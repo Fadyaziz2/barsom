@@ -1,0 +1,816 @@
+<!---extand basic django-->
+{% extends 'ar/base.html' %}
+<!---import static django-->
+{% load static %}
+<!---block django-->
+{% block body %}
+
+  <!-- ================> Page header start here <================== -->
+  <section class="page-header bg--cover" >
+    <div class="container" style="display:flex;justify-content:space-between">
+      <div class="page-header__shape">
+        <span class="page-header__shape-item page-header__shape-item--1"><img src="{% static 'assets/images/logo/logo.png' %}"
+            alt="shape-icon"></span>
+      </div>
+      <div class="page-header__content" data-aos="fade-left" data-aos-duration="1000">
+        <h2>الملف الشخصي</h2>
+        <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item "><a href="{% url 'home:home_ar' %}">الصفحة الرئيسية</a></li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </section>
+  <!-- ================> Page header end here <================== -->
+
+
+  
+
+  <!-- ===============>> team details section start here <<================= -->
+  <div style="position:relative" class="team team--details padding-top padding-bottom bg-color-3">
+    <div class="container">
+      <div class="team__wrapper">
+        <div class="row g-5 align-items-center">
+
+          <div class="col-md-12 col-lg-5">
+            <div style=" position:relative;">
+              {% if not forign %}
+              {% if user.has_right_sign %}
+              <h1 style="position: absolute; font-size:90px ;  bottom:10px;right:10px;z-index:9;" class="green-color">
+                <img src="{% static 'assets/images/rightsign.png' %}" style="width: 100px;" alt="" srcset="">
+              </h1>
+              {% endif %}
+              {% endif %}
+
+              {% comment %} {% if users.count >= 5 %}
+              <div class="profile-container">
+                <img src="{% static 'assets/images/border/2.png' %}" alt="Border Image" class="border-img">
+                <img src="{{ profile.image.url }}" alt="Profile Image" class="profile-img">
+                <p class="level">الصاعد</p>
+              </div>
+              {% elif users.count >= 10 %}
+              <div class="profile-container">
+                <img src="{% static 'assets/images/border/3.png' %}" alt="Border Image" class="border-img">
+                <img src="{{ profile.image.url }}" alt="Profile Image" class="profile-img">
+                <p class="level">المجتهد</p>
+              </div>
+              {% elif users.count >= 20 %}
+              <div class="profile-container">
+                <img src="{% static 'assets/images/border/4.png' %}" alt="Border Image" class="border-img">
+                <img src="{{ profile.image.url }}" alt="Profile Image" class="profile-img">
+                <p class="level">الشريك</p>
+              </div>
+              {% elif users.count >= 30 %}
+              <div class="profile-container">
+                <img src="{% static 'assets/images/border/5.png' %}" alt="Border Image" class="border-img">
+                <img src="{{ profile.image.url }}" alt="Profile Image" class="profile-img">
+                <p class="level">الشريك المقاتل</p>
+              </div>
+              {% elif users.count >= 40 %}
+              <div class="profile-container">
+                <img src="{% static 'assets/images/border/6.png' %}" alt="Border Image" class="border-img">
+                <img src="{{ profile.image.url }}" alt="Profile Image" class="profile-img">
+                <p class="level">الشريك القناص</p>
+              </div>
+              {% elif users.count >= 50 %}
+              <div class="profile-container">
+                <img src="{% static 'assets/images/border/7.png' %}" alt="Border Image" class="border-img">
+                <img src="{{ profile.image.url }}" alt="Profile Image" class="profile-img">
+                <p class="level">القائد</p>
+              </div>
+              {% else %}
+              <div class="profile-container">
+                <img src="{% static 'assets/images/border/1.png' %}" alt="Border Image" class="border-img">
+                <img src="{{ profile.image.url }}" alt="Profile Image" class="profile-img">
+                <p class="level">مبتدأ</p>
+              </div>
+              {% endif %} {% endcomment %}
+
+              <form method="POST" enctype="multipart/form-data" action="{% url 'accounts:changeimage' %}" id="changeprofileimage">
+                {% csrf_token %}
+                <input type="file" name="image" id="imagehiddenfile" hidden>
+              </form>
+
+
+             <div onclick="changeimagemodel()" class="team__thumb rotate text-center" style="border-radius: 100%; position:relative;">
+              {% if profile.image %}  
+              <img title="اضغط لتغير الصورة" src="{{  profile.image.url}}" calss="rotate-img" style="border-radius: 100%; height:350px;width:350px"
+                  alt="Team Image">
+                  <!---Rank-->
+              </div> 
+              {% else %}
+              <img title="اضغط لتغير الصورة" src="{% static 'assets/images/user.png' %}" calss="rotate-img" style="border-radius: 100%; height:350px;width:350px"
+                  alt="Team Image">
+                  <!---Rank-->
+              </div>
+              {% endif %}
+
+             
+              <div class="text-center green-color" style="font-size:20px">
+                {% comment %} {% if my_partners >= 50 %}
+                    <span>القائد </span>
+                {% elif my_partners >= 20 %}
+                    <span>الماسي  </span>
+                {% elif my_partners >= 15 %}
+                    <span>الذهبي  </span>
+                {% elif my_partners >= 10 %}
+                    <span>الفضي   </span>
+                {% elif my_partners >= 5 %}
+                    <span>الصاعد   </span>
+                {% endif %} {% endcomment %}
+                  {% if rank %}
+      <span>{{ rank.name_ar }}</span>
+  {% else %}
+      <span>No Rank</span>
+  {% endif %}
+              </div> 
+          </div>
+          </div>
+          <div class="col-md-7">
+            <div class="team__content">
+              <div style="display:flex;justify-content:space-between">
+                <h2 class="green-color">{{profile.name}}</h2>
+              </div>
+
+              <div class="d-flex">
+                <i class="fas fa-envelope" style="margin: 5px; color: #00d094"></i>
+                <span style="color:white">البريد&nbsp;الالكتروني:</span>
+                <p>{{custom_user.email}}  </p>
+              </div>
+              <div class="d-flex">
+                <i class="fas fa-phone" style="margin: 5px; color: #00d094"></i>
+
+                <span style="color:white">رقم الهاتف:</span>
+                <p>{{custom_user.phone}}  </p>
+              </div>
+              <div class="d-flex">
+                <i class="fas fa-calendar" style="margin: 5px; color: #00d094"></i>
+
+                <span style="color:white">تاريخ الميلاد:</span>
+                {% if profile.birth_date %}
+                <p>{{profile.birth_date}}  </p>
+                {% else %}
+                <p>لا يوجد  </p>
+                {% endif %}
+              </div>
+              <div class="d-flex">
+                <i class="fas fa-map" style="margin: 5px; color: #00d094"></i>
+                <span style="color:white">العنوان:</span>
+                <p>{{profile.address}}</p>
+              </div>
+              <div class="d-flex">
+                <i class="fas fa-user" style="margin: 5px; color: #00d094"></i>
+                <span style="color:white">تم الاضافة بواسطه:</span>
+                {% if user.is_superuser and not forign %}
+                <p> مدير الموقع </p>
+                {% else %}
+                <p>{{custom_user.create_by}}</p>
+                {% endif %}
+              </div>
+              <div class="d-flex" style="">
+                <i class="fas fa-clock" style="margin: 5px;  color: #00d094"></i>
+                <span style="color:white; ">تمت الاضافة في تاريخ:</span>
+                <p>{{custom_user.create_at|date:"Y-m-d"}}</p>
+              </div>
+              <div class="d-flex">
+                <i class="fas fa-clock" style="margin: 5px; color: #00d094"></i>
+
+                <span style="color:white">يتم الاغلاق في تاريخ:</span>
+               
+               {% if user.is_superuser and not forign %}
+                <p> مدير الموقع </p>
+                {% elif user.has_right_sign and not forign %}
+                <p>حساب موثق</p>	
+                {% else %}
+                <p>{{custom_user.ended_at|date:"Y-m-d"}}</p>
+                {% endif %}
+
+
+              </div>
+              <div class="d-flex">
+                <i class="fas fa-money-bill" style="margin: 5px; color: #00d094"></i>
+
+                <span style="color:white">الخطة:</span>
+                {% if user.is_superuser and not forign  %}
+                <p> مدير الموقع </p>
+
+                {% elif user.has_right_sign and not forign %}
+                <p>حساب موثق</p>	
+                {% else %}
+                <p>{{profile.membership.name}} <span>{{profile.price}} &nbsp;EGP </span></p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                
+                 
+
+                {% endif %}
+              </div>
+
+              <div class="d-flex">
+                <i class="fas fa-user-plus" style="margin: 5px; color: #00d094"></i>
+
+                <span style="color:white">الشركاء المباشرون :</span>
+                <p>{{users.count}}  </p>
+              </div>
+              <div class="d-flex">
+                <i class="fas fa-users" style="margin: 5px; color: #00d094"></i>
+
+                <span style="color:white">الشركاء الغير مباشرون:</span>
+                <p>{{indirect_partners_ex}}  </p>
+              </div>
+              <div class="d-flex">
+                <i class="fas fa-users-rays" style="margin: 5px; color: #00d094"></i>
+                <span style="color:white">اجمالي عدد الشركاء:</span>
+                <p>{{total_partners_ex}}  </p>
+              </div>
+              <div class="d-flex">
+                <i class="fas fa-coins" style="margin: 5px; color: #00d094"></i>
+                <span style="color:white">العملات:</span>
+                <p id="my-coin">{{profile.coin}}  </p><p> &nbsp; EGP</p>
+              </div>
+              {% comment %} <div class="d-flex">
+                <i class="fas fa-person" style="margin: 5px; color: #00d094"></i>
+                <span style="color:white">ترتيب حسابي في المدرسة:</span>
+                {% if owner and not forign %}
+                <p>مدير الموقع</p>
+                {% else %}
+                <p>{{number}}</p>
+                {% endif %}
+              </div> {% endcomment %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% comment %} {% if not user.has_right_sign %}
+    <div style="position:absolute; top:0;left:50px;" class="text-center">
+      <a>
+        <h1 style="font-size:30px" class="green-color"><span> Upgrade Your {{profile.membership.name}} Membership </span> </h1>
+        <h1><i class="fa fa-arrow-up 3xl green-color"></i></h1>
+        <h1 style="font-size:30px" class="green-color"><span> Upgrade </span> </h1>
+
+      </a>
+    </div>
+    {% endif %} {% endcomment %}
+   
+  </div>
+  <!-- ===============>> team details section end here <<================= -->
+
+  <div class="feature feature--style1 padding-bottom padding-top bg-color">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="learn-press-profile-nav">
+            {% if forign %}
+            <ul class="nav">
+              <li><a data-bs-toggle="tab" class="tab" href="#team">فريق {{profile.name}} </a></li>
+            </ul>
+            {% else %}
+            <ul class="nav">
+              <li><a data-bs-toggle="tab" class="tab" href="#team">فريقي</a></li>
+              <!---check if coin >= 50 -->
+              {% if profile.coin >= 50 %}
+              <li><a data-bs-toggle="tab" class="tab" href="#addnewmember">اضافة حوت جديد</a></li>
+              <!---else button to show modal-->
+              {% else %}
+              <li class="hover-pointer">
+                <a class="tab show-modal" href="#" id="addNewWhaleLink">
+                  اضافة حوت جديد
+              </a>
+              
+              {% endif %}
+              
+              {% if not last %}
+              <li>
+              <a href="{% url 'accounts:upgrade_membership' %}" id="upgrade_membership"  class="tab">
+                <i class="fas fa-arrow-up 3xl" ></i>ترقية الخطة
+              </a>
+              </li>
+              {% endif %}
+            </ul>
+            {% endif %}
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ===============>> cta section start here <<================= -->
+  <section class="cta padding-top padding-bottom  bg-color">
+    <div class="container">
+      <div class="cta__wrapper">
+        <div class="cta__newsletter justify-content-center">
+          <div class="row">
+            <div class="col-12">
+              <div class="tab-content lp-profile-content">
+
+                <div id="team" class="profile-content-quizzes tab-pane fade">
+                  <div class="learn-press-subtab-content">
+                    <div class="tab-content">
+                      <div class="row">
+                        <div class="col-12 scroll">
+                          <!--button search -->
+                          <div class="search d-flex mb-5">
+                            <input type="text" class="form-control" placeholder="البحث بواسطه الاسم او رقم الهاتف او البريد الالكتروني"
+                              id="searchinput">
+                            <button class="btn trk-btn--primary" style="color: white;" id="searchbtn"><i
+                                class="fa fa-search" aria-hidden="true"></i></button>
+                          </div>
+                          {% if users_profiles %}
+                          <div style="overflow-x: auto;">
+                          <table class="lp-list-table table text-center" style="border-color: 2px solid #00d094 !important;">
+                              <thead>
+                                  <tr class="">
+                                      <th class="column-status text-center green-color">الاسم</th>
+                                      <th class="column-status text-center green-color">البريد الالكتروني</th>
+                                      <th class="column-date text-center green-color">رقم الهاتف</th>
+                                      <th class="column-quiz text-center green-color" style="width: fit-content !important; white-space: nowrap;"> تاريخ التسجيل</th>
+                                      <th class="column-quiz text-center green-color">  تاريخ الاغلاق </th>
+                                      <th class="column-quiz text-center green-color" style="width: fit-content !important; white-space: nowrap;">عدد الشركاء</th>
+                                      <th class="column-time-interval text-center green-color">العملات</th>
+                                      <th class="column-time-interval text-center green-color">ارسال عملات</th>
+                                  </tr>
+                              </thead>
+                              <tbody id="teamtable" style="vertical-align:middle !important;">
+                                  {% for profile in users_profiles %}
+                                  <tr style="width: fit-content !important;">
+                                      <td class="*" style="width: fit-content !important; white-space: nowrap;">
+                                          <a href="{% url 'accounts:team_profile_ar' profile.user.id %}">
+                                              {{ profile.name|safe }}
+                                          </a>
+                                      </td>
+                                      <td class="column-status">
+                                          <a href="#">
+                                              {{ profile.user.email }}
+                                          </a>
+                                      </td>
+                                      <td class="column-date">
+                                          <a href="#">{{ profile.user.phone }}</a>
+                                      </td>
+                                      <td class="column-quiz">
+                                          <a href="#">{{ profile.user.create_at|date:"d/m/Y" }}</a>
+                                      </td>
+                                      <td class="column-quiz">
+                                          <a href="#">{{ profile.user.ended_at|date:"d/m/Y" }}</a>
+                                      </td>
+                                      <td class="column-quiz">
+                                          <a href="#">{{ profile.partner_count }} <i class="fas fa-user"></i></a>
+                                      </td>
+                                      <td>
+                                          <a href="#">{{ profile.coin }} <img src="{% static 'assets/images/coin.png' %}" width="20" alt=""></a>
+                                      </td>
+                                      <td>
+                                        <form method="post" action="{% url 'accounts:send_coin_ar' %}" class="send-coin-form d-flex">
+                                          {% csrf_token %}
+                                          <input class="form-control send-coin-input" style="min-width: 150px;" type="number" name="coin">
+                                          <input class="form-control" style="min-width: 150px;" type="number" name="phone" value="{{ profile.user.phone }}" hidden>
+                                          <button class="btn trk-btn--primary" style="margin-left: 5px; color:white">ارسال</button>
+                                      </form>
+                                      
+                                      </td>
+                                  </tr>
+                                  <!-- tr erorr-->
+                                  {% endfor %}
+                              </tbody>
+                          </table>
+                          </div>
+                          {% else %}
+                          <div class="alert alert-danger" role="alert">
+                              لا يوجد اعضاء في فريقك حتي الان
+                          </div>
+                          {% endif %}
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="addnewmember" class="profile-content-quizzes tab-pane fade">
+                  <!-- add new member form to add name, phone, address, coin,select membership plan (basic,profishnal),image,birthdate  -->
+                  <form action="{% url 'accounts:add_new_member_ar' %}" method="post" class="mt-5" name="add_new_member_form" enctype="multipart/form-data">
+                     {% csrf_token %}
+                    <div class="form-group">
+                      <label for="image">اضافة صورة</label>
+                      <div class="upload-btn-container">
+                        <input type="file" name="image" id="image" hidden>
+                        <label for="image" class="upload-btn" style="background-color: #00d094;">
+                          <img src="{% static 'assets/images/add.png' %}" alt="Upload Image" id="preview-image">
+                        </label>
+                      </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                      <label for="name">الاسم</label>
+                      <input type="text" name="name" id="name" class="form-control" placeholder="الاسم" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="email">البريد الالكتروني</label>
+                      <input type="email" name="email" id="email" class="form-control" placeholder="البريدي الالكتروني" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="phone">رقم الهاتف</label>
+                      <input type="text" name="phone" id="phone" class="form-control" placeholder="رقم الهاتف"
+                        required>
+                    </div>
+                    <div class="form-group">
+                      <label for="phone"> العنوان</label>
+                      <input type="text" name="address" id="phone" class="form-control" placeholder="العنوان"
+                        required>
+                    </div>
+                    <div class="form-pass">
+                      <label for="account-pass" class="form-label">الرقم السري</label>
+                      <input type="password" name="password" class="form-control showhide-pass" id="password" placeholder="الرقم السري"
+                        required>
+  
+                      <button  type="button" id="btnToggle" onclick="changepasstype()" class="form-pass__toggle"><i
+                          id="eyeIcon" class="fa fa-eye"></i></button>
+                    </div>
+                    <div class="form-pass">
+                      <label for="account-pass" class="form-label">تاكيد الرقم السري</label>
+                      <input type="password" name="password2" class="form-control showhide-pass" id="password2" placeholder="تاكيد الرقم السري"
+                        required>
+  
+                      <button type="button" id="btnToggle" onclick="changepasstype2()" class="form-pass__toggle"><i
+                          id="eyeIcon" class="fa fa-eye"></i></button>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="birthdate">تاريخ الميلاد</label>
+                      <input type="text" placeholder="يوم-شهر-سنه" name="birthdate" id="birthdate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="membership">خطة التسجيل</label>
+                      <select name="membership" id="membership" class="form-control" required>
+                      <!---django memberships selection-->
+                        <option value="" selected disabled>اختر خطة للتسجيل</option>
+                        {% for membership in memberships %}
+                        <option value="{{ membership.id }}" data-price="{{ membership.price }}">{{ membership.name }} <span id="membership-price">{{ membership.price }}</span>&nbsp; EGP</option>
+                        {% endfor %}
+
+                      </select>
+                    </div>
+                    <!---error-container-->
+                    <div class="error-container text-center">
+                     <p class="text-danger error-text"></p>
+                    </div>
+                   {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li {% if message.tags %} class="text-danger error-text"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                   {% endif %}
+                    <input type="submit" class="btn trk-btn--primary mt-5 text-white"  value="اضافة" name="addnewmember">
+                  </form>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+  </section>
+  <!-- ===============>> cta section start here <<================= -->
+
+  <!--modal to show message you don't have enough coin with embeded style-->
+  <!-- Modal -->
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"> 
+   <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">
+          الاشعارات
+        </h5>
+        <button type="button" style="position: absolute;left: 20px;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-body-content">
+          {% if messages %}
+              <div class="alert" role="alert">
+                  {% for message in messages %}
+                      {{ message|escapejs }}
+                  {% endfor %}
+              </div>
+          {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">اغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!--end modal-->
+
+
+  <!---modal two with content there no enough coin-->
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"> 
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdrop2Label">
+            الاشعارات
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body-content">
+        اسف ليس لديك رصيد كافي من العملات لاضافة حوت جديد
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">اغلاق</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <!--end  modal -->
+  
+
+  <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"> 
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdrop2Label">
+            Notification
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body-content">
+        <!---profile image-->
+          <div class="profile-container">
+            <img src="{{ profile.image.url }}" alt="Profile Image">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <!--close-->
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">اغلاق</button>
+          <!--change-->
+          <button type="button" class="btn btn-primary" onclick="changeimage()">تغيير</button>
+        </div>
+      </div>
+    </div>
+</div>
+  
+
+
+
+<!--end block django-->
+{% endblock %}
+
+{% block script %}
+
+<script>
+
+   // function changeimagemodel to open model 3
+   function changeimagemodel() {
+    const myModal3 = new bootstrap.Modal(document.getElementById('staticBackdrop3'), {
+      keyboard: false
+    });
+    myModal3.show();
+  }
+
+
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var upgradeLink = document.getElementById("upgrade_membership");
+  
+    if (upgradeLink) {
+      upgradeLink.addEventListener("click", function(event) {
+        event.preventDefault();
+        // show confirmation dialog
+        var confirmUpgrade = confirm("هل انت متاكد من ترقية الخطة؟ يرجي العلم انه سوف يتم خصم الفرق من رصيدك من العملات");
+        
+
+        if (confirmUpgrade) {
+          // If the user confirms, proceed to the upgrade URL
+          window.location.href = upgradeLink.getAttribute("href");
+        } else {
+          // If the user cancels, do nothing
+        }
+      });
+    }
+  });
+
+
+
+  //get changeprofileimage
+  const changeprofileimage = document.getElementById("changeprofileimage");
+
+
+  function changeimage() {
+    document.getElementById("imagehiddenfile").click();
+  }
+  imagehiddenfile.addEventListener("change", function () {
+    changeprofileimage.submit();
+  });
+
+
+
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    // script to show modal 2
+    function showModal2() {
+      const myModal2 = new bootstrap.Modal(document.getElementById('staticBackdrop2'), {
+        keyboard: false
+      });
+      myModal2.show();
+    }
+
+    // addNewWhaleLink click event
+    const addNewWhaleLink = document.getElementById('addNewWhaleLink');
+    addNewWhaleLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      showModal2();
+    });
+
+  });
+  </script>
+  
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form[name='add_new_member_form']");
+    const nameInput = form.querySelector("#name");
+    const phoneInput = form.querySelector("#phone");
+    const emailInput = form.querySelector("#email");
+    const passwordInput = form.querySelector("#password");
+    const passwordInput2 = form.querySelector("#password2");
+    const birthdateInput = form.querySelector("#birthdate");
+    const membershipInput = form.querySelector("#membership");
+    const imageInput = form.querySelector("#image");
+    membershipprice=0
+    //get my coin
+    const myCoin = document.querySelector("#my-coin");
+    const errortext = form.querySelector(".error-text");
+
+
+    //get membership price from  data-price  on membership change
+    membershipInput.addEventListener("change", function () {
+      const selectedOption = membershipInput.options[membershipInput.selectedIndex];
+      const selectedPrice = selectedOption.getAttribute("data-price");
+      membershipprice=selectedPrice
+    });
+
+
+
+    form.addEventListener("submit", function (event) {
+      let isValid = true;
+      const nameRegex = /^[A-Z][a-z]+ [A-Z][a-z]+ [A-Z][a-z]+$/;
+      const phoneRegex = /^\d+$/;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+      const birthdateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+      if (!nameRegex.test(nameInput.value)) {
+        displayError("الاسم يجب ان يكون 3 اسماء انجيليزي تبدأ ب حرف كابتل");
+        isValid = false;
+      }
+      else if (parseInt(membershipprice) > parseInt(myCoin.innerHTML)) {
+        displayError("ليس لديك رصيد كافي من العملات لاختيار هذه الخطة");
+        isValid = false;
+      }
+      else if (!phoneRegex.test(phoneInput.value)) {
+        displayError("رقم الهاتف يجب ان يكون ارقام فقط");
+        isValid = false;
+      }
+      else if (!emailRegex.test(emailInput.value)) {
+        displayError("البريد الالكتروني يجب ان يحتوي علي @gmail.com");
+        isValid = false;
+      }else if (!moment(birthdateInput.value, "DD-MM-YYYY", true).isValid()) {
+        displayError(" تاريخ الميلاد يجب ان يكون بصيغة يوم-شهر-سنه مثل 02-12-2023" ); 
+        isValid = false;
+      }else if (!passwordRegex.test(passwordInput.value)) {
+        displayError("يجب ان يحتوي الرقم السري علي حرف كابتل وحرف سمول ورقم ورمز خاص وطوله 8 احرف علي الاقل");
+        isValid = false;
+      }
+      else if ((passwordInput.value)!=(passwordInput2.value)) {
+        displayError("الرقم السري غير متطابق");
+        isValid = false;
+      }
+      else if (membershipInput.value == "") {
+        displayError("يجب اختيار خطة للتسجيل");
+        isValid = false;
+      }
+      else if (imageInput.value == "") {
+        displayError("يجب اختيار صورة");
+        isValid = false;
+      }
+      if (!isValid) {
+        event.preventDefault();
+      }
+    });
+
+    function displayError(message) {
+      errortext.innerHTML = message;
+    }
+
+
+
+
+    const teamTable = document.getElementById("teamtable");
+
+    teamTable.addEventListener("submit", function (event) {
+        const sendCoinForm = event.target.closest(".send-coin-form");
+        
+        if (sendCoinForm) {
+            const sendCoinInput = sendCoinForm.querySelector(".send-coin-input");
+            const modalBodyContent = document.getElementById('modal-body-content');
+            
+            if (parseInt(sendCoinInput.value) > parseInt(myCoin.innerHTML)) {
+                event.preventDefault();
+                const myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {
+                    keyboard: false
+                });
+                modalBodyContent.textContent = "عزرا ليس لديك رصيد كافي من العملات";
+                myModal.show();
+            } 
+        }
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      var messages = document.querySelectorAll(".alert");
+      if (messages.length > 1) {
+          var modal = new bootstrap.Modal(document.getElementById("staticBackdrop"));
+          modal.show();
+      } else {
+          var modal = new bootstrap.Modal(document.getElementById("staticBackdrop"));
+          modal.hide();
+      }
+  });
+  </script>
+  
+  
+  
+
+<script>
+  const imageInput = document.getElementById('image');
+  const previewImage = document.getElementById('preview-image');
+
+  imageInput.addEventListener('change', (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const objectUrl = URL.createObjectURL(selectedFile);
+      previewImage.src = objectUrl;
+    }
+  });
+
+  function changepasstype() {
+    var passinput = document.getElementById("password");
+    if (passinput.type == "password") {
+      passinput.type = "text"
+    } else {
+      passinput.type = "password"
+    }
+  }
+  function changepasstype2() {
+    var passinput2 = document.getElementById("password2");
+    if (passinput2.type == "password") {
+      passinput2.type = "text"
+    } else {
+      passinput2.type = "password"
+    }
+  }
+
+
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchinput");
+    const searchBtn = document.getElementById("searchbtn");
+    const teamTable = document.getElementById("teamtable");
+
+    searchBtn.addEventListener("click", function () {
+        const searchQuery = searchInput.value.toLowerCase();
+        const rows = teamTable.querySelectorAll("tr");
+
+        rows.forEach(function (row) {
+            const name = row.querySelector(".column-status a").textContent.toLowerCase();
+            const email = row.querySelector(".column-date a").textContent.toLowerCase();
+            const phone = row.querySelector(".column-quiz a").textContent.toLowerCase();
+
+            if (name.includes(searchQuery) || email.includes(searchQuery) || phone.includes(searchQuery)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+});
+
+</script>
+
+{% endblock %}

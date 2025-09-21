@@ -1,0 +1,381 @@
+<!---extand basic django-->
+{% extends 'base2.html' %}
+<!---import static django-->
+{% load static %}
+<!---block django-->
+{% block body %}
+
+
+<style>
+
+    .imagescale {
+        scale: 0.8;
+        transition: scale 0.3s ease-in-out; /* Adjust the duration and timing function as needed */
+    }
+    
+    .imagescale:hover {
+        scale: 1;
+    }
+    .show:hover{
+        cursor: pointer;
+        color:#00D094;
+    }
+</style>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Trading Whale School </title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Sites meta Data -->
+  <meta name="application-name" content="Trading Whale School">
+  <meta name="author" content="Your Name">
+  <meta name="keywords" content="Trading Whale School, Trading Education, Trading Monster">
+  <meta name="description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
+
+  <!-- OG meta data -->
+  <meta property="og:title" content="Trading Whale School">
+  <meta property="og:description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
+  <meta property="og:image" content="{% static 'assets/images/logo/login-logo.png' %}">
+  
+
+
+
+  <link rel="shortcut icon" href="{% static 'assets/images/logo/logo.png' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/all.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}">
+
+
+
+  <!-- main css for template -->
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+</head>
+<body>
+
+  <header class="header-section header-section--style1" style="display: none;">
+        <div class="header-bottom">
+          <div style="">
+            <div class="header-wrapper" style="justify-content: space-evenly;display: flex;">
+              <div class="logo">
+                <a href="#">
+                  <img class="" style="width:130px;" src="{% static 'assets/images/logo/preloader.png' %}" alt="logo">
+                </a>
+              </div>
+              <div class="menu-area">
+                <ul class="menu">
+                  <li>
+                    <a href="#homepage" class="menu-li-a"> Home  </a>
+                  </li>
+                  <li>
+                    <a href="#videosection" class="menu-li-a">Video </a>
+                  </li>
+                  <li>
+                    <a href="#request" id="showModalx" class="menu-li-a"> Request Plan </a>
+                  </li>
+                  
+    
+                  <li style="display: flex;margin-top: -15px;">
+                    <div class="header-action">
+                      <div class="menu-area">
+                        
+                        <div class="">
+                          <a href="{% url 'accounts:login' %}" class="trk-btn trk-btn--border trk-btn--primary">
+                            <span>Login</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+    
+                </ul>
+    
+              </div>
+    
+              <div class="d-flex" style="align-items: center; margin-right: 30px; margin-top: -20px;">
+                <!---language icon-->
+                <i class="fa fa-language" style="color: #e5cd26; font-size: 25px;"></i>
+                <div class="custom-dropdown">
+                    <button 
+                        onclick="navigateToArabic()" 
+                        style="background-color: #00150f; border: none; cursor: pointer; color: white; padding: 10px; border-radius: 5px;">
+                        Arabic
+                    </button>
+                </div>
+            </div>
+    
+                <!-- toggle icons -->
+                <div class="header-bar d-lg-none header-bar--style1">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+             
+            </div>
+          </div>
+        </div>
+    </header>
+
+
+
+      <section class="banner banner--style3"id="homepage" >
+        <div class="banner__bg">
+          <div class="banner__bg-element">
+            <img src="{% static 'assets/images/bg.png' %}" alt="section-bg-element" class="dark d-none d-lg-block">
+            <span class="bg-color d-lg-none"></span>
+          </div>
+        </div>
+        <div class="container">
+          <div class="banner__wrapper">
+            <div class="row gy-5 gx-4">
+              <div class="col-lg-6 col-md-7" style="display: flex; align-items: center;">
+                <div class="banner__content" data-aos="fade-right" data-aos-duration="1000">
+                  
+                  <h2 class="banner__content-heading"> <span>{{ landing_page.title }}</span></h2>
+                  <p class="banner__content-moto text-white lead">
+                    {{ landing_page.description }}
+                </p>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-5">
+                <div class="banner__thumb imagescale" data-aos="fade-left" data-aos-duration="1000">
+                  <img src="{{ landing_page.image.url }}">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="banner__shape">
+          <span class="banner__shape-item banner__shape-item--1"><img src="{% static 'assets/images/banner/home1/4.png' %}"
+              alt="shape icon"></span>
+        </div>
+      </section>
+    <!-- Courses Section -->
+    <div class="container-fluid py-5" style="background-color: #0C201D;" id="videosection">
+      <div class="container">
+        <h1 class="text-center" style="color: #00D094;">Video</h1>
+    
+        <div>
+          <video id="promoVideo" src="{{ landing_page.video.url }}" controls width="100%" height="100%"></video>
+        </div>
+    
+        <div class="title">
+          <p class="lead text-center mt-5" style="font-size: 46px; color: red;">
+            {{ video.message }}
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      const video = document.getElementById('promoVideo');
+      let lastAllowedTime = 0;
+      let seekingBlocked = false;
+    
+      // Try autoplay with sound (may fail silently)
+      video.play().catch(() => {
+        // Wait for user interaction to play with sound
+        document.body.addEventListener('click', () => {
+          video.muted = false;
+          video.play();
+        }, { once: true }); // only once is enough
+      });
+    
+      // Track last allowed playback time
+      video.addEventListener('timeupdate', () => {
+        if (!seekingBlocked) {
+          lastAllowedTime = video.currentTime;
+        }
+      });
+    
+      // Prevent seeking forward
+      video.addEventListener('seeking', () => {
+        if (video.currentTime > lastAllowedTime + 0.01) {
+          seekingBlocked = true;
+          video.currentTime = lastAllowedTime;
+        } else {
+          seekingBlocked = false;
+        }
+      });
+    </script>
+    
+    
+
+    
+
+    <!-- Request Plan Section -->
+    <div class="container my-5" id="request">
+        <h2 id="toggleButton" class="show">Request Plan
+            <i class="fa fa-arrow-down" id="icon"></i>
+        </h2> 
+
+        <!-- Button to toggle the form visibility -->
+        
+        <!-- Form section initially hidden -->
+        <div id="membershipForm" style="display: none;">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">Name *</label>
+                        <input type="text" class="form-control" id="name" name="name" required placeholder="Name">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">email </label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder=" Email">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="age" class="form-label">Age *</label>
+                        <input type="number" class="form-control" id="age" name="age" required placeholder=" Age ">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="phone" class="form-label"> Phone *</label>
+                        <input type="text" class="form-control" id="phone" name="phone" required placeholder=" Phone" 
+                               pattern="\d{11}" title=" must be 11 number " 
+                               oninput="validateAge(this)">
+                        <div class="invalid-feedback"> Phone must be between 18 and 99.</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="gender" class="form-label">Gender</label>
+                        <select class="form-select form-control" id="gender" name="gender">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="location" class="form-label">Location *</label>
+                        <input type="text" class="form-control" id="location" name="location" required placeholder="Location">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="notes" class="form-label">Notes</label>
+                    <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Notes"></textarea>
+                </div>
+                <div class="text-center">
+                    <button type="submit" id="requestButton" class="trk-btn trk-btn--border trk-btn--primary d-block mt-4" disabled 
+                    data-bs-toggle="tooltip" title="يجب مشاهدة الفيديوا بالكامل لتمكن من طلب العضوية">
+                    Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+
+
+
+
+
+    <script>
+      const video = document.getElementById('promoVideo');
+      const unmuteButton = document.getElementById('unmuteButton');
+
+      unmuteButton.addEventListener('click', function() {
+          video.muted = false;
+          video.play(); // In case it was paused
+          unmuteButton.style.display = 'none'; // Hide the button after unmuting
+      });
+    </script>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Get the video and button elements
+        const video = document.getElementById('promoVideo');
+        const requestButton = document.getElementById('requestButton');
+
+        // Disable the button initially
+        requestButton.disabled = true;
+
+        
+            // Initialize Bootstrap tooltip
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+              return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        
+            // Enable button when the video ends
+            video.addEventListener('ended', function() {
+                requestButton.disabled = false;
+            });
+    </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Toggle form visibility with animation
+            $('#toggleButton').click(function() {
+                $('#membershipForm').slideToggle(400);
+                // update the i icon
+                const icon = $('#icon'); // Select the icon within toggleButton
+                if (icon.hasClass('fa-arrow-down')) {
+                    icon.removeClass('fa-arrow-down').addClass('fa-arrow-up');
+                } else {
+                    icon.removeClass('fa-arrow-up').addClass('fa-arrow-down');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function validateAge(input) {
+            const value = input.value;
+            const feedback = input.nextElementSibling; // Get the feedback element
+    
+            // Check if the value is exactly 11 digits
+            if (value.length === 11 && /^\d+$/.test(value)) {
+                input.setCustomValidity(''); // Clear any custom error message
+                feedback.style.display = 'none'; // Hide feedback
+                input.classList.remove('is-invalid'); // Remove invalid class
+            } else {
+                input.setCustomValidity('Invalid'); // Set an error message
+                feedback.style.display = 'block'; // Show feedback
+                input.classList.add('is-invalid'); // Add invalid class
+            }
+        }
+    </script>
+
+    {% comment %} <script>
+        function navigateToArabic() {
+            const currentUrl = window.location.href; // Get the current URL
+            const newUrl = insertArabicSegment(currentUrl); // Insert 'ar/' in the URL
+            window.location.href = newUrl; // Navigate to the new URL
+        }
+        
+        function insertArabicSegment(url) {
+            // Create a URL object
+            const urlObj = new URL(url);
+        
+            // Split the pathname into segments
+            const segments = urlObj.pathname.split('/');
+        
+            // Find the index of 'page' and insert 'ar' after it
+            const pageIndex = segments.indexOf('page');
+            if (pageIndex !== -1 && pageIndex + 1 < segments.length) {
+                // Insert 'ar' after 'page'
+                segments.splice(pageIndex + 1, 0, 'ar');
+            }
+        
+            // Rebuild the pathname
+            urlObj.pathname = segments.join('/');
+            
+            // Return the updated URL as a string
+            return urlObj.toString();
+        }
+        </script> {% endcomment %}
+</body>
+</html>
+
+
+{% endblock %}

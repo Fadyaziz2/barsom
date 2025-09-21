@@ -1,0 +1,410 @@
+{% load static %}
+<!----load media -->
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Language" content="ar">
+  <title>Trading Whale School </title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Sites meta Data -->
+  <meta name="application-name" content="مدرسة حيتان التداول">
+  <meta name="author" content="Brsom Emad">
+  <meta name="keywords" content="مدرسة حيتان التداول , تعلم التداول , افضل منصة تداول ">
+  <meta name="description" content="مدرسة حيتان التداول افضل منصه لتعليم التداول هدفنا ان نصنع منك حوت تداول لا تقهر ">
+
+  <!-- OG meta data -->
+  <meta property="og:title" content="مدرسة حيتان التداول">
+  <meta property="og:description" content="مدرسة حيتان التداول هدفنا تعليمك كيف تتداول بامان وتصبح من افضل حيتان التداول انضم لنا الان ">
+  <meta property="og:image" content="{% static 'assets/images/logo/login-logo.png' %}">
+  
+
+
+  <link rel="shortcut icon" href="{% static 'assets/images/logo/preloader.png' %}" type="image/x-icon">
+
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  {% comment %} <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.0.0/css/bootstrap.min.css" integrity="sha384-P4uhUIGk/q1gaD/NdgkBIl3a6QywJjlsFJFk7SPRdruoGddvRVSwv5qFnvZ73cpz" crossorigin="anonymous"> {% endcomment %}
+  
+  <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/all.min.css' %}">
+  
+  <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}">
+  
+  
+  <!--font awsome-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  
+  <!-- main css for template -->
+  <link rel="stylesheet" href="{% static 'assets/css/style2.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrapcustom.css' %}">
+
+
+</head>
+
+<body dir="rtl">
+
+  <!-- ===============>> Preloader start here <<================= -->
+  <div class="preloader" style="width:300px;hieght:300px; left:45vw">
+    <img src="{% static 'assets/images/logo/preloader.png' %}" alt="preloader icon">
+  </div>
+  <!-- ===============>> Preloader end here <<================= -->
+
+
+
+  <!-- ===============>> light&dark switch start here <<================= -->
+  <div class="">
+    <span class="" id="btnSwitch">
+    </span>
+  </div>
+  <!-- ===============>> light&dark switch start here <<================= -->
+
+  {% comment %} <!-- Header for language button -->
+  <header class="" style="padding: 20px;background-color: #081c16">
+    <div class="container d-flex" style="align-items:center">
+        <!---language icon-->
+        <i class="fa fa-language"></i>
+        <div class="custom-dropdown" >
+            <button class="dropdown-toggle" style="background-color: #00150f; border: none;" id="languageDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="flag-icon flag-icon-us"></span> عربي
+            </button>
+            <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                <a class="dropdown-item" href="{% url 'home:home' %}">
+                    <span class="flag-icon flag-icon-us"></span> English
+                </a>
+                <a class="dropdown-item" href="{% url 'home:home_ar' %}">
+                    <span class="flag-icon flag-icon-mx"></span> عربي
+                </a>
+            </div>
+        </div>
+    </div>
+</header> {% endcomment %}
+
+
+  <!-- ===============>> Header section start here <<================= -->
+  <header class="header-section header-section--style1">
+    <div class="header-bottom">
+      <div style="display: flex; justify-content: space-evenly;">
+        <div class="header-wrapper">
+          <div class="logo">
+            <a href="{% url 'home:home_ar' %}">
+              <img class="" style="width:130px;" src="{% static 'assets/images/logo/preloader.png' %}" alt="logo">
+            </a>
+          </div>
+          <div class="menu-area">
+            <ul class="menu">
+              <li>
+                <a href="{% url 'home:home_ar' %}" class="menu-li-a">الصفحة الرئيسية </a>
+              </li>
+              <li>
+                <a href="{% url 'accounts:profile_ar' %}" class="menu-li-a">الملف الشخصي </a>
+              </li>
+              <li>
+                <a href="#" id="showModalx" class="menu-li-a">المحاضرات التعليمية </a>
+              </li>
+              <!---submenu-->
+              <li class="menu-item-has-children">
+                <a href="#">صفحات اخري </a>
+                <ul class="submenu">
+                  <li><a href="https://www.tradingview.com" class="menu-li-a">(موقع) Trading View </a></li>
+                  <li><a href="https://gocharting.com/" class="menu-li-a">(موقع) GoCharting </a></li>
+                  <li><a href="https://sa.investing.com/economic-calendar/" class="menu-li-a">المفكرة الاقتصادية</a></li>
+                  {% if user.has_landpage %}
+                  <li><a href="{% url 'landing_page:UserLandingPage_ar' %}" class="menu-li-a">صفحة العرض </a></li>
+                  {% endif %}
+                </ul>
+              </li>
+              <!---submenu-->
+              
+              {% comment %} <li>
+                <a href="https://www.tradingview.com" class="menu-li-a">Trading View </a>
+              </li>
+              <li>
+                <a href="https://sa.investing.com/economic-calendar/" class="menu-li-a">Ecounmic&nbsp;calendar </a>
+              </li> {% endcomment %}
+             
+              <li>
+                <a href="{% url 'contact:contact_ar' %}" class="menu-li-a">تواصل معنا</a>
+              </li>
+              <!---dashboard if superuser-->
+              {% if user.is_superuser %}
+              <li class="menu-item-has-children">
+                <a href="#">مدير الموقع</a>
+                <ul class="submenu">
+                  <li><a href="{% url 'admin:index' %}" class="menu-li-a">لوحة التحكم</a></li>
+                  <li><a href="{% url 'home:send_emails_ar' %}" class="menu-li-a">ارسال ايميلات</a></li>
+                  <li><a href="{% url 'landing_page:LandingPage_ar' %}" class="menu-li-a">صفحة العرض الرئيسية</a></li>
+                  
+                </ul>
+              </li>
+              {% endif %}
+
+              <li style="display: flex;margin-top: -15px;">
+                <div class="header-action">
+                  <div class="menu-area">
+                    <div class="" style="margin-right: 30px; margin-left:20px">
+                      <img src="{% static 'assets/images/logo/walet.png' %}" class="wallet" width="50px" srcset=""> {{profile.coin}}&nbsp;EGP
+                    </div>
+                    <div class="">
+                      <a href="{% url 'accounts:logout_ar' %}" class="trk-btn trk-btn--border trk-btn--primary">
+                        <span>تسجيل خروج</span>
+                      </a>
+                    </div>
+      
+                    
+      
+      
+                  
+                  </div>
+                </div>
+              </li>
+
+            </ul>
+
+          </div>
+
+          <div class=" d-flex" style="align-items:center; margin-right:30px; margin-top:-20px;">
+            <!---language icon-->
+            <i class="fa fa-language" style="color:#e5cd26;font-size: 25px;"></i>
+              <div class="custom-dropdown" >
+                <button class="dropdown-toggle" style="background-color: #00150f; border: none;" id="languageDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="flag-icon flag-icon-us"></span> عربي
+                </button>
+                <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="changelng()">
+                        <span class="flag-icon flag-icon-us"></span> English
+                    </a>
+                    <a class="dropdown-item" href="javascript:void(0);" >
+                        <span class="flag-icon flag-icon-mx"></span> عربي
+                    </a>
+                </div>
+              </div>
+          </div>
+
+            <!-- toggle icons -->
+            <div class="header-bar d-lg-none header-bar--style1">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+         
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ===============>> Header section end here <<================= -->
+
+
+<!-- block body  django-->
+{% block body %}
+
+{% endblock %}
+
+
+
+  <!-- ===============>> footer start here <<================= -->
+  <footer class="footer brand-1">
+    <div class="container">
+      <div class="footer__wrapper">
+        <div class="footer__top footer__top--style1">
+          <div class="row gy-5 gx-4">
+            <div class="col-md-8">
+              <div class="footer__about">
+                <a href="{% url 'home:home_ar' %}" class="footer__about-logo">
+                  <img style="width:250px;" src="{% static 'assets/images/logo/preloader.png' %}"
+                    alt="Logo"></a>
+                <p class="footer__about-moto ">
+                  النجاح في السوق ينتمي إلى الأشخاص الذين يسعون دائما  للتعلم، وليس لأولئك الذين يتاجرون استنادًا إلى المشاعر.
+في مدرسة  حيتان التداول نضع التعليم في المقام الأول.
+                  <span class="green-color">
+                    هل انت مستعد لتصبح حوت من ضمن حيتان التداول؟
+                  </span>
+                  
+                </p>
+
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="footer__links">
+                <div class="footer__links-tittle">
+                  <h6 class="green-color">الوصول السريع للصفحات </h6>
+                </div>
+                <div class="footer__links-content">
+                  <ul class="footer__linklist">
+                    <li class="footer__linklist-item"> <a href="{% url 'accounts:profile_ar' %}">الملف الشخصي</a>
+                    </li>
+                    <li class="footer__linklist-item"> <a href="{% url 'home:home_ar' %}" id="showModalx">الصفحة الرئيسية</a>
+                    </li>
+                    <li class="footer__linklist-item"> <a href="https://www.tradingview.com">(موقع) Trading View </a>
+                    </li>
+                    <li class="footer__linklist-item"> <a href="https://gocharting.com/">(موقع) GoCharting </a>
+                    </li>
+                    <li class="footer__linklist-item"> <a href="https://sa.investing.com/economic-calendar/"> المفكرة الاقتصادية</a> </li>
+                    <li class="footer__linklist-item"> <a href="{% url 'contact:contact_ar' %}">تواصل معنا</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer__shape">
+      <span class="footer__shape-item footer__shape-item--1" style="left:80%"><img src="{% static 'assets/images/footer/1.png' %}"
+          alt="shape icon"></span>
+      <span class="footer__shape-item footer__shape-item--2"> <span></span> </span>
+    </div>
+  </footer>
+  <!-- ===============>> footer end here <<================= -->
+
+
+
+  <!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  <div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="staticBackdropLabel">
+        اشعارات
+      </h5>
+      <button type="button" style="position: absolute;left: 20px;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body" id="modal-body-content">
+        {% if messages %}
+            <div class="alert" role="alert">
+                {% for message in messages %}
+                    {{ message|escapejs }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">اغلاق</button>
+    </div>
+  </div>
+</div>
+</div>
+<!--end modal-->
+
+
+<div class="modal" id="myModalx" >
+  <div class="modal-dialog">
+   <div class="modal-content">
+     <div class="modal-header">
+       <h4 class="modal-title">اشعارات</h4>
+     </div>
+     <div class="modal-body" >
+      الدورات على هذا الموقع للأغراض التعليمية فقط ولا ينبغي اعتبارها نصيحة مالية. التداول نشاط عالي المخاطر ويجب عليك دائمًا إجراء البحث الخاص بك قبل اتخاذ أي قرارات استثمارية. نحن لسنا مسؤولين عن أي خسائر قد تحدث لك نتيجة لأنشطة التداول الخاصة بك.
+      بالموافقة على هذه الشروط ، فإنك تقر بأنك قد قرأت وفهمت إخلاء المسؤولية هذا وأنك وحدك المسؤول عن أي قرارات استثمارية تتخذها.</div>
+     <div class="modal-footer">
+       <a href="{% url 'courses:courses_category_ar' %}" id="" class="btn btn-success">اوافق</a>
+       <a href="#"  id="" class="btn btn-danger">ارفض</a>
+     </div>
+   </div>
+ </div>
+ </div>
+
+
+  <!-- ===============>>  start here <<================= -->
+  <a href="#" class=" --home1"><i class="fa-solid fa-arrow-up-from-bracket"></i></a>
+  <!-- ===============>>  ending here <<================= -->
+
+
+  <!-- vendor plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/all.min.js' %}"></script>
+  {% comment %} <script src="{% static 'assets/js/swiper-bundle.min.js' %}"></script> {% endcomment %}
+  <script src="{% static 'assets/js/aos.js' %}"></script>
+  <script src="{% static 'assets/js/fslightbox.js' %}"></script>
+  <script src="{% static 'assets/js/purecounter_vanilla.js' %}"></script>
+
+
+
+
+
+
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+  <script>
+
+        function changelng() {
+          var url = window.location.href;
+          var new_url = url.replace("/ar/", "/en/");
+          //access the url
+          window.location.href=new_url;
+
+        }
+
+        // Get the modal and the link elements
+        var modal = document.getElementById('myModalx');
+        var link = document.getElementById('showModalx');
+        var link2 = document.getElementById('showModalx2');
+  
+        // Get the buttons inside the modal
+        var agreeBtn = document.getElementById('agreeBtn');
+        var refuseBtn = document.getElementById('refuseBtn');
+  
+        // When the link is clicked, show the modal
+        link.addEventListener('click', function() {
+          modal.style.display = 'block';
+        });
+        link2.addEventListener('click', function() {
+          modal.style.display = 'block';
+        });
+  
+        // When the Agree button is clicked, proceed to the URL
+        agreeBtn.addEventListener('click', function() {
+          modal.style.display = 'none';
+          // change url to {% url 'courses:courses_category_ar' %}
+          window.location.href = "{% url 'courses:courses_category_ar' %}";          
+        });
+  
+        // When the Refuse button is clicked, close the modal
+        refuseBtn.addEventListener('click', function() {
+          modal.style.display = 'none';
+        });
+  
+
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var messages = document.querySelectorAll(".alert");
+        if (messages.length > 1) {
+            var modal = new bootstrap.Modal(document.getElementById("staticBackdrop"));
+            modal.show();
+        } else {
+            var modal = new bootstrap.Modal(document.getElementById("staticBackdrop"));
+            modal.hide();
+        }
+    });
+    </script>
+
+
+
+  <script>
+
+
+    document.getElementById('selectimage').addEventListener('click', function () {
+      document.getElementById('image').click();
+    });
+
+   
+
+  </script>
+
+  {% block script %}
+  {% endblock %}
+
+
+</body>
+
+
+</html>
+

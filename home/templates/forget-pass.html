@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+
+<head>
+  <title>Trading Whale School </title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Sites meta Data -->
+  <meta name="application-name" content="Trading Whale School">
+  <meta name="author" content="Your Name">
+  <meta name="keywords" content="Trading Whale School, Trading Education, Trading Monster">
+  <meta name="description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
+
+  <!-- OG meta data -->
+  <meta property="og:title" content="Trading Whale School">
+  <meta property="og:description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
+  <meta property="og:image" content="{% static 'assets/images/logo/login-logo.png' %}">
+  
+
+
+
+  <link rel="shortcut icon" href="{% static 'assets/images/logo.png' %}" type="image/x-icon">
+
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/all.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}">
+
+
+
+  <!-- main css for template -->
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+</head>
+
+<body>
+  <!-- ===============>> account start here <<================= -->
+  <section class="account padding-top padding-bottom sec-bg-color2">
+    <div class="container">
+      <div class="account__wrapper">
+        <div class="row g-4">
+          <div class="col-md-12 col-lg-5" style="display:flex; align-items:center;" >
+            <img src="{% static 'assets/images/logo/logo.png' %}" class="img-fluid rounded-top scale2" alt="">
+          </div>
+          <div class="col-lg-7 md-12">
+            <div class="account__content account__content--style1">
+
+              <!-- account tittle -->
+              <div class="account__header text-center">
+                <h2 class="green-color">    
+                  Enter your Email To change Password
+                </h2>
+                <p>
+                  We Will send Link in your email To change Your Password
+                </p>
+              </div>
+
+              <!-- account social -->
+
+              <!-- account form -->
+              <form method="post" id="login-form"  class=" account__form needs-validation">
+                {% csrf_token %}
+                <div class="row g-4">
+                  <div class="col-12">
+                    <div>
+                      <div class="form-check">
+                        <label class="form-check-label" for="">
+                          Email
+                        </label>
+                      </div>
+                    </div>
+                    <div style="display: flex;">
+                      <input type="email" class="form-control" name="email" style="display: inline;" id="account-email"
+                        placeholder="Enter your email" required>
+                     
+
+                    </div>
+
+                  </div>
+                </div>
+              
+                <div class="account__check-forgot">
+                  <a href="{% url 'accounts:login' %}">Login</a>
+                </div>
+                <div class="account__check-forgot text-center">
+                  <!---error span in center-->
+                  <span id="error" class="d-none" style="color: red; text-align: center;"></span>
+                </div>
+                
+                <!---show error message from django if exist-->
+                <!---django error and success message-->
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+                
+
+                <button type="submit" class="trk-btn trk-btn--border trk-btn--primary d-block mt-4">Send</button>
+
+          </form>
+        </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="account__shape">
+        <span class="account__shape-item account__shape-item--1"><img src="{% static 'assets/images/contact/4.png' %}"
+            alt="shape-icon"></span>
+      </div>
+    
+  </section>
+  <!-- ===============>> account end here <<================= -->
+
+
+
+
+
+  <!-- vendor plugins -->
+
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/all.min.js' %}"></script>
+  {% comment %} <script src="{% static 'assets/js/swiper-bundle.min.js' %}"></script> {% endcomment %}
+  <script src="{% static 'assets/js/aos.js' %}"></script>
+  <script src="{% static 'assets/js/fslightbox.js' %}"></script>
+  <script src="{% static 'assets/js/purecounter_vanilla.js' %}"></script>
+
+
+
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+</body>
+
+
+</html>

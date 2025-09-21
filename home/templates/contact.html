@@ -1,0 +1,110 @@
+<!---extand basic django-->
+{% extends 'base.html' %}
+<!---import static django-->
+{% load static %}
+<!---block django-->
+{% block body %}
+
+  <!-- ================> Page header start here <================== -->
+  <section class="page-header bg--cover" style="background-image:url(assets/images/header/1.png)">
+    <div class="container">
+      <div class="page-header__content" data-aos="fade-right" data-aos-duration="1000">
+        <h2>Contact Us</h2>
+        <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item "><a href="{% url 'home:home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="page-header__shape">
+        <span class="page-header__shape-item page-header__shape-item--1"><img src="{% static 'assets/images/logo/logo.png' %}"
+            alt="shape-icon"></span>
+      </div>
+    </div>
+  </section>
+  <!-- ================> Page header end here <================== -->
+
+
+
+
+
+  <!-- ===============>> Contact section start here <<================= -->
+  <div class="contact padding-top padding-bottom">
+    <div class="container">
+      <div class="contact__wrapper">
+        <div class="row g-5">
+          
+          <div class="col-12">
+            <div class="contact__form">
+              <form method="post" data-aos="fade-left" data-aos-duration="1000">
+                {% csrf_token %}
+                <div class="row g-4">
+                  <div class="col-6">
+                    <div>
+                      <label for="name" class="form-label">Name</label>
+                      <input class="form-control" type="text" id="name" value="{{ my_profile.name }}" readonly required>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div>
+                      <label for="email" class="form-label">Email</label>
+                      <input class="form-control" type="email" id="email" value="{{ custom_user.email }}" readonly required>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div>
+                      <label for="name" class="form-label">Added By</label>
+                      <input class="form-control" type="text" id="name" value="{{ created_by.name }}" readonly required>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div>
+                      <label for="email" class="form-label">Added At</label>
+                      <input class="form-control" type="email" value="{{ custom_user.ended_at }}" readonly required>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div>
+                      <label for="email" class="form-label">Subject</label>
+                      <input class="form-control" name="subject" type="text" placeholder="Subject" required>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div>
+                      <label for="textarea" class="form-label">Message</label>
+                      <textarea cols="30" name="message" rows="5" class="form-control" id="textarea"
+                        placeholder="Enter Your Message" required></textarea>
+                    </div>
+                  </div>
+                </div>
+                <!---django message Success-->
+                {% if messages %}
+                {% for message in messages %}
+                <!--Success-->
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>{{ message }}</strong>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <button type="submit" class="trk-btn trk-btn--border trk-btn--primary mt-4 d-block">Send
+                  Now</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact__shape">
+      <span class="contact__shape-item contact__shape-item--1"><img src="{% static 'assets/images/contact/4.png' %}"
+          alt="shape-icon"></span>
+      <span class="contact__shape-item contact__shape-item--2"> <span></span> </span>
+    </div>
+  </div>
+  <!-- ===============>> Contact section start here <<================= -->
+
+
+<!--end block django-->
+{% endblock %}

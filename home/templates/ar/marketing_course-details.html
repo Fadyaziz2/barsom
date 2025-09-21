@@ -1,0 +1,203 @@
+<!---extand basic django-->
+{% extends 'ar/base.html' %}
+<!---import static django-->
+{% load static %}
+<!---block django-->
+{% block body %}
+
+  <!-- ================> Page header start here <================== -->
+  <section class="page-header bg--cover" style="background-image:url(assets/images/header/1.png)">
+    <div class="container" style="display:flex;justify-content:space-between">
+      <div class="page-header__shape">
+        <span class="page-header__shape-item page-header__shape-item--1"><img src="{% static 'assets/images/logo/logo.png' %}"
+            alt="shape-icon"></span>
+      </div>
+      
+      <div class="page-header__content" data-aos="fade-left" data-aos-duration="1000">
+        <h2>{{lecture.title}}</h2>
+        <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item "><a href="{% url 'home:home_ar' %}">الرئيسية</a></li>
+          </ol>
+        </nav>
+      </div>
+     
+    </div>
+  </section>
+  <!-- ================> Page header end here <================== -->
+
+
+
+
+  <!-- ===============>> Blogs section start here <<================= -->
+  <div class="blog-details padding-top padding-bottom section-bg-color">
+    <div class="container">
+        <div class="blog-details__wrapper">
+            <div class="row g-5">
+                <div class="col-lg-12">
+                    <div class="blog-details__item">
+                        <div class="blog-details__item-inner">
+                            <div class="blog-title">
+                                <h2>{{lecture.title}}</h2>
+                            </div>
+
+                            <!--video tag -->
+                            <video controls controlsList="nodownload" nodownload width="100%" height="100%" style="width: 100%; height: 600px" 
+                                 
+                            id="videoPlayer" >
+                                <source src="{{lecture.video.url}}" type="video/mp4">
+                                  متصفحك لا يدعم تشغيل الفيديو يرجي تحديث المتصفح
+                              </video>
+                            <!--video Number -->
+                            
+                            <div style="display:flex; justify-content:space-between">
+                              <p> <span style="color: #00d094;">رقم المحاضرة : </span>{{lecture.number}}</p>
+                              <div class="rate" style="display:flex; justify-items:center">
+                                <span class="lead" style="margin-right:16px">التقييم</span>
+                                <div style="display:flex">
+                                  <form method="post">
+                                    {% csrf_token %}
+                                    <input type="text" class="form-control" name="star" value="1" id="inputName" placeholder="" hidden>
+                                    <button  class="rate-btn hover1"><i class="fa fa-star 3xl"></i></button>
+                                  </form>
+                                  
+                                  <form method="post">
+                                    {% csrf_token %}
+                                    <input type="text" class="form-control" name="star" value="2" id="inputName" placeholder="" hidden>
+                                    <button  class="rate-btn hover2"><i class="fa fa-star 3xl"></i></button>
+                                  </form>
+                                  
+                                  <form method="post">
+                                    {% csrf_token %}
+                                    <input type="text" class="form-control" name="star" value="3" id="inputName" placeholder="" hidden>
+                                    <button  class="rate-btn hover3"><i class="fa fa-star 3xl"></i></button>
+                                  </form>
+                                  
+                                  <form method="post">
+                                    {% csrf_token %}
+                                    <input type="text" class="form-control" name="star" value="4" id="inputName" placeholder="" hidden>
+                                    <button  class="rate-btn hover4"><i class="fa fa-star 3xl"></i></button>
+                                  </form>
+                                  
+                                  <form method="post">
+                                    {% csrf_token %}
+                                    <input type="text" class="form-control" name="star" value="5" id="inputName" placeholder="" hidden>
+                                    <button  class="rate-btn hover5"><i class="fa fa-star 3xl"></i></button>
+                                  </form>
+                                  
+                                </div>
+                                  
+                                  
+                                </div>
+
+                            
+
+                            </div>
+                            <!--video description -->
+                            <p>
+                              {{lecture.description}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- ===============>> Blogs section start here <<================= -->
+
+
+<!--end block django-->
+{% endblock %}
+
+
+{% block script %}
+
+<script>
+
+    //prvent right click on videoPlayer
+    document.getElementById('videoPlayer').addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+  
+    
+  //disable  pic in pic on videoPlayer
+  var videoElement = document.getElementById('videoPlayer');
+  videoElement.disablePictureInPicture = true;
+    //prevent pic in pic on videoPlayer
+    document.getElementById('videoPlayer').addEventListener('enterpictureinpicture', function(e) {
+      e.preventDefault();
+    });
+  
+    //prevent download on videoPlayer
+    document.getElementById('videoPlayer').addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+
+  let star1=document.querySelector('.hover1')
+  let star2=document.querySelector('.hover2')
+  let star3=document.querySelector('.hover3')
+  let star4=document.querySelector('.hover4')
+  let star5=document.querySelector('.hover5')
+
+  star1.addEventListener("mouseenter",function(){
+    star1.style.color="#00d094";
+  })
+  star2.addEventListener("mouseenter",function(){
+    star1.style.color="#00d094";
+    star2.style.color="#00d094";
+  })
+  star3.addEventListener("mouseenter",function(){
+    star1.style.color="#00d094";
+    star2.style.color="#00d094";
+    star3.style.color="#00d094";
+  })
+  star4.addEventListener("mouseenter",function(){
+    star1.style.color="#00d094";
+    star2.style.color="#00d094";
+    star3.style.color="#00d094";
+    star4.style.color="#00d094";
+  })
+  star5.addEventListener("mouseenter",function(){
+    star1.style.color="#00d094";
+    star2.style.color="#00d094";
+    star3.style.color="#00d094";
+    star4.style.color="#00d094";
+    star5.style.color="#00d094";
+  })
+
+
+
+  star1.addEventListener("mouseleave",function(){
+    star1.style.color="white";
+    console.log('over')
+  })
+  star2.addEventListener("mouseleave",function(){
+    star1.style.color="white";
+    star2.style.color="white";
+  })
+  star3.addEventListener("mouseleave",function(){
+    star1.style.color="white";
+    star2.style.color="white";
+    star3.style.color="white";
+  })
+  star4.addEventListener("mouseleave",function(){
+    star1.style.color="white";
+    star2.style.color="white";
+    star3.style.color="white";
+    star4.style.color="white";
+  })
+  star5.addEventListener("mouseleave",function(){
+    star1.style.color="white";
+    star2.style.color="white";
+    star3.style.color="white";
+    star4.style.color="white";
+    star5.style.color="white";
+  })
+
+
+</script>
+
+{% endblock %}

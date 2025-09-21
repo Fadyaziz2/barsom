@@ -1,0 +1,287 @@
+<!---load static django-->
+{% load static %}
+
+
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+
+<head>
+  <title>Trading Whale School </title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Sites meta Data -->
+  <meta name="application-name" content="Trading Whale School">
+  <meta name="author" content="Your Name">
+  <meta name="keywords" content="Trading Whale School, Trading Education, Trading Monster">
+  <meta name="description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
+
+  <!-- OG meta data -->
+  <meta property="og:title" content="Trading Whale School">
+  <meta property="og:description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
+  <meta property="og:image" content="{% static 'assets/images/logo/login-logo.png' %}">
+  
+
+
+  <link rel="shortcut icon" href="{% static 'assets/images/logo/logo.png' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrapcustom.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/all.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}">
+
+
+
+  <!-- main css for template -->
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+
+
+  <style>
+   
+    
+    
+  </style>
+
+</head>
+
+<body dir="rtl">
+
+  <!-- ===============>> Preloader start here <<================= -->
+  {% comment %} <div class="preloader">
+    <img src="{% static 'assets/images/logo/preloader.png' %}" style="width:450px;hieght:450px" alt="preloader icon">
+  </div> {% endcomment %}
+  <!-- ===============>> Preloader end here <<================= -->
+
+
+
+  <!-- ===============>> light&dark switch start here <<================= -->
+  <!-- ===============>> light&dark switch start here <<================= -->
+
+
+
+
+
+
+
+
+
+
+  <!-- ===============>> account start here <<================= -->
+  <section class="account  padding-bottom sec-bg-color2">
+    <div class="container">
+      <div class="account__wrapper">
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="account__content account__content--style1">
+              <div class="logo-title-container text-center">
+                <img src="{% static 'assets/images/logo/login-logo.png' %}" style="margin-bottom:-50px" class="logo-image" alt="Logo">
+                <h2 class="green-color">مدرسة حيتان التداول</h2>
+              </div>
+              
+              <!-- account form -->
+              <form method="post" id="login-form"  class=" account__form needs-validation">
+                {% csrf_token %}
+                <div class="row g-4">
+                  <div class="col-12">
+                    <div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" onchange="loginForm()" name="login"
+                          id="email-login" checked>
+                        <label class="form-check-label" for="">
+                          تسجيل الدخول باستخدام البريد الالكتروني
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" onchange="loginForm()" name="login"
+                          id="phone-login">
+                        <label class="form-check-label" for="">
+                          تسجيل الدخول باستخدام رقم الهاتف
+                        </label>
+                      </div>
+                    </div>
+                    <div style="display: flex;">
+                      <input type="email" class="form-control" name="username" style="display: inline;" id="account-email"
+                        placeholder="البريد الالكتروني" required>
+                      <!-- <span class="btn btn-reapet"><i class="fas fa-repeat green-color"
+                            style="width: 50px; height:50px; background-color:gray"
+                            onclick="changeaccountemailvalue()"></i>
+                          </span>  -->
+
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-pass">
+                    <label for="account-pass" class="form-label">كلمة المرور</label>
+                    <input type="password" name="password" class="form-control showhide-pass" id="account-pass" placeholder="كلمة المرور"
+                      required>
+
+                    {% comment %} <button type="button" id="btnToggle" onclick="changepasstype()" class="form-pass__toggle"><i
+                        id="eyeIcon" class="fa fa-eye"></i></button> {% endcomment %}
+                  </div>
+                </div>
+                <div class="account__check-forgot">
+                  <a href="{% url 'accounts:forget_pass_ar' %}">نسيت كلمة المرور</a>
+                </div>
+                <div class="account__check-forgot text-center">
+                  <!---error span in center-->
+                  <span id="error" class="d-none" style="color: red; text-align: center;"></span>
+                </div>
+                
+                <!---show error message from django if exist-->
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                  <strong>{{ message }}</strong>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <button type="submit" class="trk-btn trk-btn--border trk-btn--primary d-block mt-4">تسجيل </button>
+
+            </form>
+            <!-- account form end -->
+
+        </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="account__shape">
+        <span class="account__shape-item account__shape-item--1"><img src="{% static 'assets/images/contact/4.png' %}"
+            alt="shape-icon"></span>
+      </div>
+    
+  </section>
+  <!-- ===============>> account end here <<================= -->
+
+
+
+
+
+
+
+  <!-- vendor plugins -->
+
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/all.min.js' %}"></script>
+  {% comment %} <script src="{% static 'assets/js/swiper-bundle.min.js' %}"></script> {% endcomment %}
+  <script src="{% static 'assets/js/aos.js' %}"></script>
+  <script src="{% static 'assets/js/fslightbox.js' %}"></script>
+  <script src="{% static 'assets/js/purecounter_vanilla.js' %}"></script>
+
+
+
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+  <script>
+    // function changeaccountemailvalue() to change account-email placholder to email or phone 
+
+    var accountemail = document.getElementById("account-email");
+    function changeaccountemailvalue() {
+      if (accountemail.placeholder == "ادخل البريد الالكتروني") {
+        accountemail.placeholder = "ادخل رقم الهاتف";
+        // change type to text
+        accountemail.type = "text"
+      } else {
+        accountemail.placeholder = "ادخل البريد الالكتروني";
+        //change type to email
+        accountemail.type = "email"
+      }
+
+    }
+    document.getElementById('email-login');
+    document.getElementById('phone-login');
+    function loginForm() {
+      if (document.getElementById('email-login').checked) {
+        document.getElementById('account-email').placeholder = "تسجيل الدخول باستخدام البريد الالكتروني";
+        document.getElementById('account-email').type = "email";
+        
+      } else if (document.getElementById('phone-login').checked) {
+        document.getElementById('account-email').placeholder = "تسجيل الدخول باستخدام رقم الهاتف";
+        document.getElementById('account-email').type = "text";
+        // change type to text
+
+
+      }
+    }
+
+
+
+    function changepasstype() {
+      var passinput = document.getElementById("account-pass");
+      if (passinput.type == "password") {
+        passinput.type = "text"
+      } else {
+        passinput.type = "password"
+      }
+    }
+
+
+    function showTearms() {
+      var termsDiv = document.getElementById("terms-div")
+      if (termsDiv.style.display == "none") {
+        termsDiv.style.display = "block"
+        console.log("work")
+      } else if (termsDiv.style.display == "block") {
+        termsDiv.style.display = "none"
+
+      }
+    }
+
+
+
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const loginForm = document.getElementById("login-form");
+      const emailInput = document.getElementById("account-email");
+      const passwordInput = document.getElementById("account-pass");
+  
+      loginForm.addEventListener("submit", function (event) {
+        if (!validateEmail() || !validatePassword()) {
+          event.preventDefault();
+        }
+      });
+  
+      function validateEmail() {
+        const emailType = document.querySelector('input[name="login"]:checked').id;
+        const emailValue = emailInput.value;
+  
+        if (emailType === "email-login" && !emailValue.includes("@gmail.com")) {
+          showError("البريد الالكتروني يجب ان يحتوي علي @gmail.com");
+          return false;
+        }
+  
+        if (emailType === "phone-login" && isNaN(emailValue)) {
+          showError("رقم الهاتف يجب ان يكون رقم");
+          return false;
+        }
+        return true;
+      }
+
+      function showError(errorMessage) {
+        // show error if not displayed with content
+        if (error.classList.contains("d-none")) {
+          error.classList.remove("d-none");
+        }
+
+        error.innerHTML = errorMessage;
+      }
+  
+    });
+  </script>
+  
+
+
+</body>
+
+
+</html>

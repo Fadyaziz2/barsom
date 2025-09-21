@@ -1,0 +1,162 @@
+<!---extand basic django-->
+{% extends 'ar/base.html' %}
+<!---import static django-->
+{% load static %}
+<!---block django-->
+{% block body %}
+
+
+
+  <!-- ===============>> Banner section start here <<================= -->
+  <section class="banner banner--style3" >
+    <div class="banner__bg">
+      <div class="banner__bg-element">
+        <img src="{% static 'assets/images/bg.png' %}" alt="section-bg-element" class="dark d-none d-lg-block">
+        <span class="bg-color d-lg-none"></span>
+      </div>
+    </div>
+    <div class="container">
+      <div class="banner__wrapper">
+        <div class="row gy-5 gx-4">
+          <div class="col-lg-6 col-md-7">
+            <div class="banner__content" data-aos="fade-right" data-aos-duration="1000">
+              <div class="banner__content-coin">
+                <img src="{% static 'assets/images/banner/home1/3.png' %}" alt="coin icon">
+              </div>
+              <h2 class="banner__content-heading">مرحبًا بك في <span>المدرسة</span></h2>
+              <p class="banner__content-moto text-white lead">
+                الحيتان هم دائمًا الرابحين في الاسواق المالية . بينما القطيع هم الأشخاص الذين يتاجرون فقط بناءً على المشاعر. إذا كنت ترغب في المتاجرة بدون تعلم، هذا ليس مكانك. إذا كنت ترغب في أن تكون ضمن الحيتان فمرحبًا بك في <span style="color: #00d094;">مدرسة  حيتان التداول</span>.
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-5">
+            <div class="banner__thumb" data-aos="fade-left" data-aos-duration="1000">
+              <img src="{% static 'assets/images/logo/logo.png' %}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="banner__shape">
+      <span class="banner__shape-item banner__shape-item--1"><img src="{% static 'assets/images/banner/home1/4.png' %}"
+          alt="shape icon"></span>
+    </div>
+  </section>
+  <!-- ===============>> Banner section end here <<================= -->
+
+
+  <!-- ========== Roadmap Section start Here========== -->
+  <section class="roadmap roadmap--style1 padding-top  padding-bottom bg-color"  id="roadmap">
+    <div class="container">
+      <div class="section-header section-header--max50">
+        <h2 class="mb-15 mt-minus-5">الخريطة التعريفية <span> للموقع</span></h2>
+      </div>
+      <div class="roadmap__wrapper">
+        <div class="row gy-4 gy-md-0 gx-5">
+          <div class="col-sm-12 col-md-6 offset-md-6">
+            <div class="roadmap__item ms-md-4 aos-init aos-animate" data-aos="fade-left" data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color"> الملف الشخصي</h3>
+                  </div>
+                  <p>
+                    في ملفك الشخصي، ستجد معلوماتك الشخصية، ولديك خيار إضافة شركاء جدد إذا كان لديك عملات كافية. بالإضافة إلى ذلك، يمكنك عرض أعضاء فريقك والوصول إلى ملفاتهم الشخصية.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="roadmap__item roadmap__item--style2 ms-auto me-md-4 aos-init aos-animate" data-aos="fade-right"
+              data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color">المحاضرات التعليمية</h3>
+                  </div>
+                  <p>
+                     هذه الصفحة تحتوي على مستويات للتعليم ويجب العلم ان هذه المستويات متاحه بالترتيب وعندما تقوم بالانتهاء من مستوى سيتم الغاء القفل في المستوى التالي ويكون متاح،وكذلك في المحاضرات التعليميه هي ايضا متاحه بالترتيب وعندما تقوم بانهاء محاضره سيتم الغاء قفل المحاضره التاليه وتكون  متاحه وهكذا                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 offset-md-6">
+            <div class="roadmap__item ms-md-4 aos-init aos-animate" data-aos="fade-left" data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color">(موقع) Trading View </h3>
+                  </div>
+                  <p>
+                    هذه الصفحة تحتوي على منصة "TradingView" المستخدمة في التحليل الفني،   لقد أضفنا هذه المنصة لسهولة الوصول اليها والتطبيق العملي علي محاضرات التحليل الفني. </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="roadmap__item roadmap__item--style2 ms-auto me-md-4 aos-init aos-animate" data-aos="fade-right"
+              data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color">(موقع)  GoCharting </h3>
+                  </div>
+                  <p>
+                    هذه الصفحة تحتوي على منصة "GoCharting"  وهي ايضا منصه للتحليل الفني،   لقد أضفنا هذه المنصة لاستخدامها في اختبار استراتيجيات التداول بخاصية الاعادة المجانيه في هذه المنصه  ولسهوله الوصول اليها      . </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 offset-md-6">
+            <div class="roadmap__item ms-md-4 aos-init aos-animate" data-aos="fade-left" data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color">المفكرة الاقتصادية</h3>
+                  </div>
+                  <p>
+                    هذه الصفحة تحتوي على المفكرة الاقتصادية الذي من خلاله يتم متابعة الأحداث  والمؤشرات الاقتصادية التي تؤثر على الاسواق ويجب عليك الدخول الي المفكرة الاقتصادية يوميا لمعرفة الاخبار والاحداث الاقتصادية التي تؤثر علي الاسواق.</p>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="roadmap__item ms-md-4 aos-init aos-animate" data-aos="fade-left" data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color">تواصل معنا</h3>
+                  </div>
+                  <p>
+                    إذا كان لديك أي مشكلة أو شكوى، يمكنك إرسال رسالة بالمشكلة او الشكوي الخاصة بك وسيقوم المسؤول برؤية الرسالة وسيعمل علي حل عل المشكله او الشكوة الخاصة بك. 
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="roadmap__shape">
+      <span class="roadmap__shape-item roadmap__shape-item--1"> <span></span> </span>
+      <span class="roadmap__shape-item roadmap__shape-item--2"> <img src="{% static 'assets/images/banner/home1/3.png' %}"
+          alt="shape-icon">
+      </span>
+    </div>
+  </section>
+  <!-- ========== Roadmap Section Ends Here========== -->
+
+
+
+
+
+
+
+
+<!--end block django-->
+{% endblock %}

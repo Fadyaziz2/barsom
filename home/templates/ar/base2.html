@@ -1,0 +1,170 @@
+{% load static %}
+<!----load media -->
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Language" content="ar">
+  <title>Trading Whale School </title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Sites meta Data -->
+  <meta name="application-name" content="مدرسة حيتان التداول">
+  <meta name="author" content="Brsom Emad">
+  <meta name="keywords" content="مدرسة حيتان التداول , تعلم التداول , افضل منصة تداول ">
+  <meta name="description" content="مدرسة حيتان التداول افضل منصه لتعليم التداول هدفنا ان نصنع منك حوت تداول لا تقهر ">
+
+  <!-- OG meta data -->
+  <meta property="og:title" content="مدرسة حيتان التداول">
+  <meta property="og:description" content="مدرسة حيتان التداول هدفنا تعليمك كيف تتداول بامان وتصبح من افضل حيتان التداول انضم لنا الان ">
+  <meta property="og:image" content="{% static 'assets/images/logo/login-logo.png' %}">
+  
+
+
+  <link rel="shortcut icon" href="{% static 'assets/images/logo/preloader.png' %}" type="image/x-icon">
+
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  {% comment %} <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.0.0/css/bootstrap.min.css" integrity="sha384-P4uhUIGk/q1gaD/NdgkBIl3a6QywJjlsFJFk7SPRdruoGddvRVSwv5qFnvZ73cpz" crossorigin="anonymous"> {% endcomment %}
+  
+  <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/all.min.css' %}">
+  
+  <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}">
+  
+  
+  <!--font awsome-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  
+  <!-- main css for template -->
+  <link rel="stylesheet" href="{% static 'assets/css/style2.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrapcustom.css' %}">
+
+
+</head>
+
+<body dir="rtl">
+
+  <!-- ===============>> Preloader start here <<================= -->
+  <div class="preloader" style="width:300px;hieght:300px; left:45vw">
+    <img src="{% static 'assets/images/logo/preloader.png' %}" alt="preloader icon">
+  </div>
+  <!-- ===============>> Preloader end here <<================= -->
+
+
+
+  <!-- ===============>> light&dark switch start here <<================= -->
+  <div class="">
+    <span class="" id="btnSwitch">
+    </span>
+  </div>
+  <!-- ===============>> light&dark switch start here <<================= -->
+
+
+<!-- block body  django-->
+{% block body %}
+
+{% endblock %}
+
+
+
+  <!-- ===============>> footer start here <<================= -->
+
+
+  <!-- vendor plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/all.min.js' %}"></script>
+  {% comment %} <script src="{% static 'assets/js/swiper-bundle.min.js' %}"></script> {% endcomment %}
+  <script src="{% static 'assets/js/aos.js' %}"></script>
+  <script src="{% static 'assets/js/fslightbox.js' %}"></script>
+  <script src="{% static 'assets/js/purecounter_vanilla.js' %}"></script>
+
+
+
+
+
+
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+  <script>
+
+        function changelng() {
+          var url = window.location.href;
+          var new_url = url.replace("/ar/", "/en/");
+          //access the url
+          window.location.href=new_url;
+
+        }
+
+        // Get the modal and the link elements
+        var modal = document.getElementById('myModalx');
+        var link = document.getElementById('showModalx');
+        var link2 = document.getElementById('showModalx2');
+  
+        // Get the buttons inside the modal
+        var agreeBtn = document.getElementById('agreeBtn');
+        var refuseBtn = document.getElementById('refuseBtn');
+  
+        // When the link is clicked, show the modal
+        link.addEventListener('click', function() {
+          modal.style.display = 'block';
+        });
+        link2.addEventListener('click', function() {
+          modal.style.display = 'block';
+        });
+  
+        // When the Agree button is clicked, proceed to the URL
+        agreeBtn.addEventListener('click', function() {
+          modal.style.display = 'none';
+          // change url to {% url 'courses:courses_category_ar' %}
+          window.location.href = "{% url 'courses:courses_category_ar' %}";          
+        });
+  
+        // When the Refuse button is clicked, close the modal
+        refuseBtn.addEventListener('click', function() {
+          modal.style.display = 'none';
+        });
+  
+
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var messages = document.querySelectorAll(".alert");
+        if (messages.length > 1) {
+            var modal = new bootstrap.Modal(document.getElementById("staticBackdrop"));
+            modal.show();
+        } else {
+            var modal = new bootstrap.Modal(document.getElementById("staticBackdrop"));
+            modal.hide();
+        }
+    });
+    </script>
+
+
+
+  <script>
+
+
+    document.getElementById('selectimage').addEventListener('click', function () {
+      document.getElementById('image').click();
+    });
+
+   
+
+  </script>
+
+  {% block script %}
+  {% endblock %}
+
+
+</body>
+
+
+</html>
+

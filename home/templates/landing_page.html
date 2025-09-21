@@ -1,0 +1,544 @@
+<!---extand basic django-->
+{% extends 'base2.html' %}
+<!---import static django-->
+{% load static %}
+<!---block django-->
+{% block body %}
+
+<style>
+
+    .lectureitem{
+      position: relative;
+  
+    }
+  
+    .lecturelock {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60%; /* Adjust the size as needed */
+      height: auto;
+      opacity: 0.5; /* You can adjust the opacity as needed */
+      animation-play-state: paused; /* Stop any animations on lecturelock image */
+  }
+  .courceimage {
+    transform: scale(0.8);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .courceimage:hover {
+    transform: scale(1);
+  }
+
+
+
+
+
+
+  .social-container {
+    display: flex;
+    align-items: center;
+    background-color: #112520;
+    border-radius: 30px;
+    padding: 5px;
+    transition: all 0.3s ease;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.5s ease; /* Adjusted transition speed */
+    opacity: 0.7; /* Make the icons slightly transparent */
+}
+
+.social-icon i {
+    font-size: 24px;
+    margin-right: 10px;
+    transition: color 0.3s ease; /* Icon color transition on hover */
+}
+
+.social-icon span {
+    opacity: 0; /* Initially hidden */
+    font-weight: bold;
+    transition: opacity 0.5s ease; /* Faster transition for visibility */
+    visibility: hidden; /* Ensure no space is taken when not visible */
+}
+
+.social-icon:hover {
+    padding-right: 20px;
+    opacity: 1; /* Fully visible icon on hover */
+    background-color: #0b1c17; 
+    scale: 1.3;/* Change background color on hover */
+}
+
+.social-icon:hover i {
+    color: #ffffff; /* Change icon color to white on hover */
+}
+
+.social-icon:hover span {
+    opacity: 1; /* Fade-in text smoothly */
+    visibility: visible; /* Ensure visibility is set to visible on hover */
+    transition-delay: 0.2s; /* Shorter delay before the text becomes visible */
+}
+
+
+
+  </style>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Trading Whale School </title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Sites meta Data -->
+  <meta name="application-name" content="Trading Whale School">
+  <meta name="author" content="Your Name">
+  <meta name="keywords" content="Trading Whale School, Trading Education, Trading Monster">
+  <meta name="description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
+
+  <!-- OG meta data -->
+  <meta property="og:title" content="Trading Whale School">
+  <meta property="og:description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
+  <meta property="og:image" content="{% static 'assets/images/logo/login-logo.png' %}">
+  
+
+
+
+  <link rel="shortcut icon" href="{% static 'assets/images/logo/logo.png' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/all.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}">
+
+
+
+  <!-- main css for template -->
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header class="header-section header-section--style1">
+        <div class="header-bottom">
+          <div style="">
+            <div class="header-wrapper" style="justify-content: space-evenly;display: flex;">
+              <div class="logo">
+                <a href="#">
+                  <img class="" style="width:130px;" src="{% static 'assets/images/logo/preloader.png' %}" alt="logo">
+                </a>
+              </div>
+              <div class="menu-area">
+                <ul class="menu">
+                  <li>
+                    <a href="#homepage" class="menu-li-a"> home </a>
+                  </li>
+                  <li>
+                    <a href="#coursessection" class="menu-li-a">Courses </a>
+                  </li>
+                  <li>
+                    <a href="#roadmap" id="showModalx" class="menu-li-a"> Roadmap </a>
+                  </li>
+                  <li>
+                    <a href="#users" id="showModalx" class="menu-li-a"> Users opinions </a>
+                  </li>
+                  
+                  <li>
+                    <a href="#contactsection" class="menu-li-a">Contact</a>
+                  </li>
+                  
+    
+                  <li style="display: flex;margin-top: -15px;">
+                    <div class="header-action">
+                      <div class="menu-area">
+                        
+                        <div class="">
+                          <a href="{% url 'accounts:login' %}" class="trk-btn trk-btn--border trk-btn--primary">
+                            <span> Login</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+    
+                </ul>
+    
+              </div>
+    
+              <div class=" d-flex" style="align-items:center; margin-right:30px; margin-top:-20px;">
+                <!---language icon-->
+                <i class="fa fa-language" style="color:#e5cd26;font-size: 25px;"></i>
+                  <div class="custom-dropdown" >
+                    <button class="" style="background-color: #00150f; border: none;">
+                        <a href="/landingpage/ar/">اللغه العربية</a> 
+                    </button>
+                  </div>
+              </div>
+    
+                <!-- toggle icons -->
+                <div class="header-bar d-lg-none header-bar--style1">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+             
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="banner banner--style3"  id="homepage">
+        <div class="banner__bg">
+          <div class="banner__bg-element">
+            <img src="{% static 'assets/images/bg.png' %}" alt="section-bg-element" class="dark d-none d-lg-block">
+            <span class="bg-color d-lg-none"></span>
+          </div>
+        </div>
+        <div class="container">
+          <div class="banner__wrapper">
+            <div class="row gy-5 gx-4">
+              <div class="col-lg-6 col-md-7" style="display: flex; align-items: center;">
+                <div class="banner__content" data-aos="fade-right" data-aos-duration="1000">
+                  
+                  <h2 class="banner__content-heading"> <span>{{ landing_page.main_section.title }}</span></h2>
+                  <p class="banner__content-moto text-white lead">
+                    {{ landing_page.main_section.description }}
+                </p>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-5">
+                <div class="banner__thumb" data-aos="fade-left" data-aos-duration="1000">
+                  <img src="{{ landing_page.main_section.image.url }}">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="banner__shape">
+          <span class="banner__shape-item banner__shape-item--1"><img src="{% static 'assets/images/banner/home1/4.png' %}"
+              alt="shape icon"></span>
+        </div>
+      </section>
+
+
+
+
+      <section class="service padding-bottom section-bg-color" id="coursessection">
+        <div class="section-header section-header--max50" class="font-weight:900px">
+          <h1 class="text-center" style="color: #00D094; margin-top:40px ;" >Best Courses </h2>
+          </div>
+        <div class="container">
+          <div class="service__wrapper">
+            <div class="row g-4 align-items-center">
+              {% for course in landing_page.courses_sections.all  %}
+              <div class="col-sm-12 col-md-6 col-lg-4">
+                <div class="banner__content" data-aos="fade-up" data-aos-duration="2000">
+                  
+                  <div class="service__item-inner text-center">
+                    {% if not course.video %}
+                    <div class="service__thumb mb-30">
+                      <div class="lectureitem">
+                        <!---if course.isview or course is the first-->
+                        
+                        <img class="courceimage" style="width:500px;height:280px;" src="{{course.image.url}}" alt="service-icon">
+                        
+                      </div>
+                    </div>
+                    <div class="service__content">
+                      
+                      <h5 class="mb-15">{{course.title}}</h5>
+                      <p class="card-text" style="color: white;">{{ course.description }}</p>
+                    </div>
+                    {% else %}
+                    <div class="service__content">
+                      
+                      <h5 class="mb-15">{{course.title}}</h5>
+                      <video src="{{course.video.url}}" poster="{% if course.video_poster %} {{course.video_poster.url}} {% endif %}" width="100%" height="100%" controls controlsList="nodownload">
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                    {% endif %}
+                    
+                 
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+             
+            
+    
+            </div>
+          </div>
+        </div>
+    
+       
+      </section>
+
+
+
+
+
+
+      <section class="roadmap roadmap--style1 padding-top  padding-bottom bg-color"  id="roadmap">
+        <div class="container">
+          <div class="section-header section-header--max50">
+            <h2 class="mb-15 mt-minus-5"> RoadMap For <span> Website</span></h2>
+          </div>
+          <div class="roadmap__wrapper">
+            <div class="row gy-4 gy-md-0 gx-5">
+
+              {% for benefit in landing_page.benefits_sections.all %}
+                  {% if forloop.counter|divisibleby:2 %}
+                      <div class="col-sm-12 col-md-6 offset-md-6">
+                          <div class="roadmap__item ms-md-4 aos-init aos-animate" data-aos="fade-left" data-aos-duration="800">
+                              <div class="roadmap__item-inner">
+                                  <div class="roadmap__item-content">
+                                      <div class="roadmap__item-header">
+                                          <h3 class="green-color">{{ benefit.title }}</h3>
+                                      </div>
+                                      <p>
+                                          {{ benefit.description }}
+                                      </p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  {% else %}
+                      <div class="col-md-6">
+                          <div class="roadmap__item roadmap__item--style2 ms-auto me-md-4 aos-init aos-animate" data-aos="fade-right" data-aos-duration="800">
+                              <div class="roadmap__item-inner">
+                                  <div class="roadmap__item-content">
+                                      <div class="roadmap__item-header">
+                                          <h3 class="green-color">{{ benefit.title}}</h3>
+                                      </div>
+                                      <p>
+                                          {{ benefit.description }}
+                                      </p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  {% endif %}
+              {% endfor %}
+              
+            </div>
+          </div>
+        </div>
+        <div class="roadmap__shape">
+          <span class="roadmap__shape-item roadmap__shape-item--1"> <span></span> </span>
+          <span class="roadmap__shape-item roadmap__shape-item--2"> <img src="{% static 'assets/images/banner/home1/3.png' %}"
+              alt="shape-icon">
+          </span>
+        </div>
+      </section>
+
+
+
+      <section class="service padding-bottom section-bg-color" id="users">
+        <div class="section-header section-header--max50" class="font-weight:900px">
+          <h1 class="text-center" style="color: #00D094; margin-top:40px ;" > User opinions</h2>
+          </div>
+        <div class="container">
+          <div class="service__wrapper">
+            <div class="row g-4 ">
+              {% for course in landing_page.pricing_plans.all  %}
+              <div class="col-sm-12 col-md-6 col-lg-4">
+                <div class="banner__content" data-aos="fade-up" data-aos-duration="2000">
+                  {%  if not course.video %}
+                  <div class="service__item-inner text-center">
+                    <div class="service__thumb mb-30">
+                      <div class="lectureitem">
+                        <!---if course.isview or course is the first-->
+                        
+                        <img class="courceimage" style="width:500px;height:280px; border-radius: 50%;" src="{{course.image.url}}" alt="service-icon">
+                        
+                      </div>
+                    </div>
+                    <div class="service__content">
+                      
+                      <h4 class="mb-15">{{course.name}}</h5>
+                      <p class="card-text" style="color: white;">{{ course.features }}</p>
+                    </div>
+                    
+                  </div>
+                  {% else %}
+                  <div class="service__item-inner text-center">
+                    {% comment %} <div class="service__thumb mb-30">
+                      <div class="lectureitem">
+                        <!---if course.isview or course is the first-->
+                        
+                        <img class="courceimage" style="width:500px;height:280px; border-radius: 50%;" src="{{course.image.url}}" alt="service-icon">
+                        
+                      </div>
+                    </div> {% endcomment %}
+                    <div class="service__content">
+                      
+                      <h4 class="mb-15">{{course.name}}</h5>
+                      <!-- video -->
+                       <video src="{{course.video.url}}" poster="{% if course.video_poster %} {{course.video_poster.url}} {% endif %}" width="100%" height="100%" controls controlsList="nodownload">
+                          Your browser does not support the video tag.
+                        </video> 
+                        
+                    </div>
+                    
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+              {% endfor %}
+             
+            
+    
+            </div>
+          </div>
+        </div>
+    
+       
+      </section>
+
+
+
+
+    <section class="team padding-top padding-bottom section-bg-color" id="contactsection">
+      <div class="section-header section-header--max50" class="font-weight:900px">
+        <h1 class="text-center" style="color: #00D094; margin-top:40px ;" > Social Media </h2>
+        </div>
+      <div  style="text-align: center;display: block ruby;" id="Socialsection">
+        <div class="social-container" style="width: 50%;display: flex;justify-content: space-evenly;">
+          {% for social in landing_page.social_medias.all%}
+          <div id="facebook" class="social-icon h2" >
+              <i class="">
+                <img src="{{social.icon.url}}" width="40" height="40" alt="">
+              </i>
+              <span><a href="http://www.facebook.com">{{social.name}}</a> </span>
+          </div>
+          {% endfor %}
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+    <!-- Benefits Section -->
+    {% comment %} <div class="container my-5">
+        <h1 class="text-center" style="color: #00D094;"> الفائدة من الموقع</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="accordion" id="benefitsAccordion">
+                    
+                    {% for benefit in landing_page.benefits_sections.all %}
+                    <div class="accordion-item">
+                        <h1 class="accordion-header" style="background-color: #0C201D;color: #00d094; " id="heading{{benefit.id}}">
+                            <button class="accordion-button" style="background-color: #0C201D;color: #00d094; " type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{benefit.id}}" aria-expanded="true" aria-controls="collapse{{benefit.id}}">
+                                <h4 style="color: #00D094;">
+                                    {{ benefit.title_ar }}
+                                </h4>
+                            </button>
+                        </h1>
+                        <div id="collapse{{benefit.id}}" class="accordion-collapse collapse {% if forloop.first %} show {% endif %}" aria-labelledby="headingOne" data-bs-parent="#benefitsAccordion">
+                            <div class="accordion-body" style="background-color: #00150f;color: white;">
+                                {{ benefit.description_ar }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                </div>
+            </div>
+            <div class="col-md-6">
+                <img src="{{landing_page.benfits_image.url}}" alt="Benefits Image" class="img-fluid" style="width: 100%; margin-left: 60px;">
+            </div>
+        </div>
+    </div> {% endcomment %}
+
+    <!-- Pricing Section -->
+    {% comment %} <div class="container-fluid py-5" style="background-color: #0C201D;">
+      <div class="container">
+      <h1 class="text-center" style="color:#00D094">خطط العضوية</h2>
+        <div class="row">
+            
+            {% for plan in landing_page.pricing_plans.all %}
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="head" style="background-color:#0C201D; padding: 20px;">
+                        <h2 class="card-title text-center" style="color: #00D094;">{{ plan.plan_ar }}</h5>
+                        <h6 class="text-center">${{ plan.price }}</h6>
+                    </div>
+                    <div class="card-body" style="color: white;">
+                        {{ plan.features_ar|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+      </div>  
+    </div>
+
+    <!-- Request Plan Section -->
+    <div class="container my-5">
+        <h2>طلب عضوية</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label">الاسم</label>
+                    <input type="text" class="form-control" id="name" name="name" required placeholder="الاسم">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">الايميل</label>
+                    <input type="email" class="form-control" id="email" name="email" required placeholder="البريد الالكتروني">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">الهاتف</label>
+                    <input type="text" class="form-control" id="phone" name="phone" required placeholder="رقم الهاتف">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="age" class="form-label">السن</label>
+                    <input type="number" class="form-control" id="age" name="age" required placeholder="السن">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="gender" class="form-label">النوع</label>
+                    <select class="form-select form-control" id="gender" name="gender" required>
+                        <option value="male">ذكر</option>
+                        <option value="female">انثى</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="location" class="form-label">العنوان</label>
+                    <input type="text" class="form-control" id="location" name="location" required placeholder="العنوان">
+                </div>
+            </div>
+            <div class="mb-3 ">
+                <label for="notes" class="form-label">الملاحظات</label>
+                <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="الملاحظات"></textarea>
+            </div>
+            <div class="text-center">
+            <button type="submit" class="trk-btn trk-btn--border trk-btn--primary d-block mt-4">طلب عضوية</button>
+          </div>
+        </form>
+    </div> {% endcomment %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+
+
+</body>
+</html>
+
+
+{% endblock %}

@@ -1,0 +1,181 @@
+<!---extand basic django-->
+{% extends 'base.html' %}
+<!---import static django-->
+{% load static %}
+<!---block django-->
+{% block body %}
+
+
+
+  <!-- ===============>> Banner section start here <<================= -->
+  <section class="banner banner--style3">
+    <div class="banner__bg">
+      <div class="banner__bg-element">
+        <img src="{% static 'assets/images/bg.png' %}" alt="section-bg-element" class="dark d-none d-lg-block">
+        <span class="bg-color d-lg-none"></span>
+      </div>
+    </div>
+    <div class="container">
+      <div class="banner__wrapper">
+        <div class="row gy-5 gx-4">
+          <div class="col-lg-6 col-md-7">
+            <div class="banner__content" data-aos="fade-right" data-aos-duration="1000">
+              <div class="banner__content-coin">
+                <img src="{% static 'assets/images/banner/home1/3.png' %}" alt="coin icon">
+              </div>
+              <h2 class="banner__content-heading">Wellcome To The <span>School</span></h2>
+              <p class="banner__content-moto text-white lead">
+                Whales are always the winners in the market, while herds are the people who only trade in feelings. If
+                you want to trade without education, this is not your place. If you want to become a whaler, welcome to
+                <span style="color: #00d094;">Trading Whale School</span>.
+              </p>
+
+
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-5">
+            <div class="banner__thumb" data-aos="fade-left" data-aos-duration="1000">
+              <img src="{% static 'assets/images/logo/logo.png' %}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="banner__shape">
+      <span class="banner__shape-item banner__shape-item--1"><img src="{% static 'assets/images/banner/home1/4.png' %}"
+          alt="shape icon"></span>
+    </div>
+  </section>
+  <!-- ===============>> Banner section end here <<================= -->
+
+
+  <!-- ========== Roadmap Section start Here========== -->
+  <section class="roadmap roadmap--style1 padding-top  padding-bottom bg-color" id="roadmap">
+    <div class="container">
+      <div class="section-header section-header--max50">
+        <h2 class="mb-15 mt-minus-5">Web <span> roadmap</span></h2>
+      </div>
+      <div class="roadmap__wrapper">
+        <div class="row gy-4 gy-md-0 gx-5">
+          <div class="col-md-6 offset-md-6">
+            <div class="roadmap__item ms-md-4 aos-init aos-animate" data-aos="fade-left" data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color"> Profile</h3>
+                  </div>
+                  <p>
+                    In your profile, you will find your personal information, and you have the option to add new
+                    partners if you have enough coins. Additionally, you can view your team members and access their
+                    profiles
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="roadmap__item roadmap__item--style2 ms-auto me-md-4 aos-init aos-animate" data-aos="fade-right"
+              data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color">Courses</h3>
+                  </div>
+                  <p>
+                    The courses page contains lectures teaching the basics of the forex market and also contains
+                    lectures to teach technical analysis. Start with the basics of the forex market, then go to learn
+                    technical analysis while summarizing all the information and practical application is very
+                    important.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 offset-md-6">
+            <div class="roadmap__item ms-md-4 aos-init aos-animate" data-aos="fade-left" data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color"> Trading View </h3>
+                  </div>
+                  <p>
+                    This page contains the trading view platform used in technical analysis, which is the trading view.
+                    We have added this platform for easy access and practical application of technical analysis
+                    lectures. </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="roadmap__item roadmap__item--style2 ms-auto me-md-4 aos-init aos-animate" data-aos="fade-right"
+              data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color">GoCharting</h3>
+                  </div>
+                  <p>
+                    This page contains the "GoCharting" platform, which is also a platform for technical analysis. We have added this platform to use for testing trading strategies with free replay feature in this platform and for easy access.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 offset-md-6">
+            <div class="roadmap__item ms-md-4 aos-init aos-animate" data-aos="fade-left" data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color">Economic calendar</h3>
+
+                  </div>
+                  <p>
+                    This page contains the economic calendar through which economic events and indicators that affect
+                    the markets are monitored </p>
+                 
+                </div>
+              </div>
+
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="roadmap__item ms-md-4 aos-init aos-animate" data-aos="fade-left" data-aos-duration="800">
+              <div class="roadmap__item-inner">
+                <div class="roadmap__item-content">
+                  <div class="roadmap__item-header">
+                    <h3 class="green-color">Contact Us</h3>
+                  </div>
+                  <p>
+                    If you have any problem or have a complaint you can send a message from this page and the admin will
+                    see your problem and solve it
+                  </p>
+                 
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="roadmap__shape">
+      <span class="roadmap__shape-item roadmap__shape-item--1"> <span></span> </span>
+      <span class="roadmap__shape-item roadmap__shape-item--2"> <img src="{% static 'assets/images/banner/home1/3.png' %}"
+          alt="shape-icon">
+      </span>
+    </div>
+  </section>
+  <!-- ========== Roadmap Section Ends Here========== -->
+
+
+
+
+
+
+
+
+<!--end block django-->
+{% endblock %}

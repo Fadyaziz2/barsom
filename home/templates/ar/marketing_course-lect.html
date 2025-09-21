@@ -1,0 +1,131 @@
+<!---extand basic django-->
+{% extends 'ar/base.html' %}
+<!---import static django-->
+{% load static %}
+<!---block django-->
+{% block body %}
+
+
+
+  <!-- ================> Page header start here <================== -->
+  <section class="page-header bg--cover" style="background-image:url(assets/images/header/1.png)">
+    <div class="container" style="display:flex;justify-content:space-between">
+      <div class="page-header__shape">
+        <span class="page-header__shape-item page-header__shape-item--1"><img src="{% static 'assets/images/logo/logo.png' %}"
+            alt="shape-icon"></span>
+      </div>
+    
+      <div class="page-header__content" data-aos="fade-left" data-aos-duration="1000">
+        <h2> محاضرات</h2>
+        <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item "><a href="{% url 'home:home_ar' %}">الرئيسية</a></li>
+          </ol>
+        </nav>
+      </div>
+      
+    </div>
+  </section>
+  <!-- ================> Page header end here <================== -->
+
+
+
+
+  <!-- ===============>> Blogs section start here <<================= -->
+  <div class="blog padding-top padding-bottom section-bg-color">
+    <div class="container">
+      <div class="blog__wrapper">
+        <div class="row g-4">
+         <div class="col-12">
+          <!--search form-->
+            <div class="search d-flex mb-5">
+              <input type="text" class="form-control" placeholder="search by Title"
+                id="searchinput">
+              <button class="btn trk-btn--primary" style="color: white;" id="searchbtn"><i
+                  class="fa fa-search" aria-hidden="true"></i></button>
+            </div>       
+          </div>
+       
+          {% if lectures %}
+          {% for lecture in lectures%}
+          <div class="blog__item1 col-sm-12 col-md-6 col-lg-4">
+            <div class="blog__item" data-aos="fade-up" data-aos-duration="1200">
+              <div class="blog__item-inner blog__item-inner--style2">
+                <div class="blog__thumb">
+                  <img src="{{ lecture.image.url }}" alt="blog Images">
+                </div>
+
+                <div class="blog__content">
+                
+                  <h3 class="10 style2" style="margin-top: 15px;"> <a href="{% url 'marketing:marketing_course_details_ar' lecture.id %}">{{ lecture.title }}</a> </h3>
+                  <div class="d-flex" style="justify-content: space-around;">
+                    <p class="mb-15"><span style="color:#00d094">المدة : </span>{{ lecture.duration }}</p>
+                    <p class="mb-15"><span style="color:#00d094">رقم المحاضرة: </span>{{ lecture.number }}</p>
+                  </div>
+                  <div class="rate" style="display: flex;justify-content: center; margin-top:10px">
+                    <p class="mb-0">التقييم : </p>
+                    <ul class="d-flex text-center">
+                      {% for lect in lecture.fully_star %}
+                      <li><i class="fas fa-star green-color"></i></li>
+                      {% endfor %}
+                      {% for lect in lecture.empty_star %}
+                      <li><i class="fas fa-star text-white"></i></li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  
+                  
+
+          
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <h1>لا يوجد محاضرات للعرض</h1>
+          {% endif %}
+
+      
+        
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- ===============>> Blogs section start here <<================= -->
+
+
+
+
+
+<!--end block django-->
+{% endblock %}
+
+<!---import js-->
+{% block script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchinput');
+    const searchButton = document.getElementById('searchbtn');
+    const blogItems = document.querySelectorAll('.blog__item1');
+
+    searchButton.addEventListener('click', function() {
+      const searchTerm = searchInput.value.toLowerCase();
+
+      blogItems.forEach(function(item) {
+        const title = item.querySelector('.style2 a').textContent.toLowerCase();
+
+        if (title.includes(searchTerm)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+
+
+{% endblock %}

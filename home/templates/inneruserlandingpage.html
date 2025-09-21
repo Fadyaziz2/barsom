@@ -1,0 +1,192 @@
+<!---extand basic django-->
+{% extends 'base.html' %}
+<!---import static django-->
+{% load static %}
+<!---block django-->
+{% block body %}
+    <!-- Request Plan Section -->
+    <div class="container my-5">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+
+            <h2 style="color:#00CF93">Landing Page Data
+                
+            </h2>
+            <h3 id="copypagelink">
+                <a id="pagelink" href="/landingpage/page/{{ user_landing_page.pagename }}" hidden></a>
+                <label for=""> Copy Page Link</label>
+                <i class="fa fa-copy text-dark"></i>
+            </h3>
+        </div>
+        <div style="display: flex; justify-content: end; align-items: center;">
+
+            <!-- Notification message -->
+            <div id="copy-message" style="display:none; color: green;">Link copied to clipboard!</div>
+        </div>
+            
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                
+                <div class="col-md-6 mb-3">
+                    <label for="image" class="form-label">image *</label>
+                    <input type="file" accept="image/*" class="form-control" id="image" name="image" required placeholder="Your image" value="{{ user_landing_page.image.url }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="video" class="form-label">video *</label>
+                    <input type="file" accept="video/*" class="form-control" id="video" name="video" required placeholder="Your video" value="{{ user_landing_page.video.url }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label">Title *</label>
+                    <input type="text" class="form-control" id="title" value="{{ user_landing_page.title }}" name="title" required placeholder="Your Name">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label">Arabic Title *</label>
+                    <input type="text" class="form-control" id="title" value="{{ user_landing_page.title_ar }}" name="title_ar" required placeholder="Your Name">
+                </div>
+            
+            </div>
+            <div class="mb-3 ">
+                <label for="notes" class="form-label">Description *</label>
+                <textarea class="form-control" id="notes" name="description" rows="6" placeholder="Your Description">{{ user_landing_page.description }}</textarea>
+            </div>
+            <div class="mb-3 ">
+                <label for="notes" class="form-label">Arabic Description *</label>
+                <textarea class="form-control" id="notes" name="description_ar" rows="6" placeholder="Your Description" >{{ user_landing_page.description_ar }}</textarea>
+            </div>
+            <div class="text-center">
+                <button type="submit" id="requestButton" class="trk-btn trk-btn--border trk-btn--primary d-block mt-4">
+                create/update
+                </button>
+                
+          </div>
+        </form>
+    </div>
+
+
+    <div class="my-5 p-5 fade-in" style="background-color: #081E18;">
+        <div class="">
+            <div class="d-flex" style="justify-content: space-around; align-items: center; margin-bottom: 50px;">
+                <h2 style="color: #00CF93">Users Requests</h2>
+                <button id="save-btn" class="trk-btn trk-btn--border trk-btn--primary d-block mt-4 text-center"
+                    style="width: fit-content; text-align: center; display: flex; justify-content: center; align-items: center;">
+                    save
+                </button>
+            </div>
+    
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <input type="checkbox" id="checkall">
+                        </th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">User Notes</th>
+                        <th scope="col">My Notes</th>
+                        <th scope="col">Created at</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for requested in requested %}
+                    <tr>
+                        <th scope="row">
+                            <input type="checkbox" class="user-checkbox" data-id="{{ requested.id }}" {% if requested.conected %} checked {% endif %}>
+                        </th>
+                        <td>{{ requested.name }}</td>
+                        <td>{{ requested.email }}</td>
+                        <td>{{ requested.phone }}</td>
+                        <td>{{ requested.age }}</td>
+                        <td>{{ requested.gender }}</td>
+                        <td>{{ requested.location }}</td>
+                        <td>{{ requested.notes }}</td>
+                        <td><textarea class="mynotes" data-id="{{ requested.id }}" cols="2" rows="2">{{ requested.mynotes }}</textarea></td>
+                        <td>{{ requested.created_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Check/uncheck all checkboxes
+    $('#checkall').on('change', function() {
+        $('.user-checkbox').prop('checked', this.checked);
+    });
+
+    // Save button click event
+    $('#save-btn').on('click', function() {
+        const data = [];
+
+        // Loop through all rows to gather data
+        $('.user-checkbox').each(function() {
+            const userId = $(this).data('id');
+            const connected = $(this).is(':checked');
+            const myNotes = $('textarea.mynotes[data-id="' + userId + '"]').val();
+
+            data.push({
+                id: userId,
+                conected: connected,
+                mynotes: myNotes
+            });
+        });
+
+        // AJAX call to save data
+        $.ajax({
+            url: "{% url 'landing_page:update_requests' %}",
+            method: "POST",
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+                requests: JSON.stringify(data)
+            },
+            success: function(response) {
+                alert('Data saved successfully!');
+            },
+            error: function(xhr, status, error) {
+                alert('An error occurred: ' + error);
+            }
+        });
+    });
+});
+</script>
+
+
+
+
+
+
+
+
+
+    <script>
+        document.getElementById('copypagelink').addEventListener('click', function() {
+            // Get the link from the hidden anchor tag
+            const link = document.getElementById('pagelink').href;
+    
+            // Copy the link to the clipboard
+            navigator.clipboard.writeText(link).then(function() {
+                // Display success message
+                const message = document.getElementById('copy-message');
+                message.style.display = 'block';
+                
+                // Hide the message after 2 seconds
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 2000);
+            }, function(err) {
+                console.error('Error copying text: ', err);
+            });
+        });
+    </script>
+
+
+{% endblock %}

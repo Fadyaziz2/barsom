@@ -1,0 +1,175 @@
+{% load static %}
+<!----load media -->
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+  <title>Trading Whale School </title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Sites meta Data -->
+  <meta name="application-name" content="Trading Whale School">
+  <meta name="author" content="Your Name">
+  <meta name="keywords" content="Trading Whale School, Trading Education, Trading Monster">
+  <meta name="description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
+
+  <!-- OG meta data -->
+  <meta property="og:title" content="Trading Whale School">
+  <meta property="og:description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
+  <meta property="og:image" content="{% static 'assets/images/logo/login-logo.png' %}">
+  
+
+
+
+  <link rel="shortcut icon" href="{% static 'assets/images/logo/preloader.png' %}" type="image/x-icon">
+
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  {% comment %} <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.0.0/css/bootstrap.min.css" integrity="sha384-P4uhUIGk/q1gaD/NdgkBIl3a6QywJjlsFJFk7SPRdruoGddvRVSwv5qFnvZ73cpz" crossorigin="anonymous"> {% endcomment %}
+
+  <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/all.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}">
+
+
+  <!--font awsome-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+  <!-- main css for template -->
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+</head>
+
+<body>
+
+  <!-- ===============>> Preloader start here <<================= -->
+  <div class="preloader" style="width:300px;hieght:300px; left:45vw">
+    <img src="{% static 'assets/images/logo/preloader.png' %}" alt="preloader icon">
+  </div>
+  <!-- ===============>> Preloader end here <<================= -->
+
+
+
+  <!-- ===============>> light&dark switch start here <<================= -->
+  <div class="">
+    <span class="" id="btnSwitch">
+    </span>
+  </div>
+  <!-- ===============>> light&dark switch start here <<================= -->
+
+
+
+<!-- block body  django-->
+{% block body %}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+  <!-- ===============>>  start here <<================= -->
+  <a href="#" class=" --home1"><i class="fa-solid fa-arrow-up-from-bracket"></i></a>
+  <!-- ===============>>  ending here <<================= -->
+
+
+  <!-- vendor plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/all.min.js' %}"></script>
+  <script src="{% static 'assets/js/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/aos.js' %}"></script>
+  <script src="{% static 'assets/js/fslightbox.js' %}"></script>
+  <script src="{% static 'assets/js/purecounter_vanilla.js' %}"></script>
+
+
+
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+
+
+
+  <script>
+
+    function changelng() {
+      var url = window.location.href;
+      if (url.includes("/en/")) {
+        var new_url = url.replace("/en/", "/ar/");
+      }else
+      {
+        var new_url = "https://tradingwhales.online/ar/home"
+
+      }
+      //var new_url = url.replace("/en/", "/ar/");
+      //access the url
+      window.location.href=new_url;
+      
+    }
+
+
+      // Get the modal and the link elements
+      var modal = document.getElementById('myModalx');
+      var link = document.getElementById('showModalx');
+
+      // Get the buttons inside the modal
+      var agreeBtn = document.getElementById('agreeBtn');
+      var refuseBtn = document.getElementById('refuseBtn');
+
+      // When the link is clicked, show the modal
+      link.addEventListener('click', function() {
+        modal.style.display = 'block';
+      });
+
+      // When the Agree button is clicked, proceed to the URL
+      agreeBtn.addEventListener('click', function() {
+        // Replace this line with the actual URL redirection logic
+        window.location.href = "{% url 'courses:courses_category' %}";
+      });
+
+      // When the Refuse button is clicked, close the modal
+      refuseBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var messages = document.querySelectorAll(".alert");
+        if (messages.length > 1) {
+            var modal = new bootstrap.Modal(document.getElementById("staticBackdrop"));
+            modal.show();
+        } else {
+            var modal = new bootstrap.Modal(document.getElementById("staticBackdrop"));
+            modal.hide();
+        }
+    });
+    </script>
+
+  <script>
+
+
+    document.getElementById('selectimage').addEventListener('click', function () {
+      document.getElementById('image').click();
+    });
+
+   
+
+  </script>
+
+  {% block script %}
+  {% endblock %}
+
+
+</body>
+
+
+</html>
+

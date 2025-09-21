@@ -1,0 +1,111 @@
+<!---extand basic django-->
+{% extends 'ar/base.html' %}
+<!---import static django-->
+{% load static %}
+<!---block django-->
+{% block body %}
+
+
+  <!-- ================> Page header start here <================== -->
+  <section class="page-header bg--cover" style="background-image:url(assets/images/header/1.png)">
+    <div class="container" style="display:flex;justify-content:space-between">
+      <div class="page-header__shape">
+        <span class="page-header__shape-item page-header__shape-item--1"><img src="{% static 'assets/images/logo/logo.png' %}"
+            alt="shape-icon"></span>
+      </div>
+      <div class="page-header__content" data-aos="fade-left" data-aos-duration="1000">
+        <h2>محاضرات التسويق</h2>
+        <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item "><a href="{% url 'home:home_ar' %}">الصفحة الرئيسية</a></li>
+          </ol>
+        </nav>
+      </div>
+     
+    </div>
+  </section>
+  <!-- ================> Page header end here <================== -->
+
+
+
+
+
+  <!-- ================> 404 section start here <================== -->
+  {% if not profile.marketing_avilable %}
+  <div class="error padding-top padding-bottom sec-bg-color2">
+    <div class="container">
+      <div class="error__wrapper">
+        <div class="error__inner" data-aos="fade-up" data-aos-duration="800">
+          <div class="error__thumb text-center">
+            <img src="{% static 'assets/images/lock.png' %}" style="width: 100%; height:500px; margin-top:0"
+              alt="inverview image">
+          </div>
+          <div class="error__content text-center">
+            <h2><span>صفحة التسويق</span> غير متاحة لك</h2>
+            <p>
+              صفحة التسويق متاحة فقط لمسوقين الموقع اذا اردت ان تصبح مسوق  يمكنك التواصل مع الشخص الذي قام باضافتك لاجراء  مقابلة الاختبار مع السئول
+            </p>
+            <a href="{% url 'home:home_ar' %}" class="trk-btn trk-btn--border trk-btn--primary">عودة الي الصفحة الرئيسية</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ================> 404 section end here <================== -->
+  {% else %}
+  <section class="service  padding-bottom section-bg-color">
+    <div class="section-header section-header--max50">
+      <h2 class="mb-15 mt-minus-5"><span>اقسام </span>  المحاضرات التعليمية</h2>
+      <p  >ويجب العلم انه لا يمكنك الوصول الي القسم الثاني الا بعد الانتهاء من القسم الاول وكذلك في المحاضرات لا يمكنك الوصول الي المحاضرات الا بالترتيب المخصص للقسم</p>
+    </div>
+    <div class="container">
+      <div class="service__wrapper">
+        <div class="row g-4 align-items-center">
+          {% for course in courses  %}
+          <div class="col-sm-12 col-md-12 col-lg-6">
+            <div class="service__item" data-aos="fade-up" data-aos-duration="800">
+              <div class="service__item-inner text-center">
+                <div class="service__thumb mb-30">
+                  <div class="">
+                    <img class="" style="width:500px;height:280px;" src="{{course.image.url}}" alt="service-icon">
+                  </div>
+                </div>
+                <div class="service__content">
+                  <h5 class="mb-15"> <a class="stretched-link" href="{% url 'marketing:marketing_courses_lect_ar' course.id %}">{{course.title}}</a> </h5>
+                  <div class="text-start d-flex " style="    justify-content: space-around">
+                    <p class="mb-0" ><span>عدد المحاضرات :</span>{{course.lectures_count}}</p>
+                    <p class="mb-0"><span>اجمالي الوقت :</span> {{course.duration}}</p>
+                  </div>
+                </div>
+                <div class="rate" style="display: flex;justify-content: center; margin-top:10px">
+                  <p class="mb-0">التقييم : </p>
+                  <ul class="d-flex text-center">
+                    <ul class="d-flex text-center">
+                      {% for _ in course.fully_star %}
+                      <li><i class="fas fa-star green-color"></i></li>
+                      {% endfor %}
+                      {% for _ in course.empty_star %}
+                      <li><i class="fas fa-star text-white"></i></li>
+                      {% endfor %}
+                    </ul>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+         
+        
+
+        </div>
+      </div>
+    </div>
+
+   
+  </section>
+  {% endif %}
+
+
+
+<!--end block django-->
+{% endblock %}

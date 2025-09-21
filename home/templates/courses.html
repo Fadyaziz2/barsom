@@ -1,0 +1,118 @@
+<!---extand basic django-->
+{% extends 'base.html' %}
+<!---import static django-->
+{% load static %}
+<!---block django-->
+{% block body %}
+
+<style>
+
+  .lectureitem{
+    position: relative;
+
+  }
+
+  .lecturelock {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%; /* Adjust the size as needed */
+    height: auto;
+    opacity: 0.5; /* You can adjust the opacity as needed */
+    animation-play-state: paused; /* Stop any animations on lecturelock image */
+}
+
+</style>
+
+
+
+  <!-- ================> Page header start here <================== -->
+  <section class="page-header bg--cover" style="background-image:url(assets/images/header/1.png)">
+    <div class="container">
+      <div class="page-header__content" data-aos="fade-right" data-aos-duration="1000">
+        <h2>courses</h2>
+        <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item "><a href="{% url 'home:home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Courses</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="page-header__shape">
+        <span class="page-header__shape-item page-header__shape-item--1"><img src="{% static 'assets/images/logo/logo.png' %}"
+            alt="shape-icon"></span>
+      </div>
+    </div>
+  </section>
+  <!-- ================> Page header end here <================== -->
+
+
+
+
+  <!-- ===============>> Service section start here <<================= -->
+  <section class="service padding-top padding-bottom">
+    <div class="section-header section-header--max50">
+      <h2 class="mb-15 mt-minus-5"><span>Cources </span>We offer</h2>
+      <p>We offer the best Cources around </p>
+    </div>
+    <div class="container">
+      <div class="service__wrapper">
+        <div class="row g-4 align-items-center">
+          {% for course in courses  %}
+          <div class="col-sm-12 col-md-12 col-lg-6">
+            <div class="service__item" data-aos="fade-up" data-aos-duration="800">
+              <div class="service__item-inner text-center">
+                <div class="service__thumb mb-30">
+                  <div class="lectureitem">
+                    <!---if course.isview or course is the first-->
+                    {% if course.is_viewed or forloop.first %}
+                    <img class="" style="width:500px;height:280px;" src="{{course.image.url}}" alt="service-icon">
+                    {% else %}
+                    <img class="" style="width:500px;height:280px;" src="{{course.image.url}}" alt="service-icon">
+                    <img src="{% static 'assets/images/lock2.png' %}" alt="blog Images" class="lecturelock">
+
+                    {% endif %}
+
+                  </div>
+                </div>
+                <div class="service__content">
+                  {% if course.is_viewed or forloop.first %}
+                  <h5 class="mb-15"> <a class="stretched-link" href="{% url 'courses:courses_lect' course.id %}">{{course.title}}</a> </h5>
+                  {% else %}
+                  <h5 class="mb-15" title="you must complete the prev course first"> <a class="stretched-link" href="javascript:void(0);">{{course.title}}</a> </h5>
+                  {% endif %}
+                  <div class="text-start d-flex " style="    justify-content: space-around">
+                    <p class="mb-0" ><span>Num Of Lecture :</span>{{course.lectures_count}}</p>
+                    {% comment %} <p class="mb-0"><span>Total Min :</span> {{course.duration}}</p> {% endcomment %}
+                    
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+  <!-- ===============>> Service section start here <<================= -->
+
+
+
+
+
+
+
+
+<!--end block django-->
+{% endblock %}
+
+
+

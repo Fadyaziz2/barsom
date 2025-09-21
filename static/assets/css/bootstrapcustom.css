@@ -1,0 +1,43 @@
+.offset-md-6{
+    margin-right: 50% !important;
+}
+
+/** @media max lenght 740 offset-md-6 none  **/
+@media (max-width: 767px) {
+    .offset-md-6{
+        margin-right: 0% !important;
+    }
+}
+
+@import url('../webfonts/fa-v4compatibility.woff2');
+@import url('../webfonts/fa-v4compatibility.ttf');
+*{
+    font-family: "NassimArabicProVF-All";
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: normal; 
+}  
+
+
+.menu > li > a {
+    font-size: 1rem;
+    padding: 15px 15px;
+    text-transform: capitalize;
+    font-family: "Open Sans", sans-serif;
+    color: var(--title-color);
+    font-weight: 1000;
+}
+
+
+.section-header--max50 {
+    max-inline-size: 200ch;
+    margin: 0 auto 48px auto;
+}
+
+.section-header p {
+    font-weight: 2000 !important;
+}
+
