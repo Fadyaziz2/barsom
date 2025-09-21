@@ -3,6 +3,8 @@
 import os
 import sys
 
+from project import compat  # noqa: F401
+
 
 def main():
     """Run administrative tasks."""
