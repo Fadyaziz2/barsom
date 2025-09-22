@@ -58,12 +58,16 @@ def log_in(request):
             #send message
             messages.error(request, 'Dear Trader, we would like to inform you that your educational period on the Whales Trading website has ended. If you wish to renew your subscription and continue your educational journey with us, please contact the responsible person to review the new plans. Thank you for choosing Whales Trading. We look forward to continuing to support you and providing you with the best educational experience. Best regards, The Whales Trading Team."')
             return render(request,'index.html')
-        
-        
+
+        if user.ended_at and user.ended_at < timezone.now():
+            messages.error(request, 'Your plan has ended. Please contact the administrators to renew your plan.')
+            return render(request,'index.html')
+
+
         #if access = True login
         if access:
             login(request, user)
-            #redirct to profile 
+            #redirct to profile
             return redirect('home:home_ar')
 
     return render(request,'index.html')
@@ -699,12 +703,16 @@ def log_in_ar(request):
             #send message
             messages.error(request, "عزيز المتداول نود اعلامك بان فترة التعليم الخاصة بك في موقع حيتان التداول قد انتهت اذا كنت ترغب في تجديد الاشتراك والاستمرار في رحلتك التعليمية معنا يرجي التواصل مع الشخص المسئول الكوتش بتاعك ليطلعك علي خطوات التجديد شكرا لاختيارك حيتان التداول ونتطلع لمواصلة دعمك وتقديم افضل تجربة تعليمية لك تحياتنا فريق حيتان التداول")
             return render(request,'ar/index.html')
-        
-        
+
+        if user.ended_at and user.ended_at < timezone.now():
+            messages.error(request, 'تم انتهاء الخطه الخاصه بك عد للمسؤلين لتجديد الخطه')
+            return render(request,'ar/index.html')
+
+
         #if access = True login
         if access:
             login(request, user)
-            #redirct to profile 
+            #redirct to profile
             return redirect('home:home_ar')
 
     return render(request,'ar/index.html')
