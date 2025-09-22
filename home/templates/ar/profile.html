@@ -218,6 +218,11 @@
                 <p>{{indirect_partners_ex}}  </p>
               </div>
               <div class="d-flex">
+                <i class="fas fa-user-times" style="margin: 5px; color: #00d094"></i>
+                <span style="color:white">عدد الشركاء المنتهين:</span>
+                <p>{{ended_partners_count}}  </p>
+              </div>
+              <div class="d-flex">
                 <i class="fas fa-users-rays" style="margin: 5px; color: #00d094"></i>
                 <span style="color:white">اجمالي عدد الشركاء:</span>
                 <p>{{total_partners_ex}}  </p>
@@ -328,6 +333,7 @@
                                       <th class="column-date text-center green-color">رقم الهاتف</th>
                                       <th class="column-quiz text-center green-color" style="width: fit-content !important; white-space: nowrap;"> تاريخ التسجيل</th>
                                       <th class="column-quiz text-center green-color">  تاريخ الاغلاق </th>
+                                      <th class="column-quiz text-center green-color"> حالة العضو </th>
                                       <th class="column-quiz text-center green-color" style="width: fit-content !important; white-space: nowrap;">عدد الشركاء</th>
                                       <th class="column-time-interval text-center green-color">العملات</th>
                                       <th class="column-time-interval text-center green-color">ارسال عملات</th>
@@ -354,6 +360,11 @@
                                       </td>
                                       <td class="column-quiz">
                                           <a href="#">{{ profile.user.ended_at|date:"d/m/Y" }}</a>
+                                      </td>
+                                      <td class="column-quiz">
+                                          <span class="{% if profile.is_active_partner %}text-success{% else %}text-danger{% endif %}">
+                                              {% if profile.is_active_partner %}فعال{% else %}منتهي{% endif %}
+                                          </span>
                                       </td>
                                       <td class="column-quiz">
                                           <a href="#">{{ profile.partner_count }} <i class="fas fa-user"></i></a>
