@@ -133,6 +133,23 @@
     color: #e5cd26;
   }
 
+  .header-section .menu-area {
+    position: relative;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+  }
+
+  .header-section .menu-area .menu {
+    flex: 1 1 auto;
+  }
+
+  .header-section .menu-area .header-bar {
+    margin-inline-start: auto;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
   @media (max-width: 991.98px) {
     .header-section .header-wrapper {
       flex-direction: column;
@@ -141,6 +158,7 @@
 
     .header-section .menu-area {
       width: 100%;
+      justify-content: flex-end;
     }
 
     .header-section .menu {
@@ -276,14 +294,14 @@
 
                 </ul>
 
-              </div>
-
                 <!-- toggle icons -->
                 <div class="header-bar d-lg-none header-bar--style1">
                   <span></span>
                   <span></span>
                   <span></span>
                 </div>
+
+              </div>
              
             </div>
           </div>
