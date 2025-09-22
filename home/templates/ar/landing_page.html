@@ -191,10 +191,14 @@
     .header-section .header-wrapper {
       flex-wrap: nowrap;
       gap: 0.75rem;
+      align-items: center;
     }
 
     .header-section .menu-area {
       flex: 1 1 auto;
+      flex-wrap: nowrap;
+      flex-direction: row-reverse;
+      align-items: center;
       justify-content: space-between;
       gap: 0.75rem;
     }
@@ -203,6 +207,11 @@
       flex: 1 1 auto;
       justify-content: flex-start;
       gap: 1rem;
+    }
+
+    .header-section .menu-area .header-bar {
+      margin-right: auto;
+      margin-left: 0;
     }
 
     .menu .menu__action {
