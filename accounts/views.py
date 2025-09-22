@@ -81,26 +81,43 @@ def log_out(request):
     
     
 
-# دالة لحساب عدد الأشخاص المضافين بشكل غير مباشر
-def get_indirect_partners(user):
-    # احصل على الشركاء المباشرين (الأشخاص الذين أضافهم هذا المستخدم مباشرةً)
-    direct_partners = CustomUser.objects.filter(create_by=user)
-    
-    # قائمة لتجميع كل الشركاء المباشرين وغير المباشرين
-    all_partners = list(direct_partners)
-    
-    all_indirect_partners = []
-    
-    
-    # لكل شريك مباشر، نحسب الشركاء الذين أضافهم بشكل مباشر وغير مباشر
-    for partner in direct_partners:
-        # استدعاء التكرار للحصول على الشركاء غير المباشرين
-        indirect_partners = get_indirect_partners(partner)
-        # أضف الشركاء غير المباشرين إلى القائمة
-        all_indirect_partners.append(indirect_partners)
-        
-    
-    return all_indirect_partners
+# دالة لجمع كل الشركاء (المباشرين وغير المباشرين) لأي مستخدم
+def get_all_partner_ids(user, initial_partner_ids=None):
+    """Return a set with the IDs for every partner added by ``user``."""
+
+    if initial_partner_ids is None:
+        current_level_ids = list(
+            CustomUser.objects.filter(create_by=user).values_list('id', flat=True)
+        )
+    else:
+        current_level_ids = list(initial_partner_ids)
+
+    all_partner_ids = set(current_level_ids)
+
+    while current_level_ids:
+        current_level_ids = list(
+            CustomUser.objects.filter(create_by__in=current_level_ids).values_list('id', flat=True)
+        )
+        all_partner_ids.update(current_level_ids)
+
+    return all_partner_ids
+
+
+def calculate_partner_counts(user, direct_partner_ids=None):
+    """Return the counts for indirect partners and the total partners for ``user``."""
+
+    if direct_partner_ids is None:
+        direct_partner_ids = list(
+            CustomUser.objects.filter(create_by=user).values_list('id', flat=True)
+        )
+
+    direct_partner_ids = set(direct_partner_ids)
+    all_partner_ids = get_all_partner_ids(user, direct_partner_ids)
+
+    total_partners_count = len(all_partner_ids)
+    indirect_partners_count = max(total_partners_count - len(direct_partner_ids), 0)
+
+    return indirect_partners_count, total_partners_count
 
 
     
@@ -152,15 +169,11 @@ def profile(request):
     
     
     
-    direct_partners_ex = CustomUser.objects.filter(create_by=user)
-    
-    # حساب الشركاء غير المباشرين باستخدام الدالة الجديدة
-    indirect_partners_ex = get_indirect_partners(user)
-    
-    # حساب العدد الكلي للشركاء (مباشرين وغير مباشرين)
-    total_partners_ex = len(indirect_partners_ex)+len(direct_partners_ex)
-    
-    rank=Rank.objects.filter(min_number__lte=total_partners_ex).order_by('-min_number').first()
+    direct_partners_ex = users
+    direct_partner_ids = list(direct_partners_ex.values_list('id', flat=True))
+    indirect_partners_count, total_partners_ex = calculate_partner_counts(user, direct_partner_ids)
+
+    rank = Rank.objects.filter(min_number__lte=total_partners_ex).order_by('-min_number').first()
     
     
     context = {
@@ -176,8 +189,8 @@ def profile(request):
         'my_partners': my_partners,
         'last':last,
         'direct_partners_ex': direct_partners_ex,
-        'indirect_partners_ex': len(indirect_partners_ex)-1,
-        'total_partners_ex': total_partners_ex-1,
+        'indirect_partners_ex': indirect_partners_count,
+        'total_partners_ex': total_partners_ex,
         'rank':rank
     }
     return render(request, 'profile.html', context)
@@ -524,13 +537,9 @@ def team_profile(request,id):
 
     my_partners = total_partners + users.count()
     
-    direct_partners_ex = CustomUser.objects.filter(create_by=user)
-    
-    # حساب الشركاء غير المباشرين باستخدام الدالة الجديدة
-    indirect_partners_ex = get_indirect_partners(user)
-    
-    # حساب العدد الكلي للشركاء (مباشرين وغير مباشرين)
-    total_partners_ex = len(indirect_partners_ex)+len(direct_partners_ex)
+    direct_partners_ex = users
+    direct_partner_ids = list(direct_partners_ex.values_list('id', flat=True))
+    indirect_partners_count, total_partners_ex = calculate_partner_counts(user, direct_partner_ids)
     
         
     
@@ -546,7 +555,7 @@ def team_profile(request,id):
         'my_partners': my_partners,
         'forign':forign,
         'direct_partners_ex': direct_partners_ex,
-        'indirect_partners_ex': len(indirect_partners_ex),
+        'indirect_partners_ex': indirect_partners_count,
         'total_partners_ex': total_partners_ex,
     }
     return render(request, 'profile.html', context)
@@ -699,16 +708,12 @@ def profile_ar(request):
         owner=True    
     
     
-    direct_partners_ex = CustomUser.objects.filter(create_by=user)
-    
-    # حساب الشركاء غير المباشرين باستخدام الدالة الجديدة
-    indirect_partners_ex = get_indirect_partners(user)
-    
-    # حساب العدد الكلي للشركاء (مباشرين وغير مباشرين)
-    total_partners_ex = len(indirect_partners_ex)+len(direct_partners_ex)
-    
-    
-    rank=Rank.objects.filter(min_number__lte=total_partners_ex).order_by('-min_number').first()
+    direct_partners_ex = users
+    direct_partner_ids = list(direct_partners_ex.values_list('id', flat=True))
+    indirect_partners_count, total_partners_ex = calculate_partner_counts(user, direct_partner_ids)
+
+
+    rank = Rank.objects.filter(min_number__lte=total_partners_ex).order_by('-min_number').first()
 
     
     
@@ -724,9 +729,9 @@ def profile_ar(request):
         'total_partners': total_partners,
         'my_partners': my_partners,
         'last':last,
-        'indirect_partners_ex': len(indirect_partners_ex)-1,
+        'indirect_partners_ex': indirect_partners_count,
         'direct_partners_ex': direct_partners_ex,
-        'total_partners_ex': total_partners_ex-1,
+        'total_partners_ex': total_partners_ex,
         'rank':rank,
     }
     return render(request, 'ar/profile.html', context)
@@ -985,13 +990,9 @@ def team_profile_ar(request,id):
 
     my_partners = total_partners + users.count()
     
-    direct_partners_ex = CustomUser.objects.filter(create_by=user)
-    
-    # حساب الشركاء غير المباشرين باستخدام الدالة الجديدة
-    indirect_partners_ex = get_indirect_partners(user)
-    
-    # حساب العدد الكلي للشركاء (مباشرين وغير مباشرين)
-    total_partners_ex = len(indirect_partners_ex)+len(direct_partners_ex)
+    direct_partners_ex = users
+    direct_partner_ids = list(direct_partners_ex.values_list('id', flat=True))
+    indirect_partners_count, total_partners_ex = calculate_partner_counts(user, direct_partner_ids)
     
     
     
@@ -1007,7 +1008,7 @@ def team_profile_ar(request,id):
         'my_partners': my_partners,
         'forign':forign,
         'direct_partners_ex': direct_partners_ex,
-        'indirect_partners_ex': len(indirect_partners_ex),
+        'indirect_partners_ex': indirect_partners_count,
         'total_partners_ex': total_partners_ex,
         
     }
