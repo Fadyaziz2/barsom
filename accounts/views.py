@@ -83,8 +83,8 @@ def log_out(request):
     
 
 # دالة لجمع كل الشركاء (المباشرين وغير المباشرين) لأي مستخدم
-def get_all_partner_ids(user, reference_time=None):
-    """Return a set with the IDs for every *active* partner added by ``user``."""
+def get_partner_ids_by_status(user, reference_time=None):
+    """Return two sets containing the IDs of active and ended partners for ``user``."""
 
     if reference_time is None:
         reference_time = timezone.now()
@@ -93,6 +93,7 @@ def get_all_partner_ids(user, reference_time=None):
         CustomUser.objects.filter(create_by=user).values_list('id', flat=True)
     )
     active_partner_ids = set()
+    ended_partner_ids = set()
     processed_ids = set()
 
     while current_level_ids:
@@ -101,9 +102,12 @@ def get_all_partner_ids(user, reference_time=None):
         )
 
         for data in partner_data:
+            partner_id = data['id']
             ended_at = data['ended_at']
             if ended_at is None or ended_at >= reference_time:
-                active_partner_ids.add(data['id'])
+                active_partner_ids.add(partner_id)
+            else:
+                ended_partner_ids.add(partner_id)
 
         processed_ids.update(current_level_ids)
         current_level_ids = list(
@@ -112,25 +116,56 @@ def get_all_partner_ids(user, reference_time=None):
             .values_list('id', flat=True)
         )
 
-    return active_partner_ids
+    return active_partner_ids, ended_partner_ids
 
 
-def calculate_partner_counts(user):
-    """Return the counts for direct, indirect, and total active partners for ``user``."""
+def calculate_partner_counts(user, reference_time=None):
+    """Return the counts for direct, indirect, total active, and ended partners for ``user``."""
 
-    reference_time = timezone.now()
+    if reference_time is None:
+        reference_time = timezone.now()
+
     direct_partner_ids = set(
         CustomUser.objects.filter(create_by=user)
         .filter(Q(ended_at__isnull=True) | Q(ended_at__gte=reference_time))
         .values_list('id', flat=True)
     )
 
-    all_partner_ids = get_all_partner_ids(user, reference_time)
+    active_partner_ids, ended_partner_ids = get_partner_ids_by_status(user, reference_time)
 
-    total_partners_count = len(all_partner_ids)
+    total_partners_count = len(active_partner_ids)
     indirect_partners_count = max(total_partners_count - len(direct_partner_ids), 0)
 
-    return len(direct_partner_ids), indirect_partners_count, total_partners_count
+    return (
+        len(direct_partner_ids),
+        indirect_partners_count,
+        total_partners_count,
+        len(ended_partner_ids),
+    )
+
+
+def annotate_partner_profiles(users_profiles, reference_time=None):
+    """Annotate direct partner profiles with partner counts and active status."""
+
+    if reference_time is None:
+        reference_time = timezone.now()
+
+    total_partners = 0
+
+    for partner_profile in users_profiles:
+        partner_count = Profile.objects.filter(
+            user__create_by=partner_profile.user
+        ).count()
+        partner_profile.partner_count = partner_count
+
+        ended_at = partner_profile.user.ended_at
+        partner_profile.is_active_partner = (
+            ended_at is None or ended_at >= reference_time
+        )
+
+        total_partners += partner_count
+
+    return total_partners
 
 
     
@@ -151,11 +186,8 @@ def profile(request):
     custom_user = CustomUser.objects.get(id=user.id)
     users = CustomUser.objects.filter(create_by=user)
     users_profiles = Profile.objects.filter(user__in=users)
-    total_partners = 0
-    for partner_profile in users_profiles:
-        partner_count = Profile.objects.filter(user__create_by=partner_profile.user).count()
-        partner_profile.partner_count = partner_count
-        total_partners += partner_count
+    reference_time = timezone.now()
+    total_partners = annotate_partner_profiles(users_profiles, reference_time)
 
 
     # #number in school = user_profile.id if user_profile.number=0 elsee user_profile.number
@@ -183,7 +215,12 @@ def profile(request):
     
     
     direct_partners_ex = users
-    direct_partners_count, indirect_partners_count, total_partners_ex = calculate_partner_counts(user)
+    (
+        direct_partners_count,
+        indirect_partners_count,
+        total_partners_ex,
+        ended_partners_count,
+    ) = calculate_partner_counts(user, reference_time)
 
     rank = Rank.objects.filter(min_number__lte=total_partners_ex).order_by('-min_number').first()
     
@@ -204,7 +241,8 @@ def profile(request):
         'direct_partners_count': direct_partners_count,
         'indirect_partners_ex': indirect_partners_count,
         'total_partners_ex': total_partners_ex,
-        'rank':rank
+        'rank':rank,
+        'ended_partners_count': ended_partners_count,
     }
     return render(request, 'profile.html', context)
 
@@ -539,19 +577,21 @@ def team_profile(request,id):
     custom_user = CustomUser.objects.get(id=user.id)
     users = CustomUser.objects.filter(create_by=user)
     users_profiles = Profile.objects.filter(user__in=users)
+    reference_time = timezone.now()
 
-    
+
     forign=1
-    total_partners = 0
-    for partner_profile in users_profiles:
-        partner_count = Profile.objects.filter(user__create_by=partner_profile.user).count()
-        partner_profile.partner_count = partner_count
-        total_partners += partner_count
+    total_partners = annotate_partner_profiles(users_profiles, reference_time)
 
     my_partners = total_partners + users.count()
     
     direct_partners_ex = users
-    direct_partners_count, indirect_partners_count, total_partners_ex = calculate_partner_counts(user)
+    (
+        direct_partners_count,
+        indirect_partners_count,
+        total_partners_ex,
+        ended_partners_count,
+    ) = calculate_partner_counts(user, reference_time)
     
         
     
@@ -570,6 +610,7 @@ def team_profile(request,id):
         'direct_partners_count': direct_partners_count,
         'indirect_partners_ex': indirect_partners_count,
         'total_partners_ex': total_partners_ex,
+        'ended_partners_count': ended_partners_count,
     }
     return render(request, 'profile.html', context)
 
@@ -690,11 +731,8 @@ def profile_ar(request):
     custom_user = CustomUser.objects.get(id=user.id)
     users = CustomUser.objects.filter(create_by=user)
     users_profiles = Profile.objects.filter(user__in=users)
-    total_partners = 0
-    for partner_profile in users_profiles:
-        partner_count = Profile.objects.filter(user__create_by=partner_profile.user).count()
-        partner_profile.partner_count = partner_count
-        total_partners += partner_count
+    reference_time = timezone.now()
+    total_partners = annotate_partner_profiles(users_profiles, reference_time)
 
     my_partners = total_partners + users.count()
     
@@ -722,7 +760,12 @@ def profile_ar(request):
     
     
     direct_partners_ex = users
-    direct_partners_count, indirect_partners_count, total_partners_ex = calculate_partner_counts(user)
+    (
+        direct_partners_count,
+        indirect_partners_count,
+        total_partners_ex,
+        ended_partners_count,
+    ) = calculate_partner_counts(user, reference_time)
 
 
     rank = Rank.objects.filter(min_number__lte=total_partners_ex).order_by('-min_number').first()
@@ -746,6 +789,7 @@ def profile_ar(request):
         'direct_partners_ex': direct_partners_ex,
         'total_partners_ex': total_partners_ex,
         'rank':rank,
+        'ended_partners_count': ended_partners_count,
     }
     return render(request, 'ar/profile.html', context)
 
@@ -994,17 +1038,19 @@ def team_profile_ar(request,id):
     custom_user = CustomUser.objects.get(id=user.id)
     users = CustomUser.objects.filter(create_by=user)
     users_profiles = Profile.objects.filter(user__in=users)
+    reference_time = timezone.now()
     forign=1
-    total_partners = 0
-    for partner_profile in users_profiles:
-        partner_count = Profile.objects.filter(user__create_by=partner_profile.user).count()
-        partner_profile.partner_count = partner_count
-        total_partners += partner_count
+    total_partners = annotate_partner_profiles(users_profiles, reference_time)
 
     my_partners = total_partners + users.count()
     
     direct_partners_ex = users
-    direct_partners_count, indirect_partners_count, total_partners_ex = calculate_partner_counts(user)
+    (
+        direct_partners_count,
+        indirect_partners_count,
+        total_partners_ex,
+        ended_partners_count,
+    ) = calculate_partner_counts(user, reference_time)
     
     
     
@@ -1023,7 +1069,8 @@ def team_profile_ar(request,id):
         'direct_partners_count': direct_partners_count,
         'indirect_partners_ex': indirect_partners_count,
         'total_partners_ex': total_partners_ex,
-        
+        'ended_partners_count': ended_partners_count,
+
     }
     return render(request, 'ar/profile.html', context)
 
