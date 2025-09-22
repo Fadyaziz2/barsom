@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-5vf5zjeb9&8x6o+-i4nfk1ux&=%6pd-h4$#d8%a71--g@d=hyq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 # DEBUG = True
-ALLOWED_HOSTS = ['85.31.237.74', 'tradingwhaleschool.online' , 'tradingwhales.online','93.127.203.33','localhost','127.0.0.1' ]
+ALLOWED_HOSTS = ['207.180.239.207', 'the-whales.com' , 'tradingwhales.online','93.127.203.33','localhost','127.0.0.1' ]
 # Application definition
 INSTALLED_APPS = [
     'jazzmin',
