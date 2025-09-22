@@ -109,6 +109,30 @@
     padding: 0 1.5rem;
   }
 
+  .menu .menu__action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .menu .menu__action .trk-btn {
+    margin-top: 0;
+  }
+
+  .menu .menu__action--language i {
+    color: #e5cd26;
+    font-size: 25px;
+  }
+
+  .menu .menu__action--language a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .menu .menu__action--language a:hover {
+    color: #e5cd26;
+  }
+
   @media (max-width: 991.98px) {
     .header-section .header-wrapper {
       flex-direction: column;
@@ -125,9 +149,9 @@
       gap: 0.75rem;
     }
 
-    .header-section .d-flex {
-      margin-right: 0 !important;
-      margin-top: 0 !important;
+    .menu .menu__action {
+      width: 100%;
+      justify-content: center;
     }
 
     .banner__content {
@@ -240,35 +264,20 @@
                   <li>
                     <a href="#contactsection" class="menu-li-a">Contact</a>
                   </li>
-                  
-    
-                  <li style="display: flex;margin-top: -15px;">
-                    <div class="header-action">
-                      <div class="menu-area">
-                        
-                        <div class="">
-                          <a href="{% url 'accounts:login' %}" class="trk-btn trk-btn--border trk-btn--primary">
-                            <span> Login</span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
+                  <li class="menu__action">
+                    <a href="{% url 'accounts:login' %}" class="trk-btn trk-btn--border trk-btn--primary">
+                      <span> Login</span>
+                    </a>
                   </li>
-    
+                  <li class="menu__action menu__action--language">
+                    <i class="fa fa-language"></i>
+                    <a href="/landingpage/ar/">اللغه العربية</a>
+                  </li>
+
                 </ul>
-    
+
               </div>
-    
-              <div class=" d-flex" style="align-items:center; margin-right:30px; margin-top:-20px;">
-                <!---language icon-->
-                <i class="fa fa-language" style="color:#e5cd26;font-size: 25px;"></i>
-                  <div class="custom-dropdown" >
-                    <button class="" style="background-color: #00150f; border: none;">
-                        <a href="/landingpage/ar/">اللغه العربية</a> 
-                    </button>
-                  </div>
-              </div>
-    
+
                 <!-- toggle icons -->
                 <div class="header-bar d-lg-none header-bar--style1">
                   <span></span>
