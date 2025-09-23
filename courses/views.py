@@ -1,49 +1,36 @@
-from django.shortcuts import render
-#import login_required
 from django.contrib.auth.decorators import login_required
-#import Profile from accounts
-from accounts.models import Profile , MemberShip
-#import course , lecture
-from .models import Course , Lecture , Lecture_rate , ViewLecture , ViewCourse
-#import redirct
-from django.shortcuts import redirect
-#import video file clip
-from moviepy.editor import VideoFileClip, concatenate_videoclips
-from django.db.models import Sum
-#import timezone
-from django.utils import timezone
-#import timedelta
-from datetime import timedelta
 from django.http import HttpResponse
-from django.db.models import Q
+from django.shortcuts import render
+
+from accounts.utils import get_profile_or_missing_response
+from moviepy.editor import VideoFileClip
+
+from .models import Course, Lecture, ViewLecture, ViewCourse
 
 # Create your views here.
 
 # #courses_category
 @login_required
 def courses_category(request):
-     user = request.user
-     user_profile = Profile.objects.get(user=user)
-     if user.has_right_sign:
-         #get all course
-          courses = Course.objects.all()
-     else:
-         #get course on user membership and courses that user membership less than course membership
-         courses = Course.objects.filter(member_ship__lte=user_profile.membership) 
-     #get number of all lecture in this course
-     for course in courses:
-         course.lectures_count = len(course.lecture_set.all())
-     #add atrribute to course to check if this course is viewed by this user
-     for course in courses:
-         if ViewCourse.objects.filter(user=user,course=course).exists():
-             course.is_viewed = True
-         else:
-             course.is_viewed = False
-     context={
-         'profile':user_profile,
-         'courses':courses,
-     }
-     return render(request,'courses.html',context)
+    user_profile, missing_response = get_profile_or_missing_response(request, language="en")
+    if missing_response:
+        return missing_response
+
+    user = request.user
+    if getattr(user_profile, "is_placeholder", False) or user.has_right_sign:
+        courses = Course.objects.all()
+    else:
+        courses = Course.objects.filter(member_ship__lte=user_profile.membership)
+
+    for course in courses:
+        course.lectures_count = course.lecture_set.count()
+        course.is_viewed = ViewCourse.objects.filter(user=user, course=course).exists()
+
+    context = {
+        "profile": user_profile,
+        "courses": courses,
+    }
+    return render(request, "courses.html", context)
 
 
 
@@ -52,47 +39,39 @@ def courses_category(request):
 #courses_lect
 @login_required
 def courses_lect(request,id):
+    user_profile, missing_response = get_profile_or_missing_response(request, language="en")
+    if missing_response:
+        return missing_response
+
     user = request.user
-    user_profile = Profile.objects.get(user=user)
-    #get lecture 
-    lectures = Lecture.objects.filter(course=id).order_by('number')
-    #get all lectures video duration
+    lectures = Lecture.objects.filter(course=id).order_by("number")
+
     for lecture in lectures:
         video = VideoFileClip(lecture.video.path)
-        lecture.duration = video.duration
-        lecture.duration = round(lecture.duration / 60,1)
-        lecture.duration = str(lecture.duration) + ' min'
-    
-    #add atrribute to lecture to check if this lecture is viewed by this user
-    for lecture in lectures:
-        viewlectures = ViewLecture.objects.filter(user=user, lecture=lecture)
-        if viewlectures.exists():
-            lecture.is_viewed = True
-        else:
-            lecture.is_viewed = False
+        duration_minutes = round(video.duration / 60, 1)
+        lecture.duration = f"{duration_minutes} min"
+        lecture.is_viewed = ViewLecture.objects.filter(user=user, lecture=lecture).exists()
 
-            
-
-    context={
-        'profile':user_profile,
-        'lectures':lectures,
+    context = {
+        "profile": user_profile,
+        "lectures": lectures,
     }
-    return render(request,'course-lect.html',context)
+    return render(request, "course-lect.html", context)
 
 #course_details
 @login_required
 def course_details(request,id):
-    user = request.user
-    user_profile = Profile.objects.get(user=user)
-    #get lecture by id
+    user_profile, missing_response = get_profile_or_missing_response(request, language="en")
+    if missing_response:
+        return missing_response
+
     lecture = Lecture.objects.get(id=id)
-     #get course for this lecture
-    course = Course.objects.get(id=lecture.course.id)
-    context={
-        'profile':user_profile,
-        'lecture':lecture,
+
+    context = {
+        "profile": user_profile,
+        "lecture": lecture,
     }
-    return render(request,'course-details.html',context)
+    return render(request, "course-details.html", context)
 
 
 
@@ -148,77 +127,47 @@ def view_lect(request,lect_id):
 #courses_category
 @login_required
 def courses_category_ar(request):
-    user = request.user
-    user_profile = Profile.objects.get(user=user)
-    
-    if user.has_right_sign:
-        #get all course
-         courses = Course.objects.all()
-    else:
-        #get course on user membership
-        courses = Course.objects.filter(member_ship__lte=user_profile.membership)     
-    #get number of all lecture in this course
-    for course in courses:
-        course.lectures_count = len(course.lecture_set.all())
-    
-    
-    #set fully_star and empty_star in course depend on course.rate
-    # for course in courses:
-    #     course.fully_star = range(course.rate)
-    #     course.empty_star = range(5-course.rate)
-        
-    
-    #add atrribute to course to check if this course is viewed by this user
-    for course in courses:
-        if ViewCourse.objects.filter(user=user,course=course).exists():
-            course.is_viewed = True
-        else:
-            course.is_viewed = False
+    user_profile, missing_response = get_profile_or_missing_response(request, language="ar")
+    if missing_response:
+        return missing_response
 
-    context={
-        'profile':user_profile,
-        'courses':courses,
+    user = request.user
+    if getattr(user_profile, "is_placeholder", False) or user.has_right_sign:
+        courses = Course.objects.all()
+    else:
+        courses = Course.objects.filter(member_ship__lte=user_profile.membership)
+
+    for course in courses:
+        course.lectures_count = course.lecture_set.count()
+        course.is_viewed = ViewCourse.objects.filter(user=user, course=course).exists()
+
+    context = {
+        "profile": user_profile,
+        "courses": courses,
     }
-    return render(request,'ar/courses.html',context)
+    return render(request, "ar/courses.html", context)
 
 #courses_lect
 @login_required
 def courses_lect_ar(request,id):
+    user_profile, missing_response = get_profile_or_missing_response(request, language="ar")
+    if missing_response:
+        return missing_response
+
     user = request.user
-    user_profile = Profile.objects.get(user=user)
-    #get lecture 
-    lectures = Lecture.objects.filter(course=id).order_by('number')
-    #get all lectures video duration
+    lectures = Lecture.objects.filter(course=id).order_by("number")
+
     for lecture in lectures:
         video = VideoFileClip(lecture.video.path)
-        lecture.duration = video.duration
-        lecture.duration = round(lecture.duration / 60,1)
-        lecture.duration = str(lecture.duration) + ' دقيقة'
-    
-    
-    #set fully_star and empty_star in lecture depend on lecture.Lecture_rate
-    # for lecture in lectures:
-    #     lecture.fully_star = range(lecture.rate)
-    #     lecture.empty_star = range(5-lecture.rate)
+        duration_minutes = round(video.duration / 60, 1)
+        lecture.duration = f"{duration_minutes} دقيقة"
+        lecture.is_viewed = ViewLecture.objects.filter(user=user, lecture=lecture).exists()
 
-     #add atrribute to lecture to check if this lecture is viewed by this user
-    for lecture in lectures:
-        viewlectures = ViewLecture.objects.filter(user=user, lecture=lecture)
-        if viewlectures.exists():
-            lecture.is_viewed = True
-            
-                        
-                    
-                
-        else:
-            lecture.is_viewed = False
-    
-    
-    context={
-        'profile':user_profile,
-        'lectures':lectures,
+    context = {
+        "profile": user_profile,
+        "lectures": lectures,
     }
-    return render(request,'ar/course-lect.html',context)
+    return render(request, "ar/course-lect.html", context)
 
 
 
@@ -226,20 +175,17 @@ def courses_lect_ar(request,id):
 #course_details
 @login_required
 def course_details_ar(request,id):
-    user = request.user
-    user_profile = Profile.objects.get(user=user)
-    #get lecture by id
-    lecture = Lecture.objects.get(id=id)
-     #get course for this lecture
-    course = Course.objects.get(id=lecture.course.id)
-          
-        
+    user_profile, missing_response = get_profile_or_missing_response(request, language="ar")
+    if missing_response:
+        return missing_response
 
-    context={
-        'profile':user_profile,
-        'lecture':lecture,
+    lecture = Lecture.objects.get(id=id)
+
+    context = {
+        "profile": user_profile,
+        "lecture": lecture,
     }
-    return render(request,'ar/course-details.html',context)
+    return render(request, "ar/course-details.html", context)
 
 
 
