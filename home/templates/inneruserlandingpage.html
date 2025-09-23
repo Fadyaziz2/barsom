@@ -26,14 +26,26 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
-                
+
                 <div class="col-md-6 mb-3">
                     <label for="image" class="form-label">image *</label>
-                    <input type="file" accept="image/*" class="form-control" id="image" name="image" required placeholder="Your image" value="{{ user_landing_page.image.url }}">
+                    <input type="file" accept="image/*" class="form-control" id="image" name="image" required placeholder="Your image">
+                    {% if user_landing_page and user_landing_page.image %}
+                    <div class="mt-2">
+                        <small class="d-block text-muted">Current image:</small>
+                        <img src="{{ user_landing_page.image.url }}" alt="Current image" class="img-fluid rounded" style="max-height: 200px;">
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="video" class="form-label">video *</label>
-                    <input type="file" accept="video/*" class="form-control" id="video" name="video" required placeholder="Your video" value="{{ user_landing_page.video.url }}">
+                    <input type="file" accept="video/*" class="form-control" id="video" name="video" required placeholder="Your video">
+                    {% if user_landing_page and user_landing_page.video %}
+                    <div class="mt-2">
+                        <small class="d-block text-muted">Current video:</small>
+                        <video src="{{ user_landing_page.video.url }}" controls class="w-100 rounded" style="max-height: 240px;"></video>
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="name" class="form-label">Title *</label>
