@@ -16,9 +16,73 @@
     .imagescale:hover {
         scale: 1;
     }
+
     .show:hover{
         cursor: pointer;
         color:#00D094;
+    }
+
+    .secured-video-wrapper {
+        position: relative;
+    }
+
+    .secured-video {
+        width: 100%;
+        height: 100%;
+        -webkit-user-select: none;
+        user-select: none;
+        background-color: #000;
+    }
+
+    .video-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.75);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        z-index: 5;
+    }
+
+    .video-overlay.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .video-overlay .trk-btn {
+        padding: 0.75rem 2.5rem;
+        font-size: 1.125rem;
+    }
+
+    .trk-btn.is-locked {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .video-security-toast {
+        position: fixed;
+        left: 50%;
+        bottom: 2rem;
+        transform: translate(-50%, 2rem);
+        background: rgba(0, 0, 0, 0.85);
+        color: #ffffff;
+        padding: 0.75rem 1.75rem;
+        border-radius: 999px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        z-index: 1050;
+        max-width: 90%;
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    .video-security-toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
     }
 </style>
 
@@ -174,8 +238,27 @@
         <div class="container">
           <h1 class="text-center" style="color: #00D094;">محاضرة التداول</h1>
       
-          <div>
-            <video id="promoVideo" {% if landing_page.video %}src="{{ landing_page.video.url }}"{% endif %} controls width="100%" height="100%"></video>
+          <div class="secured-video-wrapper">
+            <video
+              id="promoVideo"
+              class="secured-video"
+              {% if landing_page.video %}data-video-src="{{ landing_page.video.url }}"{% endif %}
+              data-progress-key="landing-{{ landing_page.pk }}-ar"
+              data-security-message="لأسباب أمنية لا يسمح بتنزيل أو تصوير هذا الفيديو."
+              {% if landing_page.video_poster %}poster="{{ landing_page.video_poster.url }}"{% endif %}
+              controls
+              playsinline
+              preload="metadata"
+              controlsList="nodownload noplaybackrate noremoteplayback"
+              disablePictureInPicture
+              oncontextmenu="return false;"
+              width="100%"
+              height="100%"
+            ></video>
+            <div class="video-overlay" id="videoOverlay">
+              <button type="button" class="trk-btn trk-btn--primary" id="videoOverlayPlay">ابدأ الفيديو</button>
+            </div>
+          </div>
             {% if not landing_page.video %}
             <div class="alert alert-warning text-center mt-3" role="alert">
               لا يوجد فيديو متاح حاليًا.
@@ -276,8 +359,8 @@
                     <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="ملاحظاتك"></textarea>
                 </div>
                 <div class="text-center">
-                    <button type="submit" id="requestButton" class="trk-btn trk-btn--border trk-btn--primary d-block mt-4" disabled 
-                    data-bs-toggle="tooltip" title="يجب مشاهدة الفيديوا بالكامل لتمكن من طلب العضوية">
+                    <button type="submit" id="requestButton" class="trk-btn trk-btn--border trk-btn--primary d-block mt-4 is-locked"
+                    data-lock-message="قم بإكمال الفيديو أولاً من فضلك.">
                     طلب
                     </button>
                 </div>
@@ -289,154 +372,376 @@
 
  
     
-    <script>
-      const video = document.getElementById('promoVideo');
-      const realButton = document.getElementById('toggleButton');
-      const testButton = document.getElementById('toggleButton-test');
-      const membershipForm = document.getElementById('membershipForm');
-      const icon = document.getElementById('icon');
-      const requestBtn = document.getElementById('requestButton');
-
-      const hasVideo = video && video.getAttribute('src');
-      let hasWatchedVideo = !hasVideo;
-
-      if (hasVideo) {
-        if (realButton) {
-          realButton.style.display = 'none';
-        }
-        if (testButton) {
-          testButton.style.display = 'block';
-        }
-
-        video.addEventListener('ended', () => {
-          hasWatchedVideo = true;
-
-          if (realButton) {
-            realButton.style.display = 'block';
-          }
-          if (testButton) {
-            testButton.style.display = 'none';
-          }
-          if (requestBtn) {
-            requestBtn.disabled = false;
-          }
-        });
-
-        if (testButton) {
-          testButton.addEventListener('click', () => {
-            if (!hasWatchedVideo) {
-              alert('يرجى مشاهدة الفيديو بالكامل قبل طلب العضوية.');
-            }
-          });
-        }
-      } else {
-        if (realButton) {
-          realButton.style.display = 'block';
-        }
-        if (testButton) {
-          testButton.style.display = 'none';
-        }
-        if (requestBtn) {
-          requestBtn.disabled = false;
-        }
-      }
-
-      if (realButton) {
-        realButton.addEventListener('click', () => {
-          if (membershipForm.style.display === 'none') {
-            membershipForm.style.display = 'block';
-            icon.classList.remove('fa-arrow-down');
-            icon.classList.add('fa-arrow-up');
-          } else {
-            membershipForm.style.display = 'none';
-            icon.classList.remove('fa-arrow-up');
-            icon.classList.add('fa-arrow-down');
-          }
-        });
-      }
-    </script>
-    
-
-
-
-
-    <script>
-      const video = document.getElementById('promoVideo');
-      const unmuteButton = document.getElementById('unmuteButton');
-
-      if (video && video.getAttribute('src') && unmuteButton) {
-        unmuteButton.addEventListener('click', function() {
-            video.muted = false;
-            video.play(); // In case it was paused
-            unmuteButton.style.display = 'none'; // Hide the button after unmuting
-        });
-      }
-    </script>
-
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Get the video and button elements
-        const video = document.getElementById('promoVideo');
-        const requestButton = document.getElementById('requestButton');
-
-        if (requestButton) {
-          // Disable the button initially if a فيديو exists
-          requestButton.disabled = !(video && video.getAttribute('src'));
-        }
-
-        // Initialize Bootstrap tooltip
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-
-        if (video && video.getAttribute('src')) {
-          // Enable button when the video ends
-          video.addEventListener('ended', function() {
-              if (requestButton) {
-                requestButton.disabled = false;
-              }
-          });
-        }
-    </script>
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Toggle form visibility with animation
-            $('#toggleButton').click(function() {
-                $('#membershipForm').slideToggle(400);
-                // update the i icon
-                const icon = $('#icon'); // Select the icon within toggleButton
-                if (icon.hasClass('fa-arrow-down')) {
-                    icon.removeClass('fa-arrow-down').addClass('fa-arrow-up');
+        window.validateAge = function(input) {
+            const value = input.value;
+            const feedback = input.nextElementSibling;
+
+            if (value.length === 11 && /^\d+$/.test(value)) {
+                input.setCustomValidity('');
+                if (feedback) {
+                    feedback.style.display = 'none';
+                }
+                input.classList.remove('is-invalid');
+            } else {
+                input.setCustomValidity('Invalid');
+                if (feedback) {
+                    feedback.style.display = 'block';
+                }
+                input.classList.add('is-invalid');
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const membershipContainer = document.getElementById('membershipForm');
+            const toggleButton = document.getElementById('toggleButton');
+            const toggleIcon = document.getElementById('icon');
+
+            if (toggleButton && membershipContainer) {
+                toggleButton.addEventListener('click', function () {
+                    const isHidden = membershipContainer.style.display === 'none' || membershipContainer.style.display === '';
+                    membershipContainer.style.display = isHidden ? 'block' : 'none';
+                    if (toggleIcon) {
+                        toggleIcon.classList.toggle('fa-arrow-down', !isHidden);
+                        toggleIcon.classList.toggle('fa-arrow-up', isHidden);
+                    }
+                });
+            }
+
+            const videoElement = document.getElementById('promoVideo');
+            const requestButton = document.getElementById('requestButton');
+            const videoOverlay = document.getElementById('videoOverlay');
+            const overlayButton = document.getElementById('videoOverlayPlay');
+            const membershipForm = membershipContainer ? membershipContainer.querySelector('form') : null;
+            const lockMessage = requestButton ? requestButton.dataset.lockMessage : '';
+            const securityMessage = videoElement ? videoElement.dataset.securityMessage : '';
+            const progressKey = videoElement ? (videoElement.dataset.progressKey || null) : null;
+            const tolerance = 0.35;
+            let internalSeek = false;
+            let toastTimeout = null;
+            let objectUrl = null;
+
+            const storage = (function () {
+                try {
+                    const key = 'landing-progress-test';
+                    localStorage.setItem(key, '1');
+                    localStorage.removeItem(key);
+                    return {
+                        get: function (name) { return localStorage.getItem(name); },
+                        set: function (name, value) { localStorage.setItem(name, value); }
+                    };
+                } catch (error) {
+                    return {
+                        get: function () { return null; },
+                        set: function () { }
+                    };
+                }
+            })();
+
+            const showNotice = function (message) {
+                if (!message) {
+                    return;
+                }
+                let toast = document.getElementById('videoNoticeToast');
+                if (!toast) {
+                    toast = document.createElement('div');
+                    toast.id = 'videoNoticeToast';
+                    toast.className = 'video-security-toast';
+                    toast.setAttribute('role', 'alert');
+                    toast.setAttribute('aria-live', 'assertive');
+                    toast.dir = 'auto';
+                    document.body.appendChild(toast);
+                }
+                toast.textContent = message;
+                toast.classList.add('show');
+                if (toastTimeout) {
+                    clearTimeout(toastTimeout);
+                }
+                toastTimeout = setTimeout(function () {
+                    toast.classList.remove('show');
+                }, 3200);
+            };
+
+            const setButtonLocked = function (locked) {
+                if (!requestButton) {
+                    return;
+                }
+                requestButton.dataset.locked = locked ? 'true' : 'false';
+                requestButton.classList.toggle('is-locked', locked);
+                if (locked) {
+                    requestButton.setAttribute('aria-disabled', 'true');
                 } else {
-                    icon.removeClass('fa-arrow-up').addClass('fa-arrow-down');
+                    requestButton.removeAttribute('aria-disabled');
+                }
+            };
+
+            const handleLockedAction = function (event) {
+                if (requestButton && requestButton.dataset.locked === 'true') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    showNotice(lockMessage);
+                }
+            };
+
+            if (requestButton) {
+                requestButton.addEventListener('click', handleLockedAction, true);
+                requestButton.addEventListener('keydown', function (event) {
+                    if ((event.key === 'Enter' || event.key === ' ') && requestButton.dataset.locked === 'true') {
+                        handleLockedAction(event);
+                    }
+                });
+            }
+
+            if (membershipForm) {
+                membershipForm.addEventListener('submit', handleLockedAction);
+            }
+
+            if (!videoElement || !videoElement.dataset.videoSrc) {
+                setButtonLocked(false);
+                return;
+            }
+
+            setButtonLocked(true);
+
+            const showOverlay = function () {
+                if (videoOverlay) {
+                    videoOverlay.classList.add('is-visible');
+                }
+            };
+
+            const hideOverlay = function () {
+                if (videoOverlay) {
+                    videoOverlay.classList.remove('is-visible');
+                }
+            };
+
+            if (overlayButton) {
+                overlayButton.addEventListener('click', function () {
+                    hideOverlay();
+                    videoElement.muted = false;
+                    videoElement.play().catch(function () {
+                        showOverlay();
+                    });
+                });
+            }
+
+            if ('disableRemotePlayback' in videoElement) {
+                videoElement.disableRemotePlayback = true;
+            }
+
+            videoElement.addEventListener('contextmenu', function (event) {
+                event.preventDefault();
+                if (securityMessage) {
+                    showNotice(securityMessage);
                 }
             });
-        });
-    </script>
 
-    <script>
-        function validateAge(input) {
-            const value = input.value;
-            const feedback = input.nextElementSibling; // Get the feedback element
-    
-            // Check if the value is exactly 11 digits
-            if (value.length === 11 && /^\d+$/.test(value)) {
-                input.setCustomValidity(''); // Clear any custom error message
-                feedback.style.display = 'none'; // Hide feedback
-                input.classList.remove('is-invalid'); // Remove invalid class
-            } else {
-                input.setCustomValidity('Invalid'); // Set an error message
-                feedback.style.display = 'block'; // Show feedback
-                input.classList.add('is-invalid'); // Add invalid class
+            videoElement.addEventListener('dragstart', function (event) {
+                event.preventDefault();
+            });
+
+            let storedData = {};
+            if (progressKey) {
+                try {
+                    storedData = JSON.parse(storage.get(progressKey) || '{}');
+                } catch (error) {
+                    storedData = {};
+                }
             }
-        }
+
+            let maxProgress = storedData.maxProgress ? Number(storedData.maxProgress) : 0;
+            let videoCompleted = storedData.completed === true;
+            let lastPersisted = maxProgress;
+
+            const persistProgress = function () {
+                if (!progressKey) {
+                    return;
+                }
+                storage.set(progressKey, JSON.stringify({
+                    maxProgress: maxProgress,
+                    completed: videoCompleted
+                }));
+            };
+
+            const clampTime = function (time) {
+                if (!videoElement.duration || !isFinite(videoElement.duration)) {
+                    return time;
+                }
+                const maxTime = Math.max(videoElement.duration - tolerance, 0);
+                return Math.min(Math.max(time, 0), maxTime);
+            };
+
+            const enforcePlaybackPosition = function (target) {
+                internalSeek = true;
+                videoElement.currentTime = clampTime(target);
+            };
+
+            const attemptAutoplay = function () {
+                const playPromise = videoElement.play();
+                if (playPromise && typeof playPromise.then === 'function') {
+                    playPromise.then(hideOverlay).catch(function () {
+                        showOverlay();
+                    });
+                }
+            };
+
+            const restoreProgress = function () {
+                if (!videoElement.duration || maxProgress <= 0) {
+                    if (videoCompleted) {
+                        setButtonLocked(false);
+                    }
+                    attemptAutoplay();
+                    return;
+                }
+
+                enforcePlaybackPosition(maxProgress);
+                if (videoCompleted) {
+                    setButtonLocked(false);
+                }
+                attemptAutoplay();
+            };
+
+            if (videoElement.readyState >= 1) {
+                restoreProgress();
+            } else {
+                videoElement.addEventListener('loadedmetadata', restoreProgress, { once: true });
+            }
+
+            videoElement.addEventListener('play', function () {
+                hideOverlay();
+                if (videoElement.currentTime < maxProgress - tolerance) {
+                    enforcePlaybackPosition(maxProgress);
+                }
+            });
+
+            videoElement.addEventListener('seeking', function () {
+                if (internalSeek) {
+                    return;
+                }
+                const attemptedTime = videoElement.currentTime;
+                if (attemptedTime > maxProgress + tolerance) {
+                    enforcePlaybackPosition(maxProgress);
+                    showNotice(lockMessage);
+                } else if (attemptedTime < maxProgress - tolerance) {
+                    enforcePlaybackPosition(maxProgress);
+                }
+            });
+
+            videoElement.addEventListener('seeked', function () {
+                internalSeek = false;
+            });
+
+            videoElement.addEventListener('timeupdate', function () {
+                if (internalSeek) {
+                    return;
+                }
+                if (videoElement.currentTime > maxProgress) {
+                    maxProgress = videoElement.currentTime;
+                    if (maxProgress - lastPersisted >= 1) {
+                        lastPersisted = maxProgress;
+                        persistProgress();
+                    }
+                }
+            });
+
+            videoElement.addEventListener('ratechange', function () {
+                if (videoElement.playbackRate !== 1) {
+                    videoElement.playbackRate = 1;
+                    if (securityMessage) {
+                        showNotice(securityMessage);
+                    }
+                }
+            });
+
+            videoElement.addEventListener('ended', function () {
+                if (videoElement.duration) {
+                    maxProgress = Math.max(maxProgress, videoElement.duration - tolerance);
+                }
+                videoCompleted = true;
+                persistProgress();
+                setButtonLocked(false);
+                enforcePlaybackPosition(maxProgress);
+                videoElement.pause();
+            });
+
+            const securityWarning = function () {
+                if (securityMessage) {
+                    showNotice(securityMessage);
+                }
+            };
+
+            document.addEventListener('contextmenu', function (event) {
+                if (videoElement.contains(event.target)) {
+                    event.preventDefault();
+                    securityWarning();
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                const key = event.key;
+                const target = event.target;
+
+                if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(key) && (target === videoElement || target === document.body)) {
+                    event.preventDefault();
+                    securityWarning();
+                }
+
+                if (key === 'PrintScreen') {
+                    event.preventDefault();
+                    securityWarning();
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText('').catch(function () {});
+                    }
+                }
+
+                if (key === 'F12' || (event.ctrlKey && event.shiftKey && ['I', 'C', 'J'].includes(key.toUpperCase())) || (event.ctrlKey && ['S', 'P', 'U'].includes(key.toUpperCase()))) {
+                    event.preventDefault();
+                    securityWarning();
+                }
+            }, true);
+
+            window.addEventListener('beforeunload', function () {
+                persistProgress();
+                if (objectUrl) {
+                    URL.revokeObjectURL(objectUrl);
+                }
+            });
+
+            const assignSource = function (source) {
+                return new Promise(function (resolve) {
+                    const handleLoaded = function () {
+                        videoElement.removeEventListener('loadeddata', handleLoaded);
+                        resolve();
+                    };
+                    videoElement.addEventListener('loadeddata', handleLoaded);
+                    videoElement.src = source;
+                    videoElement.load();
+                });
+            };
+
+            const sourceUrl = videoElement.dataset.videoSrc;
+            fetch(sourceUrl, { credentials: 'same-origin' })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob();
+                })
+                .then(function (blob) {
+                    objectUrl = URL.createObjectURL(blob);
+                    return assignSource(objectUrl);
+                })
+                .catch(function () {
+                    return assignSource(sourceUrl);
+                })
+                .finally(function () {
+                    if (videoElement.readyState >= 1) {
+                        restoreProgress();
+                    }
+                });
+        });
     </script>
 
     <script>
