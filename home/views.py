@@ -29,6 +29,7 @@ def home(request):
 
 #=====================================AR==========================================
 
+@login_required
 def home_ar(request):
     user = request.user
     user_profile = Profile.objects.get(user=user)
