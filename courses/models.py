@@ -10,7 +10,7 @@ from users.models import CustomUser
 #courses image title rate 
 class Course(models.Model):
     member_ship = models.ForeignKey(MemberShip,on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='static/course/image')
+    image = models.ImageField(upload_to='courses/images/')
     title = models.CharField(max_length=100)
     number=models.IntegerField(default=1)
     rate = models.IntegerField(default=0)
@@ -26,9 +26,9 @@ class Course(models.Model):
 class Lecture(models.Model):
     course = models.ForeignKey(Course,on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='static/course/image')
+    image = models.ImageField(upload_to='courses/images/')
     description = models.TextField(null=True , blank=True)
-    video = models.FileField(upload_to='static/course/video')
+    video = models.FileField(upload_to='courses/videos/')
     number = models.IntegerField(default=0)
     rate = models.IntegerField(default=0)
     
