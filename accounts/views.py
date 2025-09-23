@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 #import login
 from django.contrib.auth import authenticate, login,logout
 # import login_required
@@ -585,12 +585,21 @@ def send_coin(request):
 
 @login_required
 def team_profile(request,id):
-    user = CustomUser.objects.get(id=id)
-    user_profile = Profile.objects.get(user=user)
-    membership = MemberShip.objects.get(id=user_profile.membership.id)
+    viewed_user = get_object_or_404(CustomUser, id=id)
+
+    if not request.user.is_superuser and request.user != viewed_user:
+        active_partner_ids, ended_partner_ids = get_partner_ids_by_status(request.user)
+        allowed_partner_ids = active_partner_ids | ended_partner_ids
+
+        if viewed_user.id not in allowed_partner_ids:
+            messages.error(request, 'You do not have permission to view this team.')
+            return redirect('accounts:profile')
+
+    user_profile = get_object_or_404(Profile, user=viewed_user)
+    membership = user_profile.membership
     memberships = MemberShip.objects.all()
-    custom_user = CustomUser.objects.get(id=user.id)
-    users = CustomUser.objects.filter(create_by=user)
+    custom_user = viewed_user
+    users = CustomUser.objects.filter(create_by=viewed_user)
     users_profiles = Profile.objects.filter(user__in=users)
     reference_time = timezone.now()
 
@@ -599,14 +608,14 @@ def team_profile(request,id):
     total_partners = annotate_partner_profiles(users_profiles, reference_time)
 
     my_partners = total_partners + users.count()
-    
+
     direct_partners_ex = users
     (
         direct_partners_count,
         indirect_partners_count,
         total_partners_ex,
         ended_partners_count,
-    ) = calculate_partner_counts(user, reference_time)
+    ) = calculate_partner_counts(viewed_user, reference_time)
     
         
     
@@ -1052,26 +1061,35 @@ def send_coin_ar(request):
 
 @login_required
 def team_profile_ar(request,id):
-    user = CustomUser.objects.get(id=id)
-    user_profile = Profile.objects.get(user=user)
-    membership = MemberShip.objects.get(id=user_profile.membership.id)
+    viewed_user = get_object_or_404(CustomUser, id=id)
+
+    if not request.user.is_superuser and request.user != viewed_user:
+        active_partner_ids, ended_partner_ids = get_partner_ids_by_status(request.user)
+        allowed_partner_ids = active_partner_ids | ended_partner_ids
+
+        if viewed_user.id not in allowed_partner_ids:
+            messages.error(request, 'غير مصرح لك بعرض هذه الصفحة.')
+            return redirect('accounts:profile_ar')
+
+    user_profile = get_object_or_404(Profile, user=viewed_user)
+    membership = user_profile.membership
     memberships = MemberShip.objects.all()
-    custom_user = CustomUser.objects.get(id=user.id)
-    users = CustomUser.objects.filter(create_by=user)
+    custom_user = viewed_user
+    users = CustomUser.objects.filter(create_by=viewed_user)
     users_profiles = Profile.objects.filter(user__in=users)
     reference_time = timezone.now()
     forign=1
     total_partners = annotate_partner_profiles(users_profiles, reference_time)
 
     my_partners = total_partners + users.count()
-    
+
     direct_partners_ex = users
     (
         direct_partners_count,
         indirect_partners_count,
         total_partners_ex,
         ended_partners_count,
-    ) = calculate_partner_counts(user, reference_time)
+    ) = calculate_partner_counts(viewed_user, reference_time)
     
     
     
