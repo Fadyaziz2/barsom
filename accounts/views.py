@@ -36,9 +36,22 @@ def random_string(length=6):
     return ''.join(random.choice(characters) for _ in range(length))
 
 
-#log_in 
+def extend_membership_for_direct_partner(user, extension_days=30):
+    """Extend ``user`` membership by ``extension_days`` after adding a direct partner."""
+
+    if user.is_superuser:
+        return
+
+    now = timezone.now()
+    current_end = user.ended_at
+    base_date = current_end if current_end and current_end > now else now
+    user.ended_at = base_date + timedelta(days=extension_days)
+    user.save(update_fields=['ended_at'])
+
+
+#log_in
 def log_in(request):
-    #login 
+    #login
     if request.method == 'POST':
         #get username and password from form
         username = request.POST.get('username')
@@ -349,10 +362,6 @@ def add_new_member(request):
         if profile.coin < membershipobject.price:
             messages.error(request, 'You don\'t have enough coins for this membership')
             return redirect('accounts:profile')
-            
-
-        create_by.ended_at = timezone.now() + timedelta(days=membershipobject.renewal_days)
-        create_by.save()
 
         # Normalize the name to ASCII characters
         name = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore').decode('utf-8')
@@ -384,10 +393,12 @@ def add_new_member(request):
                 user.delete()
             messages.error(request, 'Error creating profile')
             return redirect('accounts:profile')
-        
+
         profile.coin = profile.coin - membershipobject.price
         profile.save()
-        
+
+        extend_membership_for_direct_partner(create_by)
+
         myprofile = Profile.objects.get(user=create_by)
         myprofile.rank = myprofile.rank + 1
         myprofile.save()
@@ -870,6 +881,8 @@ def add_new_member_ar(request):
         profile.coin = profile.coin - membershipobject.price
         #profile.save()
         profile.save()
+
+        extend_membership_for_direct_partner(create_by)
         #get myprofile
         myprofile = Profile.objects.get(user=create_by)
         # myprofile rank +1
