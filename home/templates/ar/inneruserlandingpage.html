@@ -23,25 +23,37 @@
             <div id="copy-message" style="display:none; color: green;">تم نسخ الرابط</div>
         </div>
             
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
-                
+
                 <div class="col-md-6 mb-3">
                     <label for="image" class="form-label">الصورة *</label>
-                    <input type="file" accept="image/*" class="form-control" id="image" name="image" required placeholder="الصورة" value="{{ user_landing_page.image.url }}">
+                    <input type="file" accept="image/*" class="form-control" id="image" name="image" required placeholder="الصورة">
+                    {% if user_landing_page and user_landing_page.image %}
+                    <div class="mt-2">
+                        <small class="d-block text-muted">الصورة الحالية:</small>
+                        <img src="{{ user_landing_page.image.url }}" alt="الصورة الحالية" class="img-fluid rounded" style="max-height: 200px;">
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="video" class="form-label">الفيديوا *</label>
-                    <input type="file" accept="video/*" class="form-control" id="video" name="video" required placeholder="فيديوا" value="{{ user_landing_page.video.url }}">
+                    <input type="file" accept="video/*" class="form-control" id="video" name="video" required placeholder="فيديوا">
+                    {% if user_landing_page and user_landing_page.video %}
+                    <div class="mt-2">
+                        <small class="d-block text-muted">الفيديو الحالي:</small>
+                        <video src="{{ user_landing_page.video.url }}" controls class="w-100 rounded" style="max-height: 240px;"></video>
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="name" class="form-label">العنوان باللغه الانجليزية *</label>
-                    <input type="text" class="form-control" id="title" value="{{ user_landing_page.title }}" name="name" required placeholder="العنوان باللغه الانجليزية">
+                    <input type="text" class="form-control" id="title" value="{{ user_landing_page.title }}" name="title" required placeholder="العنوان باللغه الانجليزية">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="name" class="form-label">العنوان لاللغة العربية *</label>
-                    <input type="text" class="form-control" id="title" value="{{ user_landing_page.title_ar }}" name="name" required placeholder="العنوان لاللغة العربية">
+                    <input type="text" class="form-control" id="title" value="{{ user_landing_page.title_ar }}" name="title_ar" required placeholder="العنوان لاللغة العربية">
                 </div>
             
             </div>
@@ -51,7 +63,7 @@
             </div>
             <div class="mb-3 ">
                 <label for="notes" class="form-label">الوصف باللغه العربية *</label>
-                <textarea class="form-control" id="notes" name="description" rows="6" placeholder="الوصف باللغه العربية" >{{ user_landing_page.description_ar }}</textarea>
+                <textarea class="form-control" id="notes" name="description_ar" rows="6" placeholder="الوصف باللغه العربية" >{{ user_landing_page.description_ar }}</textarea>
             </div>
             <div class="text-center">
                 <button type="submit" id="requestButton" class="trk-btn trk-btn--border trk-btn--primary d-block mt-4">
