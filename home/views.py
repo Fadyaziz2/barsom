@@ -1,4 +1,4 @@
-from django.shortcuts import render ,redirect
+from django.shortcuts import render, redirect
 # import login_required
 from django.contrib.auth.decorators import login_required
 from users.models import CustomUser
@@ -12,15 +12,28 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.conf import settings
 
+#helper to get profile or render missing profile page
+def _get_profile_or_missing_response(request, language="en"):
+    """Return the logged-in user's profile or a fallback response if it is missing."""
+    user = getattr(request, "user", None)
+    if not getattr(user, "is_authenticated", False):
+        return None, None
+
+    try:
+        profile = Profile.objects.select_related("membership").get(user=user)
+        return profile, None
+    except Profile.DoesNotExist:
+        template_name = "profile_missing.html" if language != "ar" else "ar/profile_missing.html"
+        return None, render(request, template_name, status=404)
+
+
 #home
 @login_required
 def home(request):
-    user = request.user
-    user_profile = Profile.objects.get(user=user)
-    
-    
-    
-    
+    user_profile, missing_response = _get_profile_or_missing_response(request, language="en")
+    if missing_response:
+        return missing_response
+
     context={
         'profile':user_profile,
     }
@@ -29,13 +42,12 @@ def home(request):
 
 #=====================================AR==========================================
 
+@login_required
 def home_ar(request):
-    user = request.user
-    user_profile = Profile.objects.get(user=user)
-    
-    
-    
-    
+    user_profile, missing_response = _get_profile_or_missing_response(request, language="ar")
+    if missing_response:
+        return missing_response
+
     context={
         'profile':user_profile,
     }
@@ -117,30 +129,32 @@ def send_emails_ar(request):
 #error_404_view
 @login_required
 def error_404_view(request,exception):
-    user = request.user
-    user_profile = Profile.objects.get(user=user)
-    
-    
-    
-    
+    language = "ar" if request.path.startswith("/ar/") else "en"
+    user_profile, missing_response = _get_profile_or_missing_response(request, language=language)
+    if missing_response:
+        return missing_response
+
+    template_name = 'ar/404.html' if language == 'ar' else '404.html'
+
     context={
         'profile':user_profile,
     }
-    return render(request,'404.html',context)
+    return render(request, template_name, context, status=404)
 
 
 @login_required
 def error_500_view(request):
-    user = request.user
-    user_profile = Profile.objects.get(user=user)
-    
-    
-    
-    
+    language = "ar" if request.path.startswith("/ar/") else "en"
+    user_profile, missing_response = _get_profile_or_missing_response(request, language=language)
+    if missing_response:
+        return missing_response
+
+    template_name = 'ar/404.html' if language == 'ar' else '404.html'
+
     context={
         'profile':user_profile,
     }
-    return render(request,'404.html',context)
+    return render(request, template_name, context, status=500)
 
 
 

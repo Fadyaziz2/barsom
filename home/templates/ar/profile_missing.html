@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>استكمال إعداد الملف الشخصي</title>
+  <style>
+    body {
+      background-color: #081c16;
+      color: #f1f5f9;
+      font-family: "Tajawal", "Cairo", Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: rgba(8, 28, 22, 0.85);
+      border: 1px solid #0f3c2f;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      max-width: 420px;
+      padding: 32px;
+      text-align: center;
+    }
+    h1 {
+      color: #00d094;
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    p {
+      line-height: 1.8;
+      margin: 0 0 20px;
+    }
+    a {
+      color: #00d094;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>قريبًا ستكون جاهزًا!</h1>
+    <p>لم يتم العثور على ملف شخصي مرتبط بحسابك بعد، وهذا يعني غالبًا أن إجراءات التسجيل لم تكتمل.</p>
+    <p>يرجى التواصل مع إدارة المنصة لاستكمال إعداد ملفك الشخصي ومنحك صلاحية الدخول الكاملة.</p>
+    <p><a href="mailto:support@the-whales.com">التواصل مع الدعم</a></p>
+    <p><a href="{% url 'accounts:logout_ar' %}">تسجيل الخروج</a></p>
+  </main>
+</body>
+</html>
