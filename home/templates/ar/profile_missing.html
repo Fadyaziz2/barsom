@@ -32,6 +32,19 @@
       line-height: 1.8;
       margin: 0 0 20px;
     }
+    .missing-title {
+      font-weight: 600;
+    }
+    .missing-list {
+      text-align: right;
+      margin: 0 0 20px 0;
+      padding: 0 20px 0 0;
+      line-height: 1.8;
+      list-style-position: inside;
+    }
+    .missing-list li {
+      margin-bottom: 6px;
+    }
     a {
       color: #00d094;
       font-weight: 600;
@@ -46,7 +59,14 @@
   <main class="card">
     <h1>قريبًا ستكون جاهزًا!</h1>
     <p>لم يتم العثور على ملف شخصي مرتبط بحسابك بعد، وهذا يعني غالبًا أن إجراءات التسجيل لم تكتمل.</p>
-    <p>يرجى التواصل مع إدارة المنصة لاستكمال إعداد ملفك الشخصي ومنحك صلاحية الدخول الكاملة.</p>
+    <p class="missing-title">لاستكمال تفعيل حسابك نحتاج إلى البيانات التالية:</p>
+    <ul class="missing-list">
+      <li>خطة الاشتراك المرتبطة بحسابك</li>
+      <li>اسمك الكامل</li>
+      <li>عنوان السكن</li>
+      <li>تاريخ الميلاد (إن وُجد)</li>
+    </ul>
+    <p>يرجى التواصل مع إدارة المنصة وتزويدهم بالبيانات المذكورة أعلاه لاستكمال إعداد ملفك الشخصي ومنحك صلاحية الدخول الكاملة.</p>
     <p><a href="mailto:support@the-whales.com">التواصل مع الدعم</a></p>
     <p><a href="{% url 'accounts:logout_ar' %}">تسجيل الخروج</a></p>
   </main>

@@ -32,6 +32,18 @@
       line-height: 1.6;
       margin: 0 0 20px;
     }
+    .missing-title {
+      font-weight: 600;
+    }
+    .missing-list {
+      text-align: left;
+      margin: 0 0 20px 0;
+      padding: 0 0 0 20px;
+      line-height: 1.6;
+    }
+    .missing-list li {
+      margin-bottom: 6px;
+    }
     a {
       color: #00d094;
       font-weight: 600;
@@ -46,7 +58,14 @@
   <main class="card">
     <h1>We're almost ready!</h1>
     <p>The system couldn't find a profile linked to your account yet. This usually means your onboarding isn't finished.</p>
-    <p>Please contact the platform administrator so they can complete your profile setup and give you full access.</p>
+    <p class="missing-title">To finish setting up your account, we still need:</p>
+    <ul class="missing-list">
+      <li>The membership plan assigned to your account</li>
+      <li>Your full name</li>
+      <li>Your address</li>
+      <li>Your birth date (if applicable)</li>
+    </ul>
+    <p>Please contact the platform administrator and share the information above so they can complete your profile setup and give you full access.</p>
     <p><a href="mailto:support@the-whales.com">Contact support</a></p>
     <p><a href="{% url 'accounts:logout' %}">Log out</a></p>
   </main>
