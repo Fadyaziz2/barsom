@@ -98,7 +98,7 @@ def outuserlandingpage(request,pagename):
         user_landing_page=UserRequested.objects.create(name=name,email=email,phone=phone,age=age,gender=gender,location=location,notes=notes,user=user)    
         user_landing_page.save()
         messages.success(request, 'your request has been sent successfully')
-        return redirect('home:home')
+        return redirect('/landingpage/ar/?next=/')
         
     return render(request,'userlandingpage.html',context)
 
@@ -195,7 +195,7 @@ def outuserlandingpage_ar(request,pagename):
         user_landing_page=UserRequested.objects.create(name=name,email=email,phone=phone,age=age,gender=gender,location=location,notes=notes,user=user)    
         user_landing_page.save()
         messages.success(request, 'your request has been sent successfully')
-        return redirect('home:home_ar')
+        return redirect('/landingpage/ar/?next=/')
     return render(request,'ar/userlandingpage.html',context)
 
 
