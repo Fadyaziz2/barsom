@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 from django.shortcuts import render, redirect
 # import login_required
 from django.contrib.auth.decorators import login_required
@@ -13,11 +15,38 @@ from django.contrib import messages
 from django.conf import settings
 
 #helper to get profile or render missing profile page
+def _build_admin_placeholder_profile(user):
+    """Create a lightweight profile-like object for admin users without profiles."""
+
+    membership_placeholder = SimpleNamespace(name="Not assigned", price=0)
+
+    return SimpleNamespace(
+        user=user,
+        membership=membership_placeholder,
+        name=getattr(user, "get_full_name", lambda: "")() or getattr(user, "username", ""),
+        address="",
+        birth_date="",
+        coin=0,
+        image=None,
+        price=0,
+        marketing_avilable=False,
+        rank=0,
+        number=0,
+    )
+
+
 def _get_profile_or_missing_response(request, language="en"):
     """Return the logged-in user's profile or a fallback response if it is missing."""
     user = getattr(request, "user", None)
     if not getattr(user, "is_authenticated", False):
         return None, None
+
+    # Allow admin users to continue even if their profiles are incomplete.
+    if getattr(user, "is_superuser", False) or getattr(user, "is_staff", False):
+        profile = Profile.objects.select_related("membership").filter(user=user).first()
+        if profile:
+            return profile, None
+        return _build_admin_placeholder_profile(user), None
 
     try:
         profile = Profile.objects.select_related("membership").get(user=user)
