@@ -145,7 +145,11 @@
               </div>
               <div class="col-lg-6 col-md-5">
                 <div class="banner__thumb imagescale" data-aos="fade-left" data-aos-duration="1000">
-                  <img src="{{ landing_page.image.url }}">
+                  {% if landing_page.image %}
+                  <img src="{{ landing_page.image.url }}" alt="Profile illustration">
+                  {% else %}
+                  <img src="{% static 'assets/images/logo/preloader.png' %}" alt="Profile illustration">
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -162,7 +166,12 @@
         <h1 class="text-center" style="color: #00D094;">Video</h1>
     
         <div>
-          <video id="promoVideo" src="{{ landing_page.video.url }}" controls width="100%" height="100%"></video>
+          <video id="promoVideo" {% if landing_page.video %}src="{{ landing_page.video.url }}"{% endif %} controls width="100%" height="100%"></video>
+          {% if not landing_page.video %}
+          <div class="alert alert-warning text-center mt-3" role="alert">
+            No video is available at the moment.
+          </div>
+          {% endif %}
         </div>
     
         <div class="title">
@@ -175,34 +184,36 @@
     
     <script>
       const video = document.getElementById('promoVideo');
-      let lastAllowedTime = 0;
-      let seekingBlocked = false;
-    
-      // Try autoplay with sound (may fail silently)
-      video.play().catch(() => {
-        // Wait for user interaction to play with sound
-        document.body.addEventListener('click', () => {
-          video.muted = false;
-          video.play();
-        }, { once: true }); // only once is enough
-      });
-    
-      // Track last allowed playback time
-      video.addEventListener('timeupdate', () => {
-        if (!seekingBlocked) {
-          lastAllowedTime = video.currentTime;
-        }
-      });
-    
-      // Prevent seeking forward
-      video.addEventListener('seeking', () => {
-        if (video.currentTime > lastAllowedTime + 0.01) {
-          seekingBlocked = true;
-          video.currentTime = lastAllowedTime;
-        } else {
-          seekingBlocked = false;
-        }
-      });
+      if (video && video.getAttribute('src')) {
+        let lastAllowedTime = 0;
+        let seekingBlocked = false;
+
+        // Try autoplay with sound (may fail silently)
+        video.play().catch(() => {
+          // Wait for user interaction to play with sound
+          document.body.addEventListener('click', () => {
+            video.muted = false;
+            video.play();
+          }, { once: true }); // only once is enough
+        });
+
+        // Track last allowed playback time
+        video.addEventListener('timeupdate', () => {
+          if (!seekingBlocked) {
+            lastAllowedTime = video.currentTime;
+          }
+        });
+
+        // Prevent seeking forward
+        video.addEventListener('seeking', () => {
+          if (video.currentTime > lastAllowedTime + 0.01) {
+            seekingBlocked = true;
+            video.currentTime = lastAllowedTime;
+          } else {
+            seekingBlocked = false;
+          }
+        });
+      }
     </script>
     
     
@@ -276,11 +287,13 @@
       const video = document.getElementById('promoVideo');
       const unmuteButton = document.getElementById('unmuteButton');
 
-      unmuteButton.addEventListener('click', function() {
-          video.muted = false;
-          video.play(); // In case it was paused
-          unmuteButton.style.display = 'none'; // Hide the button after unmuting
-      });
+      if (video && video.getAttribute('src') && unmuteButton) {
+        unmuteButton.addEventListener('click', function() {
+            video.muted = false;
+            video.play(); // In case it was paused
+            unmuteButton.style.display = 'none'; // Hide the button after unmuting
+        });
+      }
     </script>
 
 
@@ -293,20 +306,25 @@
         const video = document.getElementById('promoVideo');
         const requestButton = document.getElementById('requestButton');
 
-        // Disable the button initially
-        requestButton.disabled = true;
+        if (requestButton) {
+          // Disable the button initially only when a video is present
+          requestButton.disabled = !(video && video.getAttribute('src'));
+        }
 
-        
-            // Initialize Bootstrap tooltip
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-              return new bootstrap.Tooltip(tooltipTriggerEl)
-            })
-        
-            // Enable button when the video ends
-            video.addEventListener('ended', function() {
+        // Initialize Bootstrap tooltip
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+        if (video && video.getAttribute('src')) {
+          // Enable button when the video ends
+          video.addEventListener('ended', function() {
+              if (requestButton) {
                 requestButton.disabled = false;
-            });
+              }
+          });
+        }
     </script>
 
 
