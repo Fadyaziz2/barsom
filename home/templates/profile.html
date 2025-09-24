@@ -502,7 +502,11 @@
         <div class="modal-body" id="modal-body-content">
         <!---profile image-->
           <div class="profile-container">
+            {% if profile.image %}
             <img src="{{ profile.image.url }}" alt="Profile Image">
+            {% else %}
+            <img src="{% static 'assets/images/user.png' %}" alt="Profile Image">
+            {% endif %}
           </div>
         </div>
         <div class="modal-footer">
