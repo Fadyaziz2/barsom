@@ -23,11 +23,34 @@ from django.conf import settings
 #import os
 import os
 import random
-import string 
+import string
 from home.models import wellcome_message , reset_password_message
 
 #imonport slugify
 # Create your views here.
+
+
+def ensure_user_profile(user):
+    """Return the profile for ``user`` creating a default one when missing."""
+
+    existing_profile = Profile.objects.filter(user=user).first()
+    if existing_profile:
+        return existing_profile
+
+    default_membership = MemberShip.objects.order_by('price').first()
+    if default_membership is None:
+        raise MemberShip.DoesNotExist('No membership plans are configured.')
+
+    default_name = user.email or user.phone or f'User {user.pk}'
+
+    return Profile.objects.create(
+        user=user,
+        membership=default_membership,
+        name=default_name,
+        address='',
+        birth_date='',
+        price=default_membership.price,
+    )
 
 
 def random_string(length=6):
@@ -194,7 +217,11 @@ def annotate_partner_profiles(users_profiles, reference_time=None):
 def profile(request):
     user = request.user
     
-    user_profile = Profile.objects.get(user=user)
+    try:
+        user_profile = ensure_user_profile(user)
+    except MemberShip.DoesNotExist:
+        messages.error(request, 'No membership plans are currently configured. Please contact support.')
+        return redirect('home:home')
     membership = MemberShip.objects.get(id=user_profile.membership.id)
     #get all memberships that ishidden=False
     memberships = MemberShip.objects.filter(ishidden=False)
@@ -749,7 +776,11 @@ def log_out_ar(request):
 @login_required
 def profile_ar(request):
     user = request.user
-    user_profile = Profile.objects.get(user=user)
+    try:
+        user_profile = ensure_user_profile(user)
+    except MemberShip.DoesNotExist:
+        messages.error(request, 'لا توجد خطط عضوية متاحة حالياً. يرجى التواصل مع الدعم.')
+        return redirect('home:home_ar')
     membership = MemberShip.objects.get(id=user_profile.membership.id)
     #get all memberships that ishidden=False
     memberships = MemberShip.objects.filter(ishidden=False)
