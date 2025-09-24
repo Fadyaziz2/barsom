@@ -12,7 +12,7 @@
         scale: 0.8;
         transition: scale 0.3s ease-in-out; /* Adjust the duration and timing function as needed */
     }
-    
+
     .imagescale:hover {
         scale: 1;
     }
@@ -84,6 +84,106 @@
         opacity: 1;
         transform: translate(-50%, 0);
     }
+
+    .user-landing-page {
+        overflow-x: hidden;
+    }
+
+    .user-landing-page .banner__thumb img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .user-landing-page .secured-video-wrapper,
+    .user-landing-page .secured-video {
+        border-radius: 1rem;
+    }
+
+    .user-landing-page #request {
+        padding-inline: 0;
+    }
+
+    .user-landing-page .title p {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 991.98px) {
+        .user-landing-page .banner__wrapper {
+            text-align: center;
+        }
+
+        .user-landing-page .banner__content {
+            align-items: center;
+        }
+
+        .user-landing-page .banner__content-heading {
+            font-size: 2rem;
+            line-height: 1.3;
+        }
+
+        .user-landing-page .banner__content-moto {
+            font-size: 1rem;
+        }
+
+        .user-landing-page .banner__thumb {
+            margin-inline: auto;
+            max-width: 420px;
+        }
+
+        .user-landing-page #videosection .container {
+            padding-inline: 1rem;
+        }
+
+        .user-landing-page .secured-video-wrapper {
+            margin-inline: auto;
+        }
+
+        .user-landing-page #request {
+            padding-inline: 1rem;
+        }
+
+        .user-landing-page #request .col-md-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        .user-landing-page #request .form-label {
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .user-landing-page .banner__wrapper {
+            gap: 1.5rem;
+        }
+
+        .user-landing-page .banner__content-heading {
+            font-size: 1.75rem;
+        }
+
+        .user-landing-page #videosection h1 {
+            font-size: 1.75rem;
+        }
+
+        .user-landing-page #toggleButton {
+            font-size: 1.25rem;
+        }
+
+        .user-landing-page .show i {
+            font-size: 1rem;
+        }
+
+        .user-landing-page .title p {
+            font-size: 1.5rem !important;
+            line-height: 1.5;
+        }
+
+        .user-landing-page .secured-video-wrapper,
+        .user-landing-page .secured-video {
+            border-radius: 0.75rem;
+        }
+    }
 </style>
 
 
@@ -121,7 +221,7 @@
   <!-- main css for template -->
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
 </head>
-<body>
+<body class="user-landing-page">
 
     <header class="header-section header-section--style1" style="display: none;">
         <div class="header-bottom">
