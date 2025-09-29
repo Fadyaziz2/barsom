@@ -195,14 +195,17 @@ MEDIA_ROOT = '/var/www/media-root/'
 # size limits we ensure large uploads succeed without overwhelming the server.
 FILE_UPLOAD_HANDLERS = [
     'django.core.files.uploadhandler.TemporaryFileUploadHandler',
-    'django.core.files.uploadhandler.MemoryFileUploadHandler',
 ]
 
-# Set generous limits for the upload size (around 1 GB) to avoid Django
-# rejecting large video files before they reach the upload handlers.
-MAX_UPLOAD_SIZE_BYTES = 1024 * 1024 * 1024  # 1 GB
-DATA_UPLOAD_MAX_MEMORY_SIZE = MAX_UPLOAD_SIZE_BYTES
-FILE_UPLOAD_MAX_MEMORY_SIZE = MAX_UPLOAD_SIZE_BYTES
+# Stream uploads directly to disk to avoid exhausting worker memory when large
+# lecture videos are uploaded through the admin. ``DATA_UPLOAD_MAX_MEMORY_SIZE``
+# is set to ``None`` to disable Django's default 2.5 MB in-memory limit and
+# defer the responsibility to the upload handlers and reverse proxy. Setting
+# ``FILE_UPLOAD_MAX_MEMORY_SIZE`` to ``0`` ensures every upload is written to a
+# temporary file instead of being buffered entirely in RAM which previously
+# caused the upstream Gunicorn worker to crash for videos larger than ~100 MB.
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
+FILE_UPLOAD_MAX_MEMORY_SIZE = 0
 
 
 # Default primary key field type
