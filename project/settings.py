@@ -188,6 +188,22 @@ STATIC_ROOT = '/var/www/static-root/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/var/www/media-root/'
 
+# Allow large video uploads to be streamed directly to disk instead of memory.
+# Django's default upload handlers keep small files in memory which can cause
+# the upstream application server to crash when the proxy forwards big video
+# files. By prioritizing the temporary file handler and relaxing the upload
+# size limits we ensure large uploads succeed without overwhelming the server.
+FILE_UPLOAD_HANDLERS = [
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+    'django.core.files.uploadhandler.MemoryFileUploadHandler',
+]
+
+# Set generous limits for the upload size (around 1 GB) to avoid Django
+# rejecting large video files before they reach the upload handlers.
+MAX_UPLOAD_SIZE_BYTES = 1024 * 1024 * 1024  # 1 GB
+DATA_UPLOAD_MAX_MEMORY_SIZE = MAX_UPLOAD_SIZE_BYTES
+FILE_UPLOAD_MAX_MEMORY_SIZE = MAX_UPLOAD_SIZE_BYTES
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
