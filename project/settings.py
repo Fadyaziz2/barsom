@@ -207,6 +207,15 @@ FILE_UPLOAD_HANDLERS = [
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
 FILE_UPLOAD_MAX_MEMORY_SIZE = 0
 
+# Store Django's temporary upload files on disk space that is not limited by the
+# operating system's ``/tmp`` partition. Some production servers mount ``/tmp``
+# as an in-memory filesystem capped at 100 MB, which made admin video uploads
+# larger than that threshold fail even after switching to streaming handlers.
+# Using a project-local directory ensures uploads are buffered on persistent
+# storage with enough capacity.
+FILE_UPLOAD_TEMP_DIR = str(BASE_DIR / 'tmp' / 'uploads')
+Path(FILE_UPLOAD_TEMP_DIR).mkdir(parents=True, exist_ok=True)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
