@@ -3,9 +3,33 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from accounts.utils import get_profile_or_missing_response
+import logging
+
 from moviepy.editor import VideoFileClip
 
 from .models import Course, Lecture, ViewLecture, ViewCourse
+
+
+logger = logging.getLogger(__name__)
+
+
+def _get_video_duration_minutes(video_field):
+    """Return the video duration in minutes or ``None`` on failure."""
+    try:
+        with VideoFileClip(video_field.path) as clip:
+            return clip.duration / 60
+    except Exception as exc:  # moviepy may raise different OSErrors depending on ffmpeg
+        logger.warning("Failed to read duration for %s: %s", video_field.name, exc)
+        return None
+
+
+def _format_duration(minutes, language="en"):
+    if minutes is None:
+        return "Unknown" if language == "en" else "غير متاح"
+    rounded = round(minutes, 1)
+    if language == "ar":
+        return f"{rounded} دقيقة"
+    return f"{rounded} min"
 
 # Create your views here.
 
@@ -47,9 +71,8 @@ def courses_lect(request,id):
     lectures = Lecture.objects.filter(course=id).order_by("number")
 
     for lecture in lectures:
-        video = VideoFileClip(lecture.video.path)
-        duration_minutes = round(video.duration / 60, 1)
-        lecture.duration = f"{duration_minutes} min"
+        minutes = _get_video_duration_minutes(lecture.video)
+        lecture.duration = _format_duration(minutes, language="en")
         lecture.is_viewed = ViewLecture.objects.filter(user=user, lecture=lecture).exists()
 
     context = {
@@ -158,9 +181,8 @@ def courses_lect_ar(request,id):
     lectures = Lecture.objects.filter(course=id).order_by("number")
 
     for lecture in lectures:
-        video = VideoFileClip(lecture.video.path)
-        duration_minutes = round(video.duration / 60, 1)
-        lecture.duration = f"{duration_minutes} دقيقة"
+        minutes = _get_video_duration_minutes(lecture.video)
+        lecture.duration = _format_duration(minutes, language="ar")
         lecture.is_viewed = ViewLecture.objects.filter(user=user, lecture=lecture).exists()
 
     context = {

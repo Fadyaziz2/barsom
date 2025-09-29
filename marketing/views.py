@@ -8,7 +8,27 @@ from .models import Marketing_Course as Course , Marketing_Lecture as Lecture , 
 #import redirct
 from django.shortcuts import redirect
 #import video file clip
+import logging
+
 from moviepy.editor import VideoFileClip, concatenate_videoclips
+
+logger = logging.getLogger(__name__)
+
+
+def _get_video_duration_minutes(video_field):
+    try:
+        with VideoFileClip(video_field.path) as clip:
+            return clip.duration / 60
+    except Exception as exc:
+        logger.warning("Failed to read duration for %s: %s", video_field.name, exc)
+        return None
+
+
+def _format_duration(minutes, language="en"):
+    if minutes is None:
+        return "Unknown" if language == "en" else "غير متاح"
+    rounded = round(minutes, 1)
+    return f"{rounded} min" if language == "en" else f"{rounded} دقيقة"
 
 
 # Create your views here.
@@ -31,12 +51,15 @@ def marketing_courses_category(request):
     
     #get all couse duration 
     for course in courses:
-        course.duration = 0
+        total_minutes = 0
+        has_unknown = False
         for lecture in course.marketing_lecture_set.all():
-            video = VideoFileClip(lecture.video.path)
-            course.duration += video.duration
-        course.duration = round(course.duration / 60,1)
-        course.duration = str(course.duration) + ' min'
+            minutes = _get_video_duration_minutes(lecture.video)
+            if minutes is None:
+                has_unknown = True
+            else:
+                total_minutes += minutes
+        course.duration = _format_duration(total_minutes if not has_unknown else None)
     
     #set fully_star and empty_star in course depend on course.rate
     for course in courses:
@@ -61,10 +84,8 @@ def marketing_courses_lect(request,id):
     lectures = Lecture.objects.filter(course=id).order_by('number')
     #get all lectures video duration
     for lecture in lectures:
-        video = VideoFileClip(lecture.video.path)
-        lecture.duration = video.duration
-        lecture.duration = round(lecture.duration / 60,1)
-        lecture.duration = str(lecture.duration) + ' min'
+        minutes = _get_video_duration_minutes(lecture.video)
+        lecture.duration = _format_duration(minutes)
     
     
     #set fully_star and empty_star in lecture depend on lecture.Lecture_rate
@@ -171,12 +192,15 @@ def marketing_courses_category_ar(request):
     
     #get all couse duration 
     for course in courses:
-        course.duration = 0
+        total_minutes = 0
+        has_unknown = False
         for lecture in course.marketing_lecture_set.all():
-            video = VideoFileClip(lecture.video.path)
-            course.duration += video.duration
-        course.duration = round(course.duration / 60,1)
-        course.duration = str(course.duration) + ' دقيقة'
+            minutes = _get_video_duration_minutes(lecture.video)
+            if minutes is None:
+                has_unknown = True
+            else:
+                total_minutes += minutes
+        course.duration = _format_duration(total_minutes if not has_unknown else None, language="ar")
     
     #set fully_star and empty_star in course depend on course.rate
     for course in courses:
@@ -201,10 +225,8 @@ def marketing_courses_lect_ar(request,id):
     lectures = Lecture.objects.filter(course=id).order_by('number')
     #get all lectures video duration
     for lecture in lectures:
-        video = VideoFileClip(lecture.video.path)
-        lecture.duration = video.duration
-        lecture.duration = round(lecture.duration / 60,1)
-        lecture.duration = str(lecture.duration) + ' دقيقة'
+        minutes = _get_video_duration_minutes(lecture.video)
+        lecture.duration = _format_duration(minutes, language="ar")
     
     
     #set fully_star and empty_star in lecture depend on lecture.Lecture_rate
