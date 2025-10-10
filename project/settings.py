@@ -63,7 +63,7 @@ JAZZMIN_SETTINGS = {
     "site_header": "Trading Whale School",
     "site_brand": "Trading Whale School",
     "welcome_sign": "Welcome to the Trading Whale School admin panel",
-    "copyright": "Trading Whale School ", 
+    "copyright": "Trading Whale School ",
     #top menu links
     "topmenu_links": [
         #home
@@ -71,6 +71,20 @@ JAZZMIN_SETTINGS = {
         #profile
         {"name": "Profile",  "url": "/accounts/ar/profile/"},
     ],
+    "side_menu": {
+        "apps": [
+            {
+                "label": "المستخدمين",
+                "icon": "fas fa-users",
+                "models": [
+                    {"model": "users.CustomUser", "name": "حسابات المستخدمين"},
+                    {"model": "accounts.Profile", "name": "ملفات المستخدم"},
+                    {"model": "accounts.MemberShip", "name": "الباقات"},
+                    {"model": "accounts.Rank", "name": "الرتب"},
+                ],
+            },
+        ],
+    },
 }
 
 AUTHENTICATION_BACKENDS = [
