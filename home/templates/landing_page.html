@@ -444,7 +444,7 @@
         <p>Hear directly from our community about the impact Trading Whale School has had on their trading journey.</p>
       </div>
       <div class="row g-4">
-        {% for plan in landing_page.pricing_plans.all %}
+        {% for plan in user_opinions %}
         <div class="col-12 col-md-6 col-lg-4">
           <article class="testimonial-card" data-aos="fade-up" data-aos-duration="900" data-aos-delay="{{ forloop.counter0 }}00">
             {% if plan.video %}

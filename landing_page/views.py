@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import MainLandingPage , UserLandingPage , UserRequested , Video_message
+from .models import MainLandingPage , UserLandingPage , UserRequested , Video_message, Pricing
 from accounts.models import Profile
 from django.contrib.auth.decorators import login_required
 # import messages
@@ -20,6 +20,11 @@ def LandingPage(request):
         .order_by('-id')
         .first()
     )
+    if landing_page and landing_page.pricing_plans.exists():
+        user_opinions = landing_page.pricing_plans.all()
+    else:
+        user_opinions = Pricing.objects.all()
+
     if request.method=='POST':
         name=request.POST.get('name', '').strip()
         email=request.POST.get('email', '').strip()
@@ -38,6 +43,7 @@ def LandingPage(request):
     
     context = {
         'landing_page': landing_page,
+        'user_opinions': user_opinions,
     }
     return render(request,'landing_page.html',context)
 
@@ -132,6 +138,11 @@ def LandingPage_ar(request):
         .order_by('-id')
         .first()
     )
+    if landing_page and landing_page.pricing_plans.exists():
+        user_opinions = landing_page.pricing_plans.all()
+    else:
+        user_opinions = Pricing.objects.all()
+
     if request.method=='POST':
         name=request.POST.get('name', '').strip()
         email=request.POST.get('email', '').strip()
@@ -146,6 +157,7 @@ def LandingPage_ar(request):
     
     context = {
         'landing_page': landing_page,
+        'user_opinions': user_opinions,
     }
     return render(request,'ar/landing_page.html',context)
 
