@@ -45,6 +45,41 @@
   <link rel="stylesheet" href="{% static 'assets/css/bootstrapcustom.css' %}">
 
 
+  <style>
+    @media (min-width: 992px) {
+      .header-section .header-bottom > div {
+        width: 100%;
+      }
+
+      .header-section .header-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 2rem;
+      }
+
+      .header-section .header-wrapper .menu-area {
+        flex: 1;
+        display: flex;
+      }
+
+      .header-section .header-wrapper .menu {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 100%;
+        gap: 1.5rem;
+      }
+
+      .header-section .header-wrapper .menu > li {
+        display: flex;
+        align-items: center;
+      }
+    }
+  </style>
+
+
 </head>
 
 <body dir="rtl">
