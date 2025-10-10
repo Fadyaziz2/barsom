@@ -103,40 +103,50 @@ def course_details(request,id):
 
 
 
-def view_lect(request,lect_id):
+@login_required
+def view_lect(request, lect_id):
     try:
-        
+        lecture = Lecture.objects.select_related("course").get(id=lect_id)
+        course = lecture.course
         user = request.user
-        id=lect_id
-        #get lecture by id
-        lecture = Lecture.objects.get(id=id)
-        #get course for this lecture
-        course = Course.objects.get(id=lecture.course.id)
-        #add  next lecture in ViewLecture if not exist
-        next_lecture = Lecture.objects.filter(course=course,number=lecture.number+1)
-        #check if next lecture exist
-        if next_lecture.exists():
-            #create new ViewLecture
-            #check if this lecture is not viewed
-            if not ViewLecture.objects.filter(user=user,lecture=next_lecture[0]).exists():
-                ViewLecture.objects.create(user=user,lecture=next_lecture[0],time=0)
-                print('next create')
-        #get last lecture in this course
-        last_lecture = Lecture.objects.filter(course=course).last()
-        #check if last lecture exist in viewlecture
-        if ViewLecture.objects.filter(user=user,lecture=last_lecture).exists():
-            #add next course in ViewCourse if not exist
-            #get next course
-            next_course = Course.objects.filter(number=course.number+1)
-            #check if next course exist
-            if next_course.exists():
-                #create new ViewCourse if not exist
-                if not ViewCourse.objects.filter(user=user,course=next_course[0]).exists():
-                    ViewCourse.objects.create(user=user,course=next_course[0],time=0)
-                    print('last create')
-        return HttpResponse('done')
-    except Exception as e:
-        return HttpResponse(e)
+
+        ViewLecture.objects.update_or_create(
+            user=user,
+            lecture=lecture,
+            defaults={"time": 0},
+        )
+
+        next_lecture = (
+            Lecture.objects.filter(course=course, number__gt=lecture.number)
+            .order_by("number")
+            .first()
+        )
+
+        if next_lecture:
+            ViewLecture.objects.get_or_create(
+                user=user,
+                lecture=next_lecture,
+                defaults={"time": 0},
+            )
+        else:
+            next_course = (
+                Course.objects.filter(number__gt=course.number)
+                .order_by("number")
+                .first()
+            )
+            if next_course:
+                ViewCourse.objects.get_or_create(
+                    user=user,
+                    course=next_course,
+                    defaults={"time": 0},
+                )
+
+        return HttpResponse("done")
+    except Lecture.DoesNotExist:
+        return HttpResponse("Lecture not found", status=404)
+    except Exception as exc:
+        logger.exception("Failed to update lecture progress for user %s", request.user)
+        return HttpResponse(str(exc), status=500)
     
                 
                 
