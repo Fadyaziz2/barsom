@@ -1,691 +1,557 @@
-<!---extand basic django-->
 {% extends 'base2.html' %}
-<!---import static django-->
 {% load static %}
-<!---block django-->
 {% block body %}
-
 <style>
-
-    .lectureitem{
-      position: relative;
-  
-    }
-  
-    .lecturelock {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 60%; /* Adjust the size as needed */
-      height: auto;
-      opacity: 0.5; /* You can adjust the opacity as needed */
-      animation-play-state: paused; /* Stop any animations on lecturelock image */
-  }
-  .courceimage {
-    transform: scale(0.8);
-    transition: transform 0.3s ease-in-out;
-    width: 100%;
-    height: auto;
-    max-width: 500px;
-    display: block;
-    margin: 0 auto;
+  :root {
+    --landing-dark: #021410;
+    --landing-card: #0c201d;
+    --landing-accent: #00cf93;
+    --landing-muted: rgba(255, 255, 255, 0.65);
   }
 
-  .courceimage:hover {
-    transform: scale(1);
+  .landing-header .header-wrapper {
+    align-items: center;
+    gap: 2rem;
   }
 
-  .profile-image {
-    border-radius: 50%;
-    max-width: 280px;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-  }
-
-
-
-
-
-
-  .social-container {
+  .landing-header .menu-area {
     display: flex;
     align-items: center;
-    background-color: #112520;
-    border-radius: 30px;
-    padding: 5px;
-    transition: all 0.3s ease;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.75rem;
-    max-width: 560px;
-    margin: 0 auto;
+    gap: 1.5rem;
   }
 
-.social-icon {
+  .landing-header .menu {
     display: flex;
     align-items: center;
-    padding: 30px;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.5s ease; /* Adjusted transition speed */
-    opacity: 0.7; /* Make the icons slightly transparent */
-    gap: 0.5rem;
-}
-
-.social-icon i {
-    font-size: 24px;
-    margin-right: 10px;
-    transition: color 0.3s ease; /* Icon color transition on hover */
-}
-
-.social-icon span {
-    opacity: 0; /* Initially hidden */
-    font-weight: bold;
-    transition: opacity 0.5s ease; /* Faster transition for visibility */
-    visibility: hidden; /* Ensure no space is taken when not visible */
-}
-
-.social-icon:hover {
-    padding-right: 20px;
-    opacity: 1; /* Fully visible icon on hover */
-    background-color: #0b1c17; 
-    scale: 1.3;/* Change background color on hover */
-}
-
-.social-icon:hover i {
-    color: #ffffff; /* Change icon color to white on hover */
-}
-
-.social-icon:hover span {
-    opacity: 1; /* Fade-in text smoothly */
-    visibility: visible; /* Ensure visibility is set to visible on hover */
-    transition-delay: 0.2s; /* Shorter delay before the text becomes visible */
-}
-
-  .social-wrapper {
-    text-align: center;
-    padding: 0 1.5rem;
+    gap: 1.5rem;
+    margin-bottom: 0;
   }
 
-  .menu .menu__action {
+  .landing-header .menu > li {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+  }
+
+  .landing-header .menu__action {
     margin-left: auto;
   }
 
-  .menu .menu__action + .menu__action {
-    margin-left: 0;
-  }
-
-  .menu .menu__action .trk-btn {
-    margin-top: 0;
-  }
-
-  .menu .menu__action--language i {
-    color: #e5cd26;
-    font-size: 25px;
-  }
-
-  .menu .menu__action--language a {
-    color: #ffffff;
-    text-decoration: none;
-  }
-
-  .menu .menu__action--language a:hover {
-    color: #e5cd26;
-  }
-
-  .header-section .header-wrapper {
-    justify-content: space-between;
-    gap: 1.5rem;
-    flex-wrap: nowrap;
-  }
-
-  .header-section .logo {
-    display: flex;
-    align-items: center;
-  }
-
-  .header-section .menu-area {
+  .landing-hero {
     position: relative;
-    flex-wrap: nowrap;
-    gap: 1.5rem;
-    flex: 1 1 auto;
-    justify-content: center;
+    padding: clamp(4rem, 6vw, 6.5rem) 0 4.5rem;
+    background: radial-gradient(circle at top left, rgba(0, 207, 147, 0.12), transparent 55%),
+      radial-gradient(circle at bottom right, rgba(0, 207, 147, 0.08), transparent 60%),
+      var(--landing-dark);
+  }
+
+  .landing-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("{% static 'assets/images/bg.png' %}") center/cover no-repeat;
+    opacity: 0.12;
+  }
+
+  .landing-hero .container,
+  .landing-hero .row,
+  .landing-hero .hero-copy,
+  .landing-hero .hero-media {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-copy {
+    max-width: 540px;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
     align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: rgba(0, 207, 147, 0.12);
+    color: var(--landing-accent);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
   }
 
-  .header-section .menu-area .menu {
-    flex: 1 1 auto;
+  .hero-eyebrow i {
+    font-size: 1.1rem;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(2.3rem, 4vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-copy p {
+    color: var(--landing-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.25rem;
+  }
+
+  .hero-media {
+    display: flex;
     justify-content: center;
-    gap: 1.5rem;
-    margin: 0;
   }
 
-  .header-section .menu-area .menu > li {
+  .hero-media img {
+    max-width: min(100%, 420px);
+    border-radius: 24px;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+  }
+
+  .landing-section {
+    padding: clamp(4rem, 6vw, 6rem) 0;
+  }
+
+  .landing-section__heading {
+    max-width: 640px;
+    margin: 0 auto 3rem;
+    text-align: center;
+  }
+
+  .landing-section__heading h2 {
+    font-size: clamp(2rem, 3vw, 2.6rem);
+    font-weight: 700;
+  }
+
+  .landing-section__heading p {
+    color: var(--landing-muted);
+    margin-top: 1rem;
+  }
+
+  .info-card,
+  .roadmap-card,
+  .testimonial-card,
+  .contact-card,
+  .social-card {
+    background: var(--landing-card);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 207, 147, 0.18);
+    padding: 2rem;
+    height: 100%;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .info-card:hover,
+  .roadmap-card:hover,
+  .testimonial-card:hover,
+  .social-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 32px 70px rgba(0, 0, 0, 0.28);
+  }
+
+  .info-card img,
+  .testimonial-card img {
+    border-radius: 18px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 1.5rem;
+  }
+
+  .info-card video,
+  .testimonial-card video {
+    border-radius: 18px;
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  .info-card h3,
+  .roadmap-card h3,
+  .testimonial-card h3 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .info-card p,
+  .roadmap-card p,
+  .testimonial-card p {
+    color: var(--landing-muted);
+    margin-bottom: 0;
+  }
+
+  .roadmap-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .roadmap-card::before {
+    content: attr(data-step);
+    position: absolute;
+    inset-inline-end: 1.75rem;
+    inset-block-start: 1.5rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: rgba(0, 207, 147, 0.12);
+  }
+
+  .roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .testimonial-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .testimonial-card h3 {
+    color: var(--landing-accent);
+  }
+
+  .testimonial-card .opinion {
+    color: var(--landing-muted);
+    line-height: 1.6;
+  }
+
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .social-card {
     display: flex;
     align-items: center;
+    gap: 1rem;
+    padding-block: 1.5rem;
   }
 
-  .header-section .menu-area .header-bar {
-    margin-inline-start: 0;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: space-between;
+  .social-card img {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    object-fit: cover;
+  }
+
+  .social-card span {
+    font-weight: 600;
+  }
+
+  .contact-card {
+    padding: 3rem;
+  }
+
+  .contact-card h3 {
+    margin-bottom: 0.75rem;
+  }
+
+  .contact-card p {
+    color: var(--landing-muted);
+    margin-bottom: 2rem;
+  }
+
+  .form-label {
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+  .form-control,
+  .form-select {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(0, 207, 147, 0.25);
+    color: #ffffff;
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    border-color: var(--landing-accent);
+    box-shadow: 0 0 0 0.25rem rgba(0, 207, 147, 0.18);
+  }
+
+  .messages-wrapper {
+    position: relative;
+    z-index: 5;
+    margin-bottom: 1.5rem;
   }
 
   @media (max-width: 991.98px) {
-    .header-section .header-wrapper {
-      flex-wrap: nowrap;
-      gap: 0.75rem;
-      align-items: center;
+    .landing-header .menu-area {
+      flex-wrap: wrap;
     }
 
-    .header-section .menu-area {
-      flex: 1 1 auto;
-      flex-wrap: nowrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-    }
-
-    .header-section .menu-area .menu {
-      flex: 1 1 auto;
-      justify-content: flex-start;
-      gap: 1rem;
-    }
-
-    .header-section .menu-area .header-bar {
-      margin-left: auto;
-      margin-right: 0;
-    }
-
-    .menu .menu__action {
-      margin-left: auto;
-    }
-
-    .banner__content {
-      text-align: center;
-    }
-
-    .banner__thumb {
-      margin: 0 auto;
-    }
-  }
-
-  @media (max-width: 767.98px) {
-    .social-container {
-      max-width: 100%;
-    }
-
-    .social-icon {
-      width: 100%;
+    .landing-header .menu {
       justify-content: center;
-      padding: 16px;
-      opacity: 1;
+      flex-wrap: wrap;
     }
 
-    .social-icon span {
-      opacity: 1;
-      visibility: visible;
-      transition-delay: 0s;
+    .landing-header .menu__action {
+      margin-left: 0;
     }
 
-    .service__thumb img,
-    .roadmap__item img,
-    .roadmap__item--style2 img {
-      max-width: 100%;
+    .hero-actions {
+      justify-content: center;
     }
   }
 
   @media (max-width: 575.98px) {
-    .social-wrapper {
-      padding: 0 1rem;
+    .contact-card {
+      padding: 2rem;
     }
   }
+</style>
 
+<header class="landing-header header-section header-section--style1">
+  <div class="header-bottom">
+    <div class="container">
+      <div class="header-wrapper">
+        <div class="logo">
+          <a href="{% url 'landing_page:LandingPage' %}">
+            <img style="width: 120px;" src="{% static 'assets/images/logo/preloader.png' %}" alt="Trading Whale School logo" />
+          </a>
+        </div>
+        <div class="menu-area">
+          <ul class="menu">
+            <li><a href="#homepage" class="menu-li-a">Home</a></li>
+            <li><a href="#coursessection" class="menu-li-a">Courses</a></li>
+            <li><a href="#roadmap" class="menu-li-a">Roadmap</a></li>
+            <li><a href="#users" class="menu-li-a">Users' opinions</a></li>
+            <li><a href="#contactsection" class="menu-li-a">Contact</a></li>
+          </ul>
+          <div class="menu__action d-flex align-items-center gap-3">
+            <a href="{% url 'accounts:login' %}" class="trk-btn trk-btn--border trk-btn--primary">
+              <span>Login</span>
+            </a>
+            <a href="/landingpage/ar/" class="menu-li-a d-flex align-items-center gap-2">
+              <i class="fa fa-language text-warning"></i>
+              العربية
+            </a>
+          </div>
+          <div class="header-bar d-lg-none header-bar--style1">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
 
-
-  </style>
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Trading Whale School </title>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Sites meta Data -->
-  <meta name="application-name" content="Trading Whale School">
-  <meta name="author" content="Your Name">
-  <meta name="keywords" content="Trading Whale School, Trading Education, Trading Monster">
-  <meta name="description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
-
-  <!-- OG meta data -->
-  <meta property="og:title" content="Trading Whale School">
-  <meta property="og:description" content="Trading Whale School is your go-to platform for learning how to trade and become a trading monster.">
-  <meta property="og:image" content="{% static 'assets/images/logo/login-logo.png' %}">
-  
-
-
-
-  <link rel="shortcut icon" href="{% static 'assets/images/logo/logo.png' %}" type="image/x-icon">
-  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/css/all.min.css' %}">
-
-  <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}">
-
-
-
-  <!-- main css for template -->
-  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
-</head>
-<body>
-
-    <!-- Navbar -->
-    <header class="header-section header-section--style1">
-        <div class="header-bottom">
-          <div>
-            <div class="header-wrapper">
-              <div class="logo">
-                <a href="#">
-                  <img class="" style="width:130px;" src="{% static 'assets/images/logo/preloader.png' %}" alt="logo">
-                </a>
-              </div>
-              <div class="menu-area">
-                <ul class="menu">
-                  <li>
-                    <a href="#homepage" class="menu-li-a"> home </a>
-                  </li>
-                  <li>
-                    <a href="#coursessection" class="menu-li-a">Courses </a>
-                  </li>
-                  <li>
-                    <a href="#roadmap" id="showModalx" class="menu-li-a"> Roadmap </a>
-                  </li>
-                  <li>
-                    <a href="#users" id="showModalx" class="menu-li-a"> Users opinions </a>
-                  </li>
-                  
-                  <li>
-                    <a href="#contactsection" class="menu-li-a">Contact</a>
-                  </li>
-                  <li class="menu__action">
-                    <a href="{% url 'accounts:login' %}" class="trk-btn trk-btn--border trk-btn--primary">
-                      <span> Login</span>
-                    </a>
-                  </li>
-                  <li class="menu__action menu__action--language">
-                    <i class="fa fa-language"></i>
-                    <a href="/landingpage/ar/">اللغه العربية</a>
-                  </li>
-
-                </ul>
-
-                <!-- toggle icons -->
-                <div class="header-bar d-lg-none header-bar--style1">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-
-              </div>
-             
+<main>
+  {% if landing_page %}
+  <section class="landing-hero" id="homepage">
+    <div class="container">
+      <div class="messages-wrapper">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+      <div class="row align-items-center gy-5">
+        <div class="col-lg-6">
+          <div class="hero-copy" data-aos="fade-right" data-aos-duration="900">
+            <span class="hero-eyebrow"><i class="fa-solid fa-signal"></i> Start your trading journey</span>
+            <h1>{{ landing_page.main_section.title }}</h1>
+            <p>{{ landing_page.main_section.description }}</p>
+            <div class="hero-actions">
+              <a href="{% url 'accounts:login' %}" class="trk-btn trk-btn--border trk-btn--primary">
+                <span>Sign in now</span>
+              </a>
+              <a href="#contactsection" class="trk-btn trk-btn--border trk-btn--secondary">
+                <span>Request membership</span>
+              </a>
             </div>
           </div>
         </div>
-      </header>
-
-      <section class="banner banner--style3"  id="homepage">
-        <div class="banner__bg">
-          <div class="banner__bg-element">
-            <img src="{% static 'assets/images/bg.png' %}" alt="section-bg-element" class="dark d-none d-lg-block">
-            <span class="bg-color d-lg-none"></span>
+        <div class="col-lg-6">
+          <div class="hero-media" data-aos="fade-left" data-aos-duration="900">
+            {% if landing_page.main_section.image %}
+            <img src="{{ landing_page.main_section.image.url }}" alt="Trading Whale School main visual" />
+            {% else %}
+            <img src="{% static 'assets/images/logo/preloader.png' %}" alt="Trading Whale School" />
+            {% endif %}
           </div>
         </div>
-        <div class="container">
-          <div class="banner__wrapper">
-            <div class="row gy-5 gx-4">
-              <div class="col-lg-6 col-md-7" style="display: flex; align-items: center;">
-                <div class="banner__content" data-aos="fade-right" data-aos-duration="1000">
-                  
-                  <h2 class="banner__content-heading"> <span>{{ landing_page.main_section.title }}</span></h2>
-                  <p class="banner__content-moto text-white lead">
-                    {{ landing_page.main_section.description }}
-                </p>
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-5">
-                <div class="banner__thumb" data-aos="fade-left" data-aos-duration="1000">
-                  <img src="{{ landing_page.main_section.image.url }}">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="banner__shape">
-          <span class="banner__shape-item banner__shape-item--1"><img src="{% static 'assets/images/banner/home1/4.png' %}"
-              alt="shape icon"></span>
-        </div>
-      </section>
-
-
-
-
-      <section class="service padding-bottom section-bg-color" id="coursessection">
-        <div class="section-header section-header--max50" class="font-weight:900px">
-          <h1 class="text-center" style="color: #00D094; margin-top:40px ;" >Best Courses </h2>
-          </div>
-        <div class="container">
-          <div class="service__wrapper">
-            <div class="row g-4 align-items-center">
-              {% for course in landing_page.courses_sections.all  %}
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="banner__content" data-aos="fade-up" data-aos-duration="2000">
-                  
-                  <div class="service__item-inner text-center">
-                    {% if not course.video %}
-                    <div class="service__thumb mb-30">
-                      <div class="lectureitem">
-                        <!---if course.isview or course is the first-->
-                        
-                        <img class="courceimage" src="{{course.image.url}}" alt="service-icon">
-                        
-                      </div>
-                    </div>
-                    <div class="service__content">
-                      
-                      <h5 class="mb-15">{{course.title}}</h5>
-                      <p class="card-text" style="color: white;">{{ course.description }}</p>
-                    </div>
-                    {% else %}
-                    <div class="service__content">
-                      
-                      <h5 class="mb-15">{{course.title}}</h5>
-                      <video src="{{course.video.url}}" poster="{% if course.video_poster %} {{course.video_poster.url}} {% endif %}" width="100%" height="100%" controls controlsList="nodownload">
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                    {% endif %}
-                    
-                 
-                  </div>
-                </div>
-              </div>
-              {% endfor %}
-             
-            
-    
-            </div>
-          </div>
-        </div>
-    
-       
-      </section>
-
-
-
-
-
-
-      <section class="roadmap roadmap--style1 padding-top  padding-bottom bg-color"  id="roadmap">
-        <div class="container">
-          <div class="section-header section-header--max50">
-            <h2 class="mb-15 mt-minus-5"> RoadMap For <span> Website</span></h2>
-          </div>
-          <div class="roadmap__wrapper">
-            <div class="row gy-4 gy-md-0 gx-5">
-
-              {% for benefit in landing_page.benefits_sections.all %}
-                  {% if forloop.counter|divisibleby:2 %}
-                      <div class="col-sm-12 col-md-6 offset-md-6">
-                          <div class="roadmap__item ms-md-4 aos-init aos-animate" data-aos="fade-left" data-aos-duration="800">
-                              <div class="roadmap__item-inner">
-                                  <div class="roadmap__item-content">
-                                      <div class="roadmap__item-header">
-                                          <h3 class="green-color">{{ benefit.title }}</h3>
-                                      </div>
-                                      <p>
-                                          {{ benefit.description }}
-                                      </p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  {% else %}
-                      <div class="col-md-6">
-                          <div class="roadmap__item roadmap__item--style2 ms-auto me-md-4 aos-init aos-animate" data-aos="fade-right" data-aos-duration="800">
-                              <div class="roadmap__item-inner">
-                                  <div class="roadmap__item-content">
-                                      <div class="roadmap__item-header">
-                                          <h3 class="green-color">{{ benefit.title}}</h3>
-                                      </div>
-                                      <p>
-                                          {{ benefit.description }}
-                                      </p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  {% endif %}
-              {% endfor %}
-              
-            </div>
-          </div>
-        </div>
-        <div class="roadmap__shape">
-          <span class="roadmap__shape-item roadmap__shape-item--1"> <span></span> </span>
-          <span class="roadmap__shape-item roadmap__shape-item--2"> <img src="{% static 'assets/images/banner/home1/3.png' %}"
-              alt="shape-icon">
-          </span>
-        </div>
-      </section>
-
-
-
-      <section class="service padding-bottom section-bg-color" id="users">
-        <div class="section-header section-header--max50" class="font-weight:900px">
-          <h1 class="text-center" style="color: #00D094; margin-top:40px ;" > User opinions</h2>
-          </div>
-        <div class="container">
-          <div class="service__wrapper">
-            <div class="row g-4 ">
-              {% for course in landing_page.pricing_plans.all  %}
-              <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="banner__content" data-aos="fade-up" data-aos-duration="2000">
-                  {%  if not course.video %}
-                  <div class="service__item-inner text-center">
-                    <div class="service__thumb mb-30">
-                      <div class="lectureitem">
-                        <!---if course.isview or course is the first-->
-                        
-                        <img class="courceimage profile-image" src="{{course.image.url}}" alt="service-icon">
-                        
-                      </div>
-                    </div>
-                    <div class="service__content">
-                      
-                      <h4 class="mb-15">{{course.name}}</h5>
-                      <p class="card-text" style="color: white;">{{ course.features }}</p>
-                    </div>
-                    
-                  </div>
-                  {% else %}
-                  <div class="service__item-inner text-center">
-                    {% comment %} <div class="service__thumb mb-30">
-                      <div class="lectureitem">
-                        <!---if course.isview or course is the first-->
-                        
-                        <img class="courceimage profile-image" src="{{course.image.url}}" alt="service-icon">
-                        
-                      </div>
-                    </div> {% endcomment %}
-                    <div class="service__content">
-                      
-                      <h4 class="mb-15">{{course.name}}</h5>
-                      <!-- video -->
-                       <video src="{{course.video.url}}" poster="{% if course.video_poster %} {{course.video_poster.url}} {% endif %}" width="100%" height="100%" controls controlsList="nodownload">
-                          Your browser does not support the video tag.
-                        </video> 
-                        
-                    </div>
-                    
-                  </div>
-                  {% endif %}
-                </div>
-              </div>
-              {% endfor %}
-             
-            
-    
-            </div>
-          </div>
-        </div>
-    
-       
-      </section>
-
-
-
-
-    <section class="team padding-top padding-bottom section-bg-color" id="contactsection">
-      <div class="section-header section-header--max50" class="font-weight:900px">
-        <h1 class="text-center" style="color: #00D094; margin-top:40px ;" > Social Media </h2>
-        </div>
-      <div class="social-wrapper" id="Socialsection">
-        <div class="social-container">
-          {% for social in landing_page.social_medias.all%}
-          <div id="facebook" class="social-icon h2" >
-              <i class="">
-                <img src="{{social.icon.url}}" width="40" height="40" alt="">
-              </i>
-              <span><a href="http://www.facebook.com">{{social.name}}</a> </span>
-          </div>
-          {% endfor %}
       </div>
     </div>
   </section>
 
-
-
-
-
-    <!-- Benefits Section -->
-    {% comment %} <div class="container my-5">
-        <h1 class="text-center" style="color: #00D094;"> الفائدة من الموقع</h1>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="accordion" id="benefitsAccordion">
-                    
-                    {% for benefit in landing_page.benefits_sections.all %}
-                    <div class="accordion-item">
-                        <h1 class="accordion-header" style="background-color: #0C201D;color: #00d094; " id="heading{{benefit.id}}">
-                            <button class="accordion-button" style="background-color: #0C201D;color: #00d094; " type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{benefit.id}}" aria-expanded="true" aria-controls="collapse{{benefit.id}}">
-                                <h4 style="color: #00D094;">
-                                    {{ benefit.title_ar }}
-                                </h4>
-                            </button>
-                        </h1>
-                        <div id="collapse{{benefit.id}}" class="accordion-collapse collapse {% if forloop.first %} show {% endif %}" aria-labelledby="headingOne" data-bs-parent="#benefitsAccordion">
-                            <div class="accordion-body" style="background-color: #00150f;color: white;">
-                                {{ benefit.description_ar }}
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    
-                </div>
-            </div>
-            <div class="col-md-6">
-                <img src="{{landing_page.benfits_image.url}}" alt="Benefits Image" class="img-fluid" style="width: 100%; margin-left: 60px;">
-            </div>
+  <section class="landing-section" id="coursessection">
+    <div class="container">
+      <div class="landing-section__heading">
+        <h2>Best Courses</h2>
+        <p>Learn with structured, hands-on programs designed by professionals to accelerate your trading skills.</p>
+      </div>
+      <div class="row g-4">
+        {% for course in landing_page.courses_sections.all %}
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="info-card" data-aos="fade-up" data-aos-duration="1000">
+            {% if course.video %}
+            <video src="{{ course.video.url }}" {% if course.video_poster %}poster="{{ course.video_poster.url }}"{% endif %} controls controlsList="nodownload"></video>
+            {% elif course.image %}
+            <img src="{{ course.image.url }}" alt="{{ course.title }}" />
+            {% else %}
+            <img src="{% static 'assets/images/logo/preloader.png' %}" alt="{{ course.title }}" />
+            {% endif %}
+            <h3>{{ course.title }}</h3>
+            <p>{{ course.description }}</p>
+          </article>
         </div>
-    </div> {% endcomment %}
-
-    <!-- Pricing Section -->
-    {% comment %} <div class="container-fluid py-5" style="background-color: #0C201D;">
-      <div class="container">
-      <h1 class="text-center" style="color:#00D094">خطط العضوية</h2>
-        <div class="row">
-            
-            {% for plan in landing_page.pricing_plans.all %}
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="head" style="background-color:#0C201D; padding: 20px;">
-                        <h2 class="card-title text-center" style="color: #00D094;">{{ plan.plan_ar }}</h5>
-                        <h6 class="text-center">${{ plan.price }}</h6>
-                    </div>
-                    <div class="card-body" style="color: white;">
-                        {{ plan.features_ar|safe }}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-            
+        {% empty %}
+        <div class="col-12">
+          <p class="text-center text-muted">Courses will be available soon.</p>
         </div>
-      </div>  
+        {% endfor %}
+      </div>
     </div>
+  </section>
 
-    <!-- Request Plan Section -->
-    <div class="container my-5">
-        <h2>طلب عضوية</h2>
-        <form method="post">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="name" class="form-label">الاسم</label>
-                    <input type="text" class="form-control" id="name" name="name" required placeholder="الاسم">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="email" class="form-label">الايميل</label>
-                    <input type="email" class="form-control" id="email" name="email" required placeholder="البريد الالكتروني">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="phone" class="form-label">الهاتف</label>
-                    <input type="text" class="form-control" id="phone" name="phone" required placeholder="رقم الهاتف">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="age" class="form-label">السن</label>
-                    <input type="number" class="form-control" id="age" name="age" required placeholder="السن">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="gender" class="form-label">النوع</label>
-                    <select class="form-select form-control" id="gender" name="gender" required>
-                        <option value="male">ذكر</option>
-                        <option value="female">انثى</option>
-                    </select>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="location" class="form-label">العنوان</label>
-                    <input type="text" class="form-control" id="location" name="location" required placeholder="العنوان">
-                </div>
+  <section class="landing-section bg-color" id="roadmap">
+    <div class="container">
+      <div class="landing-section__heading">
+        <h2>Roadmap for success</h2>
+        <p>Discover the milestones that will take you from your first trade to confident market decisions.</p>
+      </div>
+      <div class="roadmap-grid">
+        {% for benefit in landing_page.benefits_sections.all %}
+        <div class="roadmap-card" data-step="#{{ forloop.counter }}" data-aos="fade-up" data-aos-duration="900" data-aos-delay="{{ forloop.counter0 }}00">
+          <h3>{{ benefit.title }}</h3>
+          <p>{{ benefit.description }}</p>
+        </div>
+        {% empty %}
+        <p class="text-center text-muted">Roadmap details will be shared soon.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="landing-section" id="users">
+    <div class="container">
+      <div class="landing-section__heading">
+        <h2>Users' opinions</h2>
+        <p>Hear directly from our community about the impact Trading Whale School has had on their trading journey.</p>
+      </div>
+      <div class="row g-4">
+        {% for plan in landing_page.pricing_plans.all %}
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="testimonial-card" data-aos="fade-up" data-aos-duration="900" data-aos-delay="{{ forloop.counter0 }}00">
+            {% if plan.video %}
+            <video src="{{ plan.video.url }}" {% if plan.video_poster %}poster="{{ plan.video_poster.url }}"{% endif %} controls controlsList="nodownload"></video>
+            {% elif plan.image %}
+            <img src="{{ plan.image.url }}" alt="{{ plan.name }}" />
+            {% else %}
+            <img src="{% static 'assets/images/logo/preloader.png' %}" alt="{{ plan.name }}" />
+            {% endif %}
+            <div>
+              <h3>{{ plan.name }}</h3>
+              <p class="opinion">{{ plan.features|safe }}</p>
             </div>
-            <div class="mb-3 ">
-                <label for="notes" class="form-label">الملاحظات</label>
-                <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="الملاحظات"></textarea>
+          </article>
+        </div>
+        {% empty %}
+        <div class="col-12">
+          <p class="text-center text-muted">We will publish users' opinions soon.</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="landing-section bg-color" id="contactsection">
+    <div class="container">
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-5">
+          <div class="contact-card h-100" data-aos="fade-right" data-aos-duration="900">
+            <h3>Connect with us</h3>
+            <p>Leave your details and our team will reach out with the next steps to join Trading Whale School.</p>
+            <div class="social-grid">
+              {% for social in landing_page.social_medias.all %}
+              <a class="social-card" href="{{ social.link }}" target="_blank" rel="noopener">
+                {% if social.icon %}
+                <img src="{{ social.icon.url }}" alt="{{ social.name }}" />
+                {% else %}
+                <span class="fa-stack fa-2x text-light">
+                  <i class="fa-solid fa-circle fa-stack-2x text-secondary"></i>
+                  <i class="fa-brands fa-share-nodes fa-stack-1x"></i>
+                </span>
+                {% endif %}
+                <span>{{ social.name }}</span>
+              </a>
+              {% empty %}
+              <p class="text-muted mb-0">Follow us on social media for updates.</p>
+              {% endfor %}
             </div>
-            <div class="text-center">
-            <button type="submit" class="trk-btn trk-btn--border trk-btn--primary d-block mt-4">طلب عضوية</button>
           </div>
-        </form>
-    </div> {% endcomment %}
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
-
-
-
-</body>
-</html>
-
-
+        </div>
+        <div class="col-lg-7">
+          <div class="contact-card h-100" data-aos="fade-left" data-aos-duration="900">
+            <h3>Request membership</h3>
+            <form method="post" class="row g-3">
+              {% csrf_token %}
+              <div class="col-md-6">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" required placeholder="Your full name" />
+              </div>
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required placeholder="you@example.com" />
+              </div>
+              <div class="col-md-6">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="text" class="form-control" id="phone" name="phone" required placeholder="(+20) 123 456 789" />
+              </div>
+              <div class="col-md-3">
+                <label for="age" class="form-label">Age</label>
+                <input type="number" min="16" class="form-control" id="age" name="age" required placeholder="25" />
+              </div>
+              <div class="col-md-3">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" name="gender" required>
+                  <option value="" selected disabled>Select</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" class="form-control" id="location" name="location" required placeholder="City, Country" />
+              </div>
+              <div class="col-12">
+                <label for="notes" class="form-label">Notes</label>
+                <textarea class="form-control" id="notes" name="notes" rows="4" placeholder="Tell us about your goals"></textarea>
+              </div>
+              <div class="col-12 text-end">
+                <button type="submit" class="trk-btn trk-btn--border trk-btn--primary">
+                  <span>Submit request</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% else %}
+  <section class="landing-section">
+    <div class="container text-center">
+      <div class="landing-section__heading">
+        <h2>Landing page is coming soon</h2>
+        <p>We are preparing fresh content. Please check back shortly.</p>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+</main>
 {% endblock %}
