@@ -505,7 +505,7 @@
         <div class="container">
           <div class="service__wrapper">
             <div class="row g-4 ">
-              {% for course in landing_page.pricing_plans.all  %}
+              {% for course in user_opinions %}
               <div class="col-sm-12 col-md-6 col-lg-4">
                 <div class="banner__content" data-aos="fade-up" data-aos-duration="2000">
                   {% if not course.video %}
@@ -558,10 +558,14 @@
 
                 </div>
               </div>
+              {% empty %}
+              <div class="col-12">
+                <p class="text-center text-muted">سيتم إضافة آراء المستخدمين قريبًا.</p>
+              </div>
               {% endfor %}
-             
-            
-    
+
+
+
             </div>
           </div>
         </div>
