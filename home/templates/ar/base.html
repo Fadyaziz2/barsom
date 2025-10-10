@@ -53,28 +53,44 @@
 
       .header-section .header-wrapper {
         display: flex;
-        align-items: center;
+        align-items: stretch;
         justify-content: space-between;
         width: 100%;
         gap: 2rem;
       }
 
       .header-section .header-wrapper .menu-area {
-        flex: 1;
+        flex: 1 1 auto;
         display: flex;
       }
 
       .header-section .header-wrapper .menu {
+        flex: 1 1 auto;
         display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        width: 100%;
-        gap: 1.5rem;
+        align-items: stretch;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        gap: 0;
       }
 
       .header-section .header-wrapper .menu > li {
+        flex: 1 1 0;
         display: flex;
         align-items: center;
+        justify-content: center;
+      }
+
+      .header-section .header-wrapper .menu > li > a {
+        width: 100%;
+        text-align: center;
+      }
+
+      .header-section .header-wrapper .menu > li.menu-utility {
+        flex: 0 0 auto;
+      }
+
+      .header-section .header-wrapper .menu > li.menu-utility > a {
+        width: auto;
       }
     }
   </style>
@@ -179,7 +195,7 @@
               </li>
               {% endif %}
 
-              <li style="display: flex;margin-top: -15px;">
+              <li class="menu-utility" style="display: flex;margin-top: -15px;">
                 <div class="header-action">
                   <div class="menu-area">
                     <div class="" style="margin-right: 30px; margin-left:20px">
