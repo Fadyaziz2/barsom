@@ -30,12 +30,51 @@ from home.models import wellcome_message , reset_password_message
 # Create your views here.
 
 
+def apply_verification_benefits(user, profile=None):
+    """Guarantee verified accounts retain access to the top membership tier."""
+
+    if not user.has_right_sign:
+        return profile
+
+    updated_fields = []
+
+    if not user.is_active:
+        user.is_active = True
+        updated_fields.append('is_active')
+
+    if user.is_blocked:
+        user.is_blocked = False
+        updated_fields.append('is_blocked')
+
+    if user.ended_at is not None:
+        user.ended_at = None
+        updated_fields.append('ended_at')
+
+    if updated_fields:
+        user.save(update_fields=updated_fields)
+
+    if profile is None:
+        profile = Profile.objects.filter(user=user).select_related('membership').first()
+
+    if profile is None:
+        return None
+
+    highest_membership = MemberShip.objects.order_by('-price').first()
+
+    if highest_membership and profile.membership_id != highest_membership.id:
+        profile.membership = highest_membership
+        profile.price = highest_membership.price
+        profile.save(update_fields=['membership', 'price'])
+
+    return profile
+
+
 def ensure_user_profile(user):
     """Return the profile for ``user`` creating a default one when missing."""
 
     existing_profile = Profile.objects.filter(user=user).first()
     if existing_profile:
-        return existing_profile
+        return apply_verification_benefits(user, existing_profile) or existing_profile
 
     default_membership = MemberShip.objects.order_by('price').first()
     if default_membership is None:
@@ -43,7 +82,7 @@ def ensure_user_profile(user):
 
     default_name = user.email or user.phone or f'User {user.pk}'
 
-    return Profile.objects.create(
+    profile = Profile.objects.create(
         user=user,
         membership=default_membership,
         name=default_name,
@@ -51,6 +90,8 @@ def ensure_user_profile(user):
         birth_date='',
         price=default_membership.price,
     )
+
+    return apply_verification_benefits(user, profile) or profile
 
 
 def random_string(length=6):
@@ -103,6 +144,7 @@ def log_in(request):
         #if access = True login
         if access:
             login(request, user)
+            apply_verification_benefits(user)
             #redirct to profile
             return redirect('home:home_ar')
 
@@ -433,8 +475,9 @@ def add_new_member(request):
         if myprofile.rank >= 50:
             create_by.has_right_sign = True
             create_by.save()
-            
-        
+            apply_verification_benefits(create_by)
+
+
         #get welcome message
         wellcome_message2 = wellcome_message.objects.first()    
         
@@ -759,6 +802,7 @@ def log_in_ar(request):
         #if access = True login
         if access:
             login(request, user)
+            apply_verification_benefits(user)
             #redirct to profile
             return redirect('home:home_ar')
 
@@ -933,6 +977,7 @@ def add_new_member_ar(request):
         if myprofile.rank >= 50:
             create_by.has_right_sign = True
             create_by.save()
+            apply_verification_benefits(create_by)
         #send welcome email to user with email , password
         subject = 'مدرسة حيتان التداول'
         wellcome_message2 = wellcome_message.objects.first()  
