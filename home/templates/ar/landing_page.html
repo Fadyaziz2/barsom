@@ -513,17 +513,23 @@
                     <div class="service__thumb mb-30">
                       <div class="lectureitem">
                         <!---if course.isview or course is the first-->
-                        
-                        <img class="courceimage profile-image" src="{{course.image.url}}" alt="service-icon">
-                        
+
+                        {% if course.image %}
+                        <img class="courceimage profile-image" src="{{course.image.url}}" alt="{{ course.name_ar|default:course.name }}">
+                        {% else %}
+                        <img class="courceimage profile-image" src="{% static 'assets/images/logo/preloader.png' %}" alt="{{ course.name_ar|default:course.name }}">
+                        {% endif %}
+
                       </div>
                     </div>
                     <div class="service__content">
-                      
-                      <h4 class="mb-15">{{course.name_ar}}</h5>
-                      <p class="card-text" style="color: white;">{{ course.features_ar }}</p>
+
+                      <h4 class="mb-15">{{ course.name_ar|default:course.name }}</h4>
+                      {% with course.features_ar|default:course.features as features_text %}
+                      <p class="card-text" style="color: white;">{{ features_text|safe }}</p>
+                      {% endwith %}
                     </div>
-                    
+
                   </div>
                   {% else %}
                   <div class="service__item-inner text-center">
@@ -536,17 +542,20 @@
                       </div>
                     </div> {% endcomment %}
                     <div class="service__content">
-                      
-                      <h4 class="mb-15">{{course.name_ar}}</h5>
+
+                      <h4 class="mb-15">{{ course.name_ar|default:course.name }}</h4>
                       <!-- video -->
                         <video src="{{course.video.url}}" {% if course.video_poster %} poster="{{course.video_poster.url}}" {% endif %} width="100%" height="100%" controls controlsList="nodownload">
                           Your browser does not support the video tag.
                         </video>
+                      {% with course.features_ar|default:course.features as features_text %}
+                      <p class="card-text mt-3" style="color: white;">{{ features_text|safe }}</p>
+                      {% endwith %}
                     </div>
-                    
+
                   </div>
                   {% endif %}
-                  
+
                 </div>
               </div>
               {% endfor %}
