@@ -782,8 +782,15 @@
             document.addEventListener('keydown', function (event) {
                 const key = event.key;
                 const target = event.target;
+                const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+                const isTargetingVideo = target === videoElement || path.includes(videoElement);
+                const activeElement = document.activeElement;
+                const isVideoActive = activeElement === videoElement || (videoElement && videoElement.contains(activeElement));
 
-                if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(key) && (target === videoElement || target === document.body)) {
+                if (
+                    ['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(key) &&
+                    (isTargetingVideo || (target === document.body && isVideoActive))
+                ) {
                     event.preventDefault();
                     securityWarning();
                 }
