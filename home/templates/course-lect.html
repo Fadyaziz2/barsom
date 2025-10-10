@@ -22,6 +22,38 @@
     opacity: 0.8; /* You can adjust the opacity as needed */
 }
 
+  [data-locked="true"] {
+    cursor: pointer;
+  }
+
+  [data-locked="true"]:focus {
+    outline: 2px solid #00d094;
+    outline-offset: 3px;
+  }
+
+  .locked-item-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 2rem;
+    transform: translate(-50%, 2rem);
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    padding: 0.75rem 1.75rem;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1050;
+    max-width: 90%;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .locked-item-toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
 </style>
 
   <!-- ================> Page header start here <================== -->
@@ -65,8 +97,8 @@
           {% if lectures %}
           {% for lecture in lectures%}
           <div class="blog__item1 col-sm-12 col-md-6 col-lg-4">
-            <div class="blog__item" data-aos="fade-up" data-aos-duration="1200">
-              <div class="blog__item-inner blog__item-inner--style2">
+              <div class="blog__item" data-aos="fade-up" data-aos-duration="1200">
+              <div class="blog__item-inner blog__item-inner--style2"{% if not lecture.is_viewed and not forloop.first %} data-locked="true" data-lock-message="Please complete the previous lecture first." role="button" tabindex="0" aria-label="Locked lecture {{ lecture.title }}"{% endif %}>
                 <div class="blog__thumb lectureitem">
                       <!---if lecture.isview or lecture is the first-->
                       {% if lecture.is_viewed  or forloop.first %}
@@ -84,7 +116,7 @@
                   <h3 class="10 style2" style="margin-top: 15px;"> <a href="{% url 'courses:course_details' lecture.id %}">{{ lecture.title }}</a> </h3>
                   {% else %}
                   <h3 class="10 style2" style="margin-top: 15px;" title="you must watch the prev lecture first"> {{ lecture.title }} </h3>
-                  {% endif %}   
+                  {% endif %}
                  <div class="d-flex" style="justify-content: space-around;">
                     <p class="mb-15"><span style="color:#00d094">Duration : </span>{{ lecture.duration }}</p>
                     <p class="mb-15"><span style="color:#00d094">Lecture Num : </span>{{ lecture.number }}</p>
@@ -121,20 +153,67 @@
     const searchInput = document.getElementById('searchinput');
     const searchButton = document.getElementById('searchbtn');
     const blogItems = document.querySelectorAll('.blog__item1');
+    let toastTimeout = null;
 
-    searchButton.addEventListener('click', function() {
-      const searchTerm = searchInput.value.toLowerCase();
+    const showNotice = function (message) {
+      if (!message) {
+        return;
+      }
+      let toast = document.getElementById('lockedItemToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'lockedItemToast';
+        toast.className = 'locked-item-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.dir = 'auto';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.classList.add('show');
+      if (toastTimeout) {
+        clearTimeout(toastTimeout);
+      }
+      toastTimeout = setTimeout(function () {
+        toast.classList.remove('show');
+      }, 3200);
+    };
 
-      blogItems.forEach(function(item) {
-        const title = item.querySelector('.style2 a').textContent.toLowerCase();
+    const handleLockedClick = function (event) {
+      const target = event.currentTarget;
+      if (target.dataset.locked === 'true') {
+        event.preventDefault();
+        event.stopPropagation();
+        showNotice(target.dataset.lockMessage || 'Please complete the previous lecture first.');
+      }
+    };
 
-        if (title.includes(searchTerm)) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
+    document.querySelectorAll('[data-locked="true"]').forEach(function (lockedItem) {
+      lockedItem.addEventListener('click', handleLockedClick);
+      lockedItem.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          handleLockedClick(event);
         }
       });
     });
+
+    if (searchButton) {
+      searchButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        const searchTerm = (searchInput ? searchInput.value : '').toLowerCase();
+
+        blogItems.forEach(function(item) {
+          const titleElement = item.querySelector('.style2 a') || item.querySelector('.style2');
+          const title = titleElement ? titleElement.textContent.toLowerCase() : '';
+
+          if (!searchTerm || title.includes(searchTerm)) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    }
   });
 </script>
 
