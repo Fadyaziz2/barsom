@@ -23,6 +23,38 @@
     animation-play-state: paused; /* Stop any animations on lecturelock image */
 }
 
+  [data-locked="true"] {
+    cursor: pointer;
+  }
+
+  [data-locked="true"]:focus {
+    outline: 2px solid #00d094;
+    outline-offset: 3px;
+  }
+
+  .locked-item-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 2rem;
+    transform: translate(-50%, 2rem);
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    padding: 0.75rem 1.75rem;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1050;
+    max-width: 90%;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .locked-item-toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
 </style>
 
 
@@ -62,7 +94,7 @@
           {% for course in courses  %}
           <div class="col-sm-12 col-md-12 col-lg-6">
             <div class="service__item" data-aos="fade-up" data-aos-duration="800">
-              <div class="service__item-inner text-center">
+              <div class="service__item-inner text-center"{% if not course.is_viewed and not forloop.first %} data-locked="true" data-lock-message="Please complete the previous level first." role="button" tabindex="0" aria-label="Locked level {{ course.title }}"{% endif %}>
                 <div class="service__thumb mb-30">
                   <div class="lectureitem">
                     <!---if course.isview or course is the first-->
@@ -112,6 +144,56 @@
 
 
 <!--end block django-->
+{% endblock %}
+
+{% block script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    let toastTimeout = null;
+
+    const showNotice = function (message) {
+      if (!message) {
+        return;
+      }
+      let toast = document.getElementById('lockedItemToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'lockedItemToast';
+        toast.className = 'locked-item-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.dir = 'auto';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.classList.add('show');
+      if (toastTimeout) {
+        clearTimeout(toastTimeout);
+      }
+      toastTimeout = setTimeout(function () {
+        toast.classList.remove('show');
+      }, 3200);
+    };
+
+    const handleLockedClick = function (event) {
+      const target = event.currentTarget;
+      if (target.dataset.locked === 'true') {
+        event.preventDefault();
+        event.stopPropagation();
+        showNotice(target.dataset.lockMessage || 'Please complete the previous level first.');
+      }
+    };
+
+    document.querySelectorAll('[data-locked="true"]').forEach(function (lockedItem) {
+      lockedItem.addEventListener('click', handleLockedClick);
+      lockedItem.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          handleLockedClick(event);
+        }
+      });
+    });
+  });
+</script>
 {% endblock %}
 
 
