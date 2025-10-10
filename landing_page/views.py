@@ -9,7 +9,17 @@ from django.shortcuts import redirect
 
 def LandingPage(request):
     # get first landing page
-    landing_page = MainLandingPage.objects.first()
+    landing_page = (
+        MainLandingPage.objects
+        .prefetch_related(
+            'courses_sections',
+            'benefits_sections',
+            'social_medias',
+            'pricing_plans',
+        )
+        .order_by('-id')
+        .first()
+    )
     if request.method=='POST':
         name=request.POST.get('name', '').strip()
         email=request.POST.get('email', '').strip()
@@ -27,7 +37,7 @@ def LandingPage(request):
     
     
     context = {
-        'landing_page':landing_page
+        'landing_page': landing_page,
     }
     return render(request,'landing_page.html',context)
 
@@ -111,7 +121,17 @@ def outuserlandingpage(request,pagename):
 def LandingPage_ar(request):
     
     # get first landing page
-    landing_page = MainLandingPage.objects.first()
+    landing_page = (
+        MainLandingPage.objects
+        .prefetch_related(
+            'courses_sections',
+            'benefits_sections',
+            'social_medias',
+            'pricing_plans',
+        )
+        .order_by('-id')
+        .first()
+    )
     if request.method=='POST':
         name=request.POST.get('name', '').strip()
         email=request.POST.get('email', '').strip()
@@ -125,7 +145,7 @@ def LandingPage_ar(request):
         messages.success(request, 'your request has been sent successfully')
     
     context = {
-        'landing_page':landing_page
+        'landing_page': landing_page,
     }
     return render(request,'ar/landing_page.html',context)
 
