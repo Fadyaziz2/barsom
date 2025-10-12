@@ -1923,22 +1923,20 @@ ol {
   color: #106a50;
 }
 
-.form-pass__ctoggle,
-.form-pass__toggle {
+.form-pass__ctoggle, .form-pass__toggle {
   background: none;
   border: none;
   color: var(--text-color);
   font-weight: 600;
-  left: 0.75em;
-  right: auto;
+  right: 0.75em;
   top: 53px;
   z-index: 9;
 }
 
 [dir="rtl"] .form-pass__ctoggle,
 [dir="rtl"] .form-pass__toggle {
-  left: auto;
-  right: 0.75em;
+  left: 0.75em;
+  right: auto;
 }
 
 .swiper-nav {
