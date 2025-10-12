@@ -1933,12 +1933,6 @@ ol {
   z-index: 9;
 }
 
-[dir="rtl"] .form-pass__ctoggle,
-[dir="rtl"] .form-pass__toggle {
-  left: 0.75em;
-  right: auto;
-}
-
 .swiper-nav {
   gap: 15px;
 }

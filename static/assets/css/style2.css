@@ -2003,15 +2003,9 @@ ol {
   border: none;
   color: var(--text-color);
   font-weight: 600;
-  right: 0.75em;
+  left: 0.75em;
   top: 53px;
   z-index: 9;
-}
-
-[dir="rtl"] .form-pass__ctoggle,
-[dir="rtl"] .form-pass__toggle {
-  left: 0.75em;
-  right: auto;
 }
 
 .swiper-nav {
