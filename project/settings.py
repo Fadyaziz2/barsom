@@ -149,7 +149,8 @@ DATABASES = {
 
 
 #BASE_URL = localhost
-BASE_URL = 'http://tradingwhaleschool.online'
+# Base URL used for generating absolute links in emails
+BASE_URL = 'https://the-whales.com'
 
 #email configration with example data
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
