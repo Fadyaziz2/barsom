@@ -44,6 +44,87 @@
     object-fit: cover;
   }
 
+  .benefits-section {
+    padding: 4rem 0;
+    background: linear-gradient(180deg, rgba(0, 32, 28, 0.85) 0%, rgba(0, 17, 13, 0.95) 100%);
+    direction: rtl;
+  }
+
+  .benefits-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .benefits-header h2 {
+    color: #00d094;
+    font-weight: 700;
+  }
+
+  .benefits-header h2 span {
+    color: #ffffff;
+  }
+
+  .benefits-header p {
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .benefit-card {
+    position: relative;
+    background: #0c201d;
+    border-radius: 24px;
+    border: 1px solid rgba(0, 208, 148, 0.2);
+    padding: 2.5rem 2rem 2rem;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+    text-align: right;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .benefit-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 32px 70px rgba(0, 0, 0, 0.3);
+  }
+
+  .benefit-card__number {
+    position: absolute;
+    top: 1.75rem;
+    left: 2rem;
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: rgba(0, 208, 148, 0.12);
+  }
+
+  .benefit-card h3 {
+    color: #00d094;
+    font-size: 1.35rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .benefit-card p {
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 575.98px) {
+    .benefit-card {
+      padding: 2rem 1.5rem 1.75rem;
+    }
+
+    .benefit-card__number {
+      left: 1.5rem;
+      font-size: 2.25rem;
+    }
+  }
+
 
 
 
@@ -443,56 +524,23 @@
 
 
 
-      <section class="roadmap roadmap--style1 padding-top  padding-bottom bg-color"  id="roadmap">
+      <section class="benefits-section" id="roadmap">
         <div class="container">
-          <div class="section-header section-header--max50">
-            <h2 class="mb-15 mt-minus-5"> مميزات حيتان  <span> التداول</span></h2>
+          <div class="benefits-header" data-aos="fade-up" data-aos-duration="900">
+            <h2 class="mb-15 mt-minus-5"> مميزات حيتان <span> التداول</span></h2>
+            <p>اكتشف جميع المميزات والخطوات التي تساعدك على بناء خطة تداول متكاملة مع حيتان التداول.</p>
           </div>
-          <div class="roadmap__wrapper">
-            <div class="row gy-4 gy-md-0 gx-5">
-
-              {% for benefit in landing_page.benefits_sections.all %}
-                  {% if forloop.counter|divisibleby:2 %}
-                      <div class="col-sm-12 col-md-6 offset-md-6">
-                          <div class="roadmap__item ms-md-4 aos-init aos-animate" data-aos="fade-left" data-aos-duration="800">
-                              <div class="roadmap__item-inner">
-                                  <div class="roadmap__item-content">
-                                      <div class="roadmap__item-header">
-                                          <h3 class="green-color">{{ benefit.title_ar }}</h3>
-                                      </div>
-                                      <p>
-                                          {{ benefit.description_ar }}
-                                      </p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  {% else %}
-                      <div class="col-md-6">
-                          <div class="roadmap__item roadmap__item--style2 ms-auto me-md-4 aos-init aos-animate" data-aos="fade-right" data-aos-duration="800">
-                              <div class="roadmap__item-inner">
-                                  <div class="roadmap__item-content">
-                                      <div class="roadmap__item-header">
-                                          <h3 class="green-color">{{ benefit.title_ar }}</h3>
-                                      </div>
-                                      <p>
-                                          {{ benefit.description_ar }}
-                                      </p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  {% endif %}
-              {% endfor %}
-              
-            </div>
+          <div class="benefits-grid">
+            {% for benefit in landing_page.benefits_sections.all %}
+            <article class="benefit-card" data-aos="fade-up" data-aos-duration="900" data-aos-delay="{{ forloop.counter0 }}00">
+              <span class="benefit-card__number">#{{ forloop.counter }}</span>
+              <h3>{{ benefit.title_ar }}</h3>
+              <p>{{ benefit.description_ar }}</p>
+            </article>
+            {% empty %}
+            <p class="text-center text-white-50 mb-0">سيتم إضافة المميزات قريبًا.</p>
+            {% endfor %}
           </div>
-        </div>
-        <div class="roadmap__shape">
-          <span class="roadmap__shape-item roadmap__shape-item--1"> <span></span> </span>
-          <span class="roadmap__shape-item roadmap__shape-item--2"> <img src="{% static 'assets/images/banner/home1/3.png' %}"
-              alt="shape-icon">
-          </span>
         </div>
       </section>
 
