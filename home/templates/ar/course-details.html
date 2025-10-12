@@ -34,11 +34,15 @@
                                 <h2>{{lecture.title}}</h2>
                             </div>
                             <!--video tag -->
-                            <video controls controlsList="nodownload" nodownload id="videoPlayer"  nodownload preload="metadata" width="100%" height="100%" style="width: 100%; height: 600px"                                
+                            <video controls controlsList="nodownload" nodownload id="videoPlayer"  nodownload preload="metadata" width="100%" height="100%" style="width: 100%; height: 600px"
                              >
                                 <source src="{{lecture.video.url}}" type="video/mp4">
                                متصفحك لا يدعم تشغيل الفيديو بشكل صحيح يرجي تحديث المتصفح
                             </video>
+                            <div class="video-seek-controls mt-3 d-flex justify-content-center gap-3 flex-wrap">
+                              <button type="button" class="trk-btn trk-btn--border trk-btn--primary" id="seekBackwardButton">⏪ رجوع 10 ثوانٍ</button>
+                              <button type="button" class="trk-btn trk-btn--border trk-btn--primary" id="seekForwardButton">⏩ تقديم 10 ثوانٍ</button>
+                            </div>
                             <!--video Number -->                            
                             <div style="display:flex; justify-content:space-between">
                               <p> <span style="color: #00d094;">رقم المحاضرة : </span>{{lecture.number}}</p>
@@ -77,77 +81,92 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
       var video = document.getElementById('videoPlayer');
+      if (!video) {
+        return;
+      }
+
       video.preload = 'auto';
       video.load();
- 
+
+      var hasTriggeredEvent = false;
+      var hasLoadedMetadata = false;
+      var pendingSeekOffset = 0;
+
+      video.addEventListener('timeupdate', function() {
+          if (!video.duration || !isFinite(video.duration)) {
+            return;
+          }
+
+          var percent = Math.floor((100 / video.duration) * video.currentTime);
+
+          if (!hasTriggeredEvent && percent >= 95) {
+              hasTriggeredEvent = true;
+
+              var lecture_id = {{lecture.id}};
+              var url = `/courses/view_lect/${lecture_id}/`;
+
+              $.ajax({
+                type: "GET",
+                url: url,
+              });
+          }
+      });
+
+      function clampTime(time) {
+        if (!video.duration || !isFinite(video.duration)) {
+          return Math.max(time, 0);
+        }
+        return Math.min(Math.max(time, 0), video.duration);
+      }
+
+      function seekBy(seconds) {
+        if (hasLoadedMetadata && video.readyState >= 1) {
+          video.currentTime = clampTime(video.currentTime + seconds);
+          return;
+        }
+
+        pendingSeekOffset += seconds;
+
+        if (video.readyState < 1) {
+          video.load();
+        }
+      }
+
+      var backwardButton = document.getElementById('seekBackwardButton');
+      var forwardButton = document.getElementById('seekForwardButton');
+
+      video.addEventListener('loadedmetadata', function () {
+        hasLoadedMetadata = true;
+
+        if (pendingSeekOffset !== 0) {
+          var targetTime = clampTime(video.currentTime + pendingSeekOffset);
+          pendingSeekOffset = 0;
+          video.currentTime = targetTime;
+        }
+      });
+
+      if (backwardButton) {
+        backwardButton.addEventListener('click', function () {
+          seekBy(-10);
+        });
+      }
+
+      if (forwardButton) {
+        forwardButton.addEventListener('click', function () {
+          seekBy(10);
+        });
+      }
+
+      video.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+
+      video.disablePictureInPicture = true;
   });
 
 </script>
 
 <script>
-
-  var video = document.getElementById("videoPlayer");
-  var hasTriggeredEvent = false;
-
-video.addEventListener('timeupdate', function() {
-    var percent = Math.floor((100 / video.duration) * video.currentTime);
-
-    // Check if the event hasn't been triggered and the video has been watched more than 95%
-    if (!hasTriggeredEvent && percent >= 95) {
-        console.log('Video watched completely');
-        // Set the variable to true to prevent further triggers of the event
-        hasTriggeredEvent = true;
-        
-        // Call your backend server here
-        var lecture_id = {{lecture.id}};
-        // call this url {% url 'courses:view_lect' lecture.id %}
-        var url = `/courses/view_lect/${lecture_id}/`;
-        console.log(url);
-        // call ajax
-        $.ajax({
-          type: "GET",
-          url: url,
-          success: function(data){
-            console.log(data);
-          },
-          error: function(error){
-            console.log(error);
-          }
-        });
-    }
-});
-
-
-
-  //prvent right click on videoPlayer
-  document.getElementById('videoPlayer').addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-  });
-
-  //disable  pic in pic on videoPlayer
-
-  document.getElementById('videoPlayer').addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-  });
-
-
-  //disable  pic in pic on videoPlayer
-  var videoElement = document.getElementById('videoPlayer');
-  videoElement.disablePictureInPicture = true;
-
-  //prevent download on videoPlayer
-  document.getElementById('videoPlayer').addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-  });
-
-
-
-  //send request when lecture watch completly
-  var video = document.getElementById("videoPlayer");
-  video.addEventListener('ended', function() {
-    
-  });
-
 
   let star1=document.querySelector('.hover1')
   let star2=document.querySelector('.hover2')
