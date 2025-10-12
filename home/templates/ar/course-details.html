@@ -89,8 +89,6 @@
       video.load();
 
       var hasTriggeredEvent = false;
-      var hasLoadedMetadata = false;
-      var pendingSeekOffset = 0;
 
       video.addEventListener('timeupdate', function() {
           if (!video.duration || !isFinite(video.duration)) {
@@ -120,30 +118,20 @@
       }
 
       function seekBy(seconds) {
-        if (hasLoadedMetadata && video.readyState >= 1) {
-          video.currentTime = clampTime(video.currentTime + seconds);
+        if (video.readyState < 1) {
+          video.addEventListener('loadedmetadata', function handleLoaded() {
+            video.removeEventListener('loadedmetadata', handleLoaded);
+            video.currentTime = clampTime(video.currentTime + seconds);
+          });
+          video.load();
           return;
         }
 
-        pendingSeekOffset += seconds;
-
-        if (video.readyState < 1) {
-          video.load();
-        }
+        video.currentTime = clampTime(video.currentTime + seconds);
       }
 
       var backwardButton = document.getElementById('seekBackwardButton');
       var forwardButton = document.getElementById('seekForwardButton');
-
-      video.addEventListener('loadedmetadata', function () {
-        hasLoadedMetadata = true;
-
-        if (pendingSeekOffset !== 0) {
-          var targetTime = clampTime(video.currentTime + pendingSeekOffset);
-          pendingSeekOffset = 0;
-          video.currentTime = targetTime;
-        }
-      });
 
       if (backwardButton) {
         backwardButton.addEventListener('click', function () {
