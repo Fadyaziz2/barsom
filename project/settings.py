@@ -26,6 +26,10 @@ SECRET_KEY = 'django-insecure-5vf5zjeb9&8x6o+-i4nfk1ux&=%6pd-h4$#d8%a71--g@d=hyq
 DEBUG = True
 # DEBUG = True
 ALLOWED_HOSTS = ['207.180.239.207', 'the-whales.com' , 'tradingwhales.online','93.127.203.33','localhost','127.0.0.1' ]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://the-whales.com',
+]
 # Application definition
 INSTALLED_APPS = [
     'jazzmin',
