@@ -16,7 +16,7 @@ class MembershipExpirationMiddleware:
         if user is not None and user.is_authenticated:
             ended_at = getattr(user, "ended_at", None)
 
-            if ended_at and ended_at < timezone.now():
+            if not user.is_superuser and ended_at and ended_at < timezone.now():
                 logout(request)
                 messages.error(
                     request,

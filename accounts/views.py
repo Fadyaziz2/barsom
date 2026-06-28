@@ -136,7 +136,7 @@ def log_in(request):
             messages.error(request, 'Dear Trader, we would like to inform you that your educational period on the Whales Trading website has ended. If you wish to renew your subscription and continue your educational journey with us, please contact the responsible person to review the new plans. Thank you for choosing Whales Trading. We look forward to continuing to support you and providing you with the best educational experience. Best regards, The Whales Trading Team."')
             return render(request,'index.html')
 
-        if user.ended_at and user.ended_at < timezone.now():
+        if not user.is_superuser and user.ended_at and user.ended_at < timezone.now():
             messages.error(request, 'Your plan has ended. Please contact the administrators to renew your plan.')
             return render(request,'index.html')
 
